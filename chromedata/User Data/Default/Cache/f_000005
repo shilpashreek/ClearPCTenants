@@ -1,0 +1,724 @@
+﻿var $jq = jQuery.noConflict();
+var popUpStack = new Array();
+
+function PFTConfirmNG(id, options, popW, popH) {
+    if (popW === undefined || popH === undefined) {
+        popW = 350;
+        popH = 130;
+    }
+    //var styl = "width:" + popW + "px;height:" + popH + "px;margin-top:-" + (popH / 2) + "px;margin-left:-" + (popW / 2) + "px; position:fixed;left:50%;top:50%";
+    var styl = "width:" + popW + "px;min-height:" + popH + "px;margin-top:-" + (popH / 2) + "px;margin-left:-" + (popW / 2) + "px;";
+
+    var item = {};
+    item.id = id;
+    item.options = options;
+    popUpStack.push(item);
+    var popUpPeekIndex = popUpStack.length;
+    var overlayClassNames = [];
+    overlayClassNames.push("overlay");
+    if (options["overlayClassName"])
+        overlayClassNames.push(options["overlayClassName"]);        //Only 1 additional class is allowed for now.
+    var overLay = createOverlay("overlay" + popUpPeekIndex, overlayClassNames);
+    var headerId = "promptHeader" + popUpPeekIndex;
+    var bodyId = "promptBody" + popUpPeekIndex;
+    var closeId = "close" + popUpPeekIndex;
+    var divObj = document.createElement('div');
+    var popupTitle = 'Alert';
+    if (options["popupTitle"] && options["popupTitle"] != '')
+        popupTitle = options["popupTitle"];
+    var html = '<div class="PopupHeader" id="' + headerId + '"><h1>' + popupTitle + '</h1>';
+    if (options["closeIconNeeded"] != null && options["closeIconNeeded"]) {
+        html += '<div title="Click here to close" class="popupClose" id="' + closeId + '"></div>';
+    }
+    html += '</div>';
+    html += '<div class="confirmPopupBody" id="' + bodyId + '"><div class="alertText">' + options["message"] + '</div><div class="clr"></div></div><div class="promptWrp"><div class="promptBtnWrp">';
+    if (options["buttons"] != null) {
+        for (var i = 0; i < options["buttons"].length; i++) {
+            var btnId = options["buttons"][i] + popUpPeekIndex;
+            html += '<div class="promptBtn" title="' + options["buttons"][i] + '" id="' + btnId + '">'
+            + options["buttons"][i] + '</div>';
+        }
+    }
+
+    html += '</div></div>';
+    divObj.setAttribute('id', id);
+    divObj.setAttribute('class', 'alertPopup confrmPop' + popUpPeekIndex);
+    divObj.setAttribute("style", styl);
+    divObj.innerHTML = html;
+    document.body.appendChild(divObj);
+    if (options["buttons"] != null) {
+        for (var i = 0; i < options["buttons"].length; i++) {
+            var btnId = options["buttons"][i] + popUpPeekIndex;
+            registerPromptEvent(btnId, options["buttons"][i], options);
+        }
+    }
+    if (options["closeIconNeeded"] != null && options["closeIconNeeded"]) {
+        if (options.title !== '') {
+            var closeDiv = document.getElementById(closeId);
+            closeDiv.addEventListener("click", function () {
+                closePopupNG();
+                if (options["closeEvent"] != undefined && options["closeEvent"] != null)
+                    window[options["closeEvent"]](this);
+            });
+        }
+    }
+}
+
+function registerPromptEvent(divId, btnType, options) {
+    var promptDiv = document.getElementById(divId);
+    promptDiv.addEventListener("click", function (e) {
+        if (options["promptButtonClick"] != null && typeof (options["promptButtonClick"]) == "function") {
+            resetPromptDlg();
+            options["promptButtonClick"].call(options, btnType, divId);
+        }
+    });
+}
+
+function resetPromptDlg() {
+    var overLayId = popUpStack.length;
+    var item = popUpStack.pop();
+    var divObj = document.getElementById(item.id);
+    divObj.style.display = "none";
+    var overLay = document.getElementById("overlay" + overLayId);
+    overLay.style.display = 'none';
+    overLay.parentNode.removeChild(overLay);
+    divObj.parentNode.removeChild(divObj);
+}
+
+function createOverlay(id, classNames) {
+    var div = document.createElement('div');
+    div.id = id;
+
+    if (typeof classNames === "string") {
+        div.className = classNames;
+    }
+    else {
+        for (var i = 0; i < classNames.length; i++) {
+            if (i == 0) {
+                div.className = classNames[i];
+            }
+            else {
+                div.className += " " + classNames[i];
+            }
+        }
+    }
+
+    document.body.appendChild(div);
+    return div;
+}
+
+function PFTPopupNG(targetPopupId, options) {
+    validatePopupOptions(options);
+    var item = {};
+    item.id = targetPopupId;
+    item.options = options;
+    popUpStack.push(item);
+    var counter = popUpStack.length;
+    var overLay = createOverlay("overlay" + counter, "overlay");
+    //SlidingDiv
+
+    if (options.isSlidingRequired != null && options.isSlidingRequired) {
+        var sliderDiv = createOverlay("slide" + counter, "slideicon");
+        sliderDiv.title = "Click here to slide";
+        options["slideId"] = sliderDiv.id;
+
+
+    }
+    //End of SlidingDiv
+    options["overlayId"] = overLay.id;
+    if (options["url"] != undefined) {
+        loadUrlNG(targetPopupId, options);
+    }
+}
+
+function validatePopupOptions(options) {
+    if (options == null || options.length == 0) {
+        throw new Error("options cannot be empty");
+    }
+
+    //var title = options["title"];
+    //if (title == "") {
+    //    throw new Error("parmeter [title] cannot be omitted");
+    //}
+
+
+    if (options["url"] == null || typeof (options["url"]) == "undefined") {
+        throw new Error("[url] or [sourceId] must be provided");
+    }
+
+    return true;
+}
+function enablePopupCloseOnEscapeKeyPress(enable) {
+    if (popUpStack.length <= 0) return;
+
+    var item = popUpStack[popUpStack.length - 1];
+    if (enable) {
+        if (item.options["closePopUpOnEsc"] != null) {
+            item.options["closePopUpOnEsc"] = true;
+        }
+        else {
+            item.options.closePopUpOnEsc = true;
+        }
+    }
+    else {
+        if (item.options["closePopUpOnEsc"] != null) {
+            item.options["closePopUpOnEsc"] = false;
+        }
+        else {
+            item.options.closePopUpOnEsc = false;
+        }
+    }
+}
+
+function openPopupNG(request, id, options) {
+    var divObject = createDiv(id, options);
+    var popUpPeekIndex = popUpStack.length;
+    var popUpCounter = popUpStack.length;
+    var headerId = "popUpHeader" + popUpCounter;
+    var headerContentLeftId = "popUpHeaderLeftContent" + popUpCounter;
+    var headerContentId = "popUpHeaderRightContent" + popUpCounter;
+    var bodyId = "popUpBody" + popUpCounter;
+    var footerId = "popUpFooter" + popUpCounter;
+    var closeId = "close" + popUpCounter;
+    var popupBusyId = "popupBusy" + popUpCounter;
+
+    if (options.title !== '') {
+        var dialogHtml = '<div class="popupBG">';
+        dialogHtml += '<div class="popHeader" id="' + headerId + '">'
+        dialogHtml += '<div class="popupHeaderLeftContainer" id="' + headerContentLeftId + '"></div><h1>' + options["title"] + '</h1><div class="popupHeaderRightContainer" id="' + headerContentId + '"></div><div class="popupBusyIcon" id="' + popupBusyId + '"></div>';
+        if (options["closeIconNeeded"] != null && !options["closeIconNeeded"]) {
+        }
+        else {
+            dialogHtml += '<div title="Click here to close" class="popupClose" id="' + closeId + '"></div>';
+        }
+        dialogHtml += '</div>';
+        dialogHtml += '<div class="popBody" id="' + bodyId + '"></div>';
+        dialogHtml += '<div class="popFooter"><div class="popupFooterContainer" id="' + footerId + '"></div>';
+        if (options["buttons"] != null) {
+            for (var i = 0; i < options["buttons"].length; i++) {
+                var btnId = options["buttons"][i] + popUpPeekIndex;
+                dialogHtml += '<div class="promptBtn" title="' + options["buttons"][i] + '" id="' + btnId + '">'
+        + options["buttons"][i] + '</div>'
+            }
+        }
+        dialogHtml += '<div class="clr"></div></div></div>';
+    } else {
+        var dialogHtml = '<div class="popupBG">';
+        dialogHtml += '</div>';
+        dialogHtml += '<div class="" id="' + bodyId + '"></div>';
+    }
+    divObject.innerHTML = dialogHtml;
+    document.body.appendChild(divObject);
+    setPopUpNGPosition(id, options);
+    if (options["leftHeaderId"] != null || options["rightHeaderId"] != null ||
+                        options["bodyContainerId"] != null || options["footerContainerId"] != null) {
+        if (options["leftHeaderId"] != null) {
+            var leftHeader = $jq($jq.parseHTML(request.responseText)).find("#" + options["leftHeaderId"]);
+            if (leftHeader != null && leftHeader != undefined && leftHeader.length > 0)
+                document.getElementById(headerContentLeftId).innerHTML = leftHeader.prop('outerHTML');
+        }
+        if (options["rightHeaderId"] != null) {
+            var rightHeader = $jq($jq.parseHTML(request.responseText)).find("#" + options["rightHeaderId"]);
+            if (rightHeader != null && rightHeader != undefined && rightHeader.length > 0)
+                document.getElementById(headerContentId).innerHTML = rightHeader.prop('outerHTML');
+        }
+        if (options["bodyContainerId"] != null) {
+            var bodyContainer = $jq($jq.parseHTML(request.responseText)).find("#" + options["bodyContainerId"]);
+            if (bodyContainer != null && bodyContainer != undefined && bodyContainer.length > 0)
+                document.getElementById(bodyId).innerHTML = bodyContainer.prop('outerHTML');
+        }
+        if (options["footerContainerId"] != null) {
+            var footerContainer = $jq($jq.parseHTML(request.responseText)).find("#" + options["footerContainerId"]);
+            if (footerContainer != null && footerContainer != undefined && footerContainer.length > 0)
+                document.getElementById(footerId).innerHTML = footerContainer.prop('outerHTML');
+        }
+    }
+    else {
+        document.getElementById(bodyId).innerHTML = request.responseText;
+    }
+    if (options["closeIconNeeded"] != null && !options["closeIconNeeded"]) {
+    }
+    else {
+        if (options.title !== '') {
+            var closeDiv = document.getElementById(closeId);
+            closeDiv.addEventListener("click", function () {
+                if (options["validateOnClosePopup"]) {
+                    options["validateOnClosePopup"]();
+                }
+                else {
+                    closePopupNG();
+                }
+            });
+        }
+    }
+
+    if (options["isSlidingRequired"] != null && options["isSlidingRequired"]) {
+        var slideId = options.slideId;
+        var slideDiv = document.getElementById(slideId);
+        // var overLayDiv = document.getElementById(options["overlayId"]);
+        slideDiv.addEventListener("click", function () {
+            var divRight = document.getElementById(divObject.id).style.right;
+            if (divRight == "0px")
+                closePopupNG();
+        }
+        );
+
+        //overLayDiv.addEventListener("click", function () {
+        //   closePopupNG();
+        //}
+        //);
+    }
+
+    if (options["onCompleteCallback"] != null && typeof (options["onCompleteCallback"]) == "function") {
+        options["onCompleteCallback"].call();
+    }
+    if (options["buttons"] != null) {
+        for (var i = 0; i < options["buttons"].length; i++) {
+            var btnId = options["buttons"][i] + popUpPeekIndex;
+            registerPopupBtnEvent(btnId, options["buttons"][i], options);
+        }
+    }
+    if (popUpStack.length == 1) {
+        if (id !== 'CreateEditPSPopupWrapper') {
+            addBlurEffectToPopup();
+        }
+    }
+    
+    if (isMobile.any() && (typeof (jQuery("#ScreenerInboxContainer.container")) != undefined || typeof (jQuery("#ScreenerOutboxContainer.container")) != undefined) && jQuery("body .popupBG").length != 0) {
+        try {
+            jQuery("#ScreenerOutboxContainer.container").css("overflow-y", "hidden");
+            jQuery("#ScreenerInboxContainer.container").css("overflow-y", "hidden");
+            jQuery(".scrBody #dashboardDetailsContainer").addClass('blur');
+
+        } catch (err) {
+
+        }
+        finally {
+            jQuery(".asset-contentWraper").css("overflow-x", "hidden");
+        }
+
+    }
+}
+
+function loadUrlNG(id, options) {
+    var url = options["url"];
+    var requestOptions = null;
+    if (options["postBody"] != null) {
+        requestOptions = {
+            method: 'POST',
+            postBody: options["postBody"],
+            onFailure: function (request) {
+                throw new Error('Critical error: LoadURL() failed for the: ' + url);
+            },
+            onSuccess: function (request) {
+                openPopupNG(request, id, options);
+            },
+            onComplete: function (request) {
+                if (id == "reviewContent" && IsClick != null && IsClick != undefined)
+                    IsClick = 0;
+            }
+        };
+    }
+    else {
+        requestOptions = {
+            method: 'POST',
+            onFailure: function (request) {
+                throw new Error('Critical error: LoadURL() failed for the: ' + url);
+            },
+            onSuccess: function (request) {
+                openPopupNG(request, id, options);
+            },
+            onComplete: function (request) {
+                if (id == "reviewContent" && IsClick != null && IsClick != undefined)
+                    IsClick = 0;
+            }
+        };
+    }
+    var checkValidation = true;
+    if (options["checkValidation"] != null) {
+        new PFTAjaxWrapper().RequestNoCheck(url, requestOptions, options["checkValidation"]);
+    }
+    else {
+        new PFTAjaxWrapper().Request(url, requestOptions, checkValidation);
+    }
+}
+
+function registerPopupBtnEvent(divId, btnType, options) {
+    var promptDiv = document.getElementById(divId);
+    promptDiv.addEventListener("click", function (e) {
+        if (options["onPopupButtonClick"] != null && typeof (options["onPopupButtonClick"]) == "function") {
+            var response = options["onPopupButtonClick"].call(options, btnType, divId);
+            if (options["closePopUpOnButtonClick"] != null && !options["closePopUpOnButtonClick"]) {
+
+            }
+            else closePopupNG();
+        }
+    });
+}
+
+function addBlurEffectToPopup() {
+    var wrapper = $jq('#bodyWrapper');
+
+    if ((wrapper != null) && detectIE() == false)
+        wrapper.addClass("blur");
+
+    var overlay = $jq('#overlay1');
+    if (overlay != null) {
+        overlay.addClass("assetViewerOverlayOpacity");
+    }
+}
+
+function removeBlurEffectForPopup() {
+    var wrapper = $jq('#bodyWrapper');
+    if (wrapper != null) {
+        wrapper.removeClass("blur");
+    }
+    var overlay = $jq('#overlay1');
+    if (overlay != null) {
+        overlay.removeClass("assetViewerOverlayOpacity");
+    }
+}
+
+function detectIE() {
+    var overlayIE = $jq('#overlay1');
+    if (window.navigator.userAgent.indexOf('Edge/') > 0 || window.navigator.userAgent.indexOf('Trident/') > 0 || window.navigator.userAgent.indexOf('MSIE ') > 0) {
+        overlayIE.addClass("overlayIE");
+        return true;
+    }
+    else {
+        overlayIE.removeClass("overlayIE");
+        return false;
+    }
+}
+
+function closePopupOnEscKey(evt) {
+    if (popUpStack.length <= 0) return;
+
+    evt = evt || window.event;
+    if (evt.keyCode == 27) {
+        var item = popUpStack[popUpStack.length - 1];
+        var element = document.getElementById(item.id);
+        if (element == null) return;
+
+        if (item.options["closePopUpOnEsc"] != null) {
+            if (!item.options["closePopUpOnEsc"]) {
+                // Dont close popup
+            }
+            else {
+                if (item.options["validateOnClosePopup"]) {
+                    item.options["validateOnClosePopup"]();
+                }
+                else {
+                    closePopupNG();
+                }
+            }
+        }
+        else {
+            if (item.options["validateOnClosePopup"]) {
+                item.options["validateOnClosePopup"]();
+            }
+            else {
+                closePopupNG();
+            }
+        }
+    }
+}
+
+function closePopupNG() {
+    if (popUpStack == null) return;
+    if (popUpStack.length <= 0) return;
+    var counter = popUpStack.length;
+    var item = popUpStack[counter - 1];
+
+    if (item.options["onCloseCallback"] != null &&
+     typeof (item.options["onCloseCallback"]) == "function") {
+        item.options['onCloseCallback'].call();
+    }
+
+    if (item.options["isSlidingRequired"] != null &&
+    item.options["isSlidingRequired"]) {
+        var width = $jq('#' + item.id).outerWidth();
+        document.getElementById(item.id).style.right = "-" + width + 'px';
+        var delayInMilliseconds = 500;
+        var slideEle = document.getElementById("slide" + counter);
+        var elem = document.getElementById(slideEle.id);
+        elem.parentNode.removeChild(elem);
+        setTimeout(function () {
+            closePopupWithoutDelay(item);
+        }, delayInMilliseconds);
+    }
+    else {
+        closePopupWithoutDelay(item);
+    }
+    if (isMobile.any() && (typeof (jQuery("#ScreenerInboxContainer.container")) != undefined || typeof (jQuery("#ScreenerOutboxContainer.container")) != undefined) && jQuery("body .popupBG").length == 0) {
+        try {
+            jQuery("#ScreenerOutboxContainer.container").css("overflow-y", "scroll");
+            jQuery("#ScreenerInboxContainer.container").css("overflow-y", "scroll");
+            jQuery(".scrBody #dashboardDetailsContainer").removeClass('blur');
+
+        } catch (err) {
+        }
+        finally {
+            jQuery(".asset-contentWraper").css("overflow-x", "scroll");
+        }
+    }
+        
+}
+
+function closePopupWithoutDelay(item) {
+    var counter = popUpStack.length;
+    if (counter == 1) {
+        removeBlurEffectForPopup();
+    }
+    popUpStack.pop();
+    var overlayEle = document.getElementById("overlay" + counter);
+    var dialogEle = document.getElementById(item.id);
+    overlayEle.style.display = "none";
+    dialogEle.style.display = "none";
+    overlayEle.parentNode.removeChild(overlayEle);
+    dialogEle.parentNode.removeChild(dialogEle);
+}
+
+function showPopupBusyStatus() {
+    if (popUpStack.length <= 0) return;
+    var popupBusyId = "popupBusy" + popUpStack.length;
+    var element = document.getElementById(popupBusyId);
+    if (element != null) {
+        element.style.display = "block";
+    }
+}
+
+function hidePopupBusyStatus() {
+    if (popUpStack.length <= 0) return;
+
+    var popupBusyId = "popupBusy" + popUpStack.length;
+    var element = document.getElementById(popupBusyId);
+    if (element != null) {
+        element.style.display = "none";
+    }
+}
+
+function createDiv(elementId, options) {
+    var divObj = document.createElement('div');
+    divObj.setAttribute('id', elementId);
+    if (options["className"]) {
+        divObj.addClassName(options["className"]);
+    }
+    if (options["height"] != null && options["width"] != null && (options["height"] != 0 && options["width"] != 0)) {
+        divObj.style.height = options["height"] + "px";
+        divObj.style.width = options["width"] + "px";
+    }
+    else {
+        divObj.style.height = "100%";
+        divObj.style.width = "100%";
+    }
+    return divObj;
+}
+
+function setPopUpNGPosition(contentContainerId, options) {
+    var container = document.getElementById(contentContainerId);
+    container.addClassName("containerPos" + popUpStack.length);
+    var screenHeight = window.screen.availHeight;
+    var screenWidth = window.screen.availWidth;
+    var actualWidth, actualHeight;
+    var deviceType = navigator.userAgent;
+
+    container.style.position = 'fixed';
+    if (options["isSlidingRequired"] != null && options.isSlidingRequired) {
+
+        container.style.right = options["right"];
+        container.style.height = "100%";
+        container.style.width = options["width"] + "px";
+    }
+
+    else {
+        if (options["height"] != null && options["width"] != null && (options["height"] != 0 && options["width"] != 0)) {
+            var panelwidth = -options["width"] / 2;
+            var panelheight = -options["height"] / 2;
+            container.style.left = "50%";
+            container.style.top = "50%";
+            if (options["display"] != null)
+                container.style.display = options["right"];
+            if (options["sizeInPercentage"] != null) {
+                if (options["sizeInPercentage"]) {
+                    container.style.marginLeft = panelwidth + "%";
+                    container.style.marginTop = panelheight + "%";
+                    container.style.width = options["width"] + "%";
+                }
+                else {
+                    container.style.marginLeft = panelwidth + "px";
+                    container.style.marginTop = panelheight + "px";
+                    container.style.width = actualWidth + "px";
+                }
+            }
+            else {
+                container.style.marginLeft = panelwidth + "px";
+                container.style.marginTop = panelheight + "px";
+                container.style.width = actualWidth + "px";
+            }
+
+        }
+        else {
+            container.style.left = "0%";
+            container.style.top = "0%";
+            container.style.marginLeft = "0%";
+            container.style.marginTop = "0%";
+        }
+    }
+}
+
+function showErrorDetails(message, condition) {
+    showErrorDetailsNG(message, condition);
+}
+
+function showErrorDetailsNG(message, condition, options, isManualClose) {
+    var classname = "alertSuccessNG";
+    switch (condition) {
+        case 0:
+        case "0": classname = 'alertErrorNG';
+            break;
+        case 1:
+        case "1": classname = 'alertSuccessNG';
+            break;
+        case 2:
+        case "2": classname = 'alertWarningNG';
+            break;
+        case 3:
+        case "3": classname = 'alertInfoNG';
+            break;
+    }
+    closeAlert();
+    var html = '<div id="errorAlert" class="' + classname + '">';
+    html += 'Alert';
+    html += '</div>';
+    html += '<div class="alertMessageNG">';
+    html += message;
+    html += '</div>';
+    html += '<div class="alertCloseNG" onclick="closeAlert();"></div>';
+    var div = document.createElement('div');
+    div.id = "alertWrapper";
+    div.innerHTML = html;
+    div.className = "alertWrapper";
+    document.body.appendChild(div);
+    var alertInterval = 5000;
+    if (options != null) {
+        if (options["alertInterval"] != null) {
+            alertInterval = options["alertInterval"];
+        }
+    }
+    if (typeof $jq(".alertWrapper").effect === "function") {
+        $jq(".alertWrapper").effect("shake", { direction: "up", times: 3, distance: 4 }, 1000);
+    }
+    if (isManualClose == null || isManualClose == undefined || isManualClose == 0)
+        setTimeout(function () {
+            closeAlert();
+        }, alertInterval);
+}
+
+function closeAlert() {
+    var element = document.getElementById("alertWrapper");
+    if (element != null) {
+        element.remove(element);
+        var wrapperElements = document.getElementsByClassName("ui-effects-wrapper");
+        if (wrapperElements.length != 0)
+            for (i = 0; i < wrapperElements.length; i++)
+                wrapperElements[i].remove(wrapperElements[i]);
+    }
+}
+
+function callApplySlider(options) {
+    var deviceMetrics = getDeviceMetrics();
+    //$jq('.' + options["leftPanel"]).css('width', '51%').addClass('setPos').hide();
+    //$jq('.' + options["rightPanel"]).css('width', '100%').removeClass('FL').addClass('FR').addClass('setPos');
+
+    //$jq('.' + options["leftPanel"]).css('width', '51%').addClass('setPos').hide();
+    //$jq('.' + options["rightPanel"]).css('width', '100%').removeClass('FL').addClass('FR').addClass('setPos');
+    //$jq('').appendTo(".popHeader");
+    $jq('#' + options["id"]).addClass('responsiveDesign')
+
+}
+
+function callShowMenu() {
+
+    var hidden = $jq('.leftMenuPanel');
+    if (hidden.hasClass('visible')) {
+        $jq('.leftMenuPanel').show();
+        hidden.animate({
+            "left": "0%"
+        }, "slow").removeClass('visible');
+    } else {
+        hidden.animate({
+            "left": "-50%"
+        }, "slow", function () {
+            $jq('.leftMenuPanel').hide();
+        }).addClass('visible');
+    }
+
+}
+
+function callFullScreen(id, type) {
+
+    var element = document.getElementById(id), height;
+    if ((document.fullScreenElement && document.fullScreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+        element.innerHTML = getFullScreenElements(id, type);
+        if (element.requestFullScreen) {
+            element.requestFullScreen();
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
+        } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+        }
+        height = $jq(id).css('height');
+        $jq('#fullScreenEementsContainer').show();
+        document.getElementById(id).style.height = '100%';
+    } else {
+        document.getElementById(id).style.height = height + 'px';
+        if (document.cancelFullScreen) {
+            document.cancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        element.innerHTML = '';
+    }
+
+
+}
+
+function getFullScreenElements(id, type) {
+
+    var childElement = '';
+    if (type == 'image') {
+        var title = $jq('#' + id).data('title');
+        if (title == null || title == undefined)
+            title = 'title';
+        childElement = '<div id="fullScreenEementsContainer" class="cfullScreenEementsContainer" >' +
+                            '<div id="fullScreenTitle" class="cfullScreenTitle" >' + title + '</div>' +
+                            '<div id="fullScreenPrev" class="cfullScreenPrevNext" onclick="callPrevInstance(' + id + ')" ></div>' +
+                            '<div id="fullScreenNext" class="cfullScreenPrevNext AlignRight" onclick="callNextInstance(' + id + ')" ></div>' +
+                            '<div id="fullScreenCancel" class="cfullScreenCancel" onclick="callFullScreen(' + id + ')" ></div>' +
+                       '</div>';
+    } else {
+        childElement = '<div id="fullScreenEementsContainer" class="cfullScreenEementsContainer" >' +
+                            '<div id="fullScreenTitle" class="cfullScreenTitle" >' + title + '</div>' +
+                            '<div id="fullScreenCancel" class="cfullScreenCancel" onclick="callFullScreen(' + id + ')" ></div>' +
+                       '</div>';
+    }
+    return childElement;
+}
+
+function ShowPopupProgressBar() {
+    if (document.getElementById("waitingPopup")) {
+        document.getElementById("waitingPopup").style.display = "inline";
+    }
+}
+function HidePopupProgressBar() {
+    if (document.getElementById("waitingPopup")) {
+        document.getElementById("waitingPopup").style.display = "none";
+    }
+}

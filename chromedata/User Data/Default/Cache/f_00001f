@@ -1,0 +1,1061 @@
+﻿var subtitleIDB = function () {
+
+    var self = this;
+    var isIDBSupport = false;
+    self.lastInsertId = null;
+    self.lastCountOfSubtitle = 0;
+    var database = "Clear-Subtitling";
+    var indexedDB = null;
+    var dbObj = null;
+    var IDBKeyRange = null;
+    var IDBTransaction = null;
+
+    var objectStore = null;
+    var collectionName = null;
+    var transaction = null;
+    var assetId = userId = launchPoint = 0;
+    var langVer = "";
+    var currentEmGuid = 0;
+    var lastEmGuid = 0;
+    var lastCollection = null;
+    var globalSubtitleModifiedFlag = false;
+
+    var enqueCount = 0;
+
+    self.setEnqueCount = function(count){
+        enqueCount = count;
+    }
+
+    self.decrementEnqueCount = function () {        
+        if (enqueCount == 0) {
+            return 0;            
+        }            
+        return --enqueCount;
+    }
+
+    self.getEnqueCount = function () {
+        return enqueCount;
+    }
+
+    self.resetGlobalFlags = function () {// No need for setter getter. We will direct reset.
+        self.globalSubtitleModifiedFlag = false;
+        //self.lastCountOfSubtitle = 0;
+    }
+
+    self.setGlobalSubtitleModified = function () {// No need for setter getter. We will direct reset.
+        self.globalSubtitleModifiedFlag = true;
+    }
+
+    self.getGlobalSubtitleModified = function () {// No need for setter getter. We will direct reset.
+        return self.globalSubtitleModifiedFlag;
+    }
+
+    self.index = function () {
+        if (self.checkIDBSupport()) {
+            /* below line have been commented when EMGUID introduced in collection table. 
+            generateCollectionName();
+            createIDBConnectionObjects(function () { clearData(); });
+			*/
+            createIDBConnectionObjects();
+        }
+    }
+
+    self.IsIDBSupportAvail = function () {
+        return isIDBSupport;
+    }
+
+    self.setCollectionName = function (collection) {
+        collectionName = collection;
+    }
+
+    self.getCollectionName = function () {
+        return collectionName;
+    }
+
+
+    self.checkIDBSupport = function () {
+        // This works on all devices/browsers, and uses IndexedDBShim as a final fallback 
+        indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+        if (!indexedDB) {
+            isIDBSupport = false;
+            return false;
+        }
+
+        IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
+        IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+
+        indexedDB.onerror = function (e) {
+            isIDBSupport = false;
+            writeToConsoleScreen("Database error  " + e.target.errorCode);
+        };
+
+        isIDBSupport = true;
+        return true;
+    }
+
+
+    self.afterLoginPerformSaveOperation = function () {
+
+        if (self.checkIDBSupport() && self.IsIDBSupportAvail()) {
+
+            var postDBObjectInstantiate = function () {
+
+                var objectStotres = dbObj.objectStoreNames;
+
+                if (objectStotres.length) {
+
+                    var index = 0;
+                    var interval = setInterval(function () {//kept interval update for async behaviour of IDB
+                        if (index >= objectStotres.length) {
+                            clearInterval(interval);
+                            return;
+                        }
+                        var objectStoreName = objectStotres[index];
+                        self.setCollectionName(objectStoreName);
+
+                        var callbackObj = {};
+                        callbackObj.callbackFunction = function () {
+                            clearData();
+                        }
+                        callbackObj.millis = 1000 * 1; // 2 Secs
+                        SubtitleIDBWrapper.processCurrentDataInIDB(callbackObj, 2);
+                        index++;
+                    }, 3 * 1000);
+                }
+            }
+
+            createIDBConnectionObjects(postDBObjectInstantiate);
+        }
+    }
+
+    self.checkAndLoadSubtitles = function (subtitleData, langVerParam, action) {
+        if (dbObj == null) {
+            var callBack = function () {
+                var callBack = function () { self.loadSubtitlesToIDB(subtitleData, langVerParam, action); }
+                self.checkCollectionExist(callBack);
+            };
+
+            createIDBConnectionObjects(callBack);
+        } else {
+            var callBack = function () { self.loadSubtitlesToIDB(subtitleData, langVerParam, action); }
+            self.checkCollectionExist(callBack);
+        }
+
+        
+    }
+
+    self.loadSubtitlesToIDB = function (subtitleData, langVerParam, action) {
+
+        try {
+
+            if (!isIDBSupport) { return false; }
+            langVer = langVerParam;
+
+            if (isArray(subtitleData)) {
+
+                var insertBulkRecordonLangChange = function () {
+                    showGlobalWaiting(false);
+
+                    var transaction = dbObj.transaction(collectionName, "readwrite");
+                    var collectionTable = transaction.objectStore(collectionName);
+                    subtitleData.forEach(function (userObj, index) {
+                        if (isArray(userObj.Subtitle)) {
+                            userObj.Subtitle.forEach(function (subtitle, subIndex) {
+                                var row = {
+                                    IndexedId: subtitle.indexedId,
+                                    TcIn: subtitle.TcIn,
+                                    TcOut: subtitle.TcOut,
+                                    SubTitleText: subtitle.SubtitleText,
+                                    OBJID: subtitle.ObjId,
+                                    UserId: userId,
+                                    AssetId: assetId,
+                                    IsModified: (action != "translateAndLoadSubtitles")? "No" : "Yes",
+                                    IsDeleted: "No",
+                                    IsNewSubtitle: (action != "translateAndLoadSubtitles")? "No" : "Yes",
+                                    langVer: subtitle.langVer,
+                                    TaskId: SubTitleModule.taskId,
+                                    TenantId: SubTitleModule.tenantId,
+                                    LaunchPoint: launchPoint,
+                                    CollectionName: collectionName,
+                                    EmGuid: subtitle.EmGuid,
+                                    assetMainTitle: subtitle.assetMainTitle,
+                                    additionalInfo: JSON.stringify(subtitle.additionalInfo)
+                                }
+
+                                insertRecord(row, collectionTable);
+                            });
+                        }
+                    });
+
+                    //self.unloadAndUpdateLastSubtitle();
+                }
+
+
+                lastEmGuid = currentEmGuid.toString();
+                currentEmGuid = getCurrentLangVerAndEMGuid().EMGuid;
+                currentEmGuid = currentEmGuid.toString();
+                if (lastEmGuid == currentEmGuid && action != "translateAndLoadSubtitles") {
+                    clearDataForEmGuid(currentEmGuid, insertBulkRecordonLangChange);
+                } else {
+                    executeCallBackFunction(insertBulkRecordonLangChange);
+                }
+
+               
+            }
+        } catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+
+    }
+
+    self.unloadAndUpdateLastSubtitle = function (millis) {
+
+        //Now we have new table for each EMGUID so no need to clear things. So returning true from here. Kept his function for future purpose
+        collectionName = null; // kept for when we have select option selected we are calling this from subtitle.js. so anyRecordModified method handle will work
+        return true;
+
+
+        if (typeof millis == "undefined") {
+            millis = 5 * 1000;
+        }
+
+        var callbackFunction = function (subtitles) {
+            SubtitleIDBWrapper.processBulkUpate(subtitles);
+            executeCallBackFunction(clearDataForEmGuid, SubtitleIDBWrapper.subtitleIDB, [lastEmGuid], millis);
+        };
+
+        if (lastEmGuid != currentEmGuid && lastEmGuid != 0) {
+            updateLastEmGuidDataToServer(callbackFunction);
+        }
+    }
+
+    self.addSubtitle = function (subtitle) {
+
+        //var transaction = dbObj.transaction(collectionName, "readwrite");
+
+        var transactionCallback = function (error, transaction) {
+
+            if (error) {
+                return writeToConsoleScreen("From addSubtitle", error);
+            }
+
+            var collectionTable = transaction.objectStore(collectionName);
+
+            if (typeof langVer == "undefined" || langVer == "") {
+                langVer = getCurrentLangVerAndEMGuid().langVer;
+            }
+
+            var row = {
+                IndexedId: subtitle.IndexedId,
+                TcIn: subtitle.TcIn,
+                TcOut: subtitle.TcOut,
+                SubTitleText: subtitle.SubTitleText,
+                OBJID: subtitle.OBJID,
+                UserId: userId,
+                AssetId: assetId,
+                IsModified: "Yes",
+                IsDeleted: "No",
+                IsNewSubtitle: "Yes",
+                langVer: langVer,
+                TaskId: SubTitleModule.taskId,
+                TenantId: SubTitleModule.tenantId,
+                LaunchPoint: launchPoint,
+                CollectionName: collectionName,
+                EmGuid: subtitle.EmGuid,
+                assetMainTitle: subtitle.assetMainTitle,
+                additionalInfo: JSON.stringify(subtitle.additionalInfo)
+            };
+
+            insertRecord(row, collectionTable, self.setGlobalSubtitleModified());
+        }
+
+        createTransaction(transactionCallback);
+    }
+
+    self.updateSubtitle = function (subtitle) {
+
+        //var transaction = dbObj.transaction(collectionName, "readwrite");
+
+        var callbackFunction = function (error, transaction) {
+            if (error) {
+                return writeToConsoleScreen("From updateSubtitle", error);
+            }
+            var collectionTable = transaction.objectStore(collectionName);
+            var row = {
+                IndexedId: subtitle.IndexedId,
+                TcIn: subtitle.TcIn,
+                TcOut: subtitle.TcOut,
+                SubTitleText: subtitle.SubTitleText,
+                OBJID: subtitle.OBJID,
+                UserId: userId,
+                AssetId: assetId,
+                IsModified: "Yes",
+                IsDeleted: "No",
+                IsNewSubtitle: "No",
+                langVer: langVer,
+                additionalInfo: subtitle.additionalInfo
+            };
+
+            updateRecord(row, collectionTable);
+        }
+
+        createTransaction(callbackFunction);
+    }
+
+    self.updateSubtitlePostServerResponse = function (subtitle) {
+
+        var transaction = dbObj.transaction(subtitle.CollectionName, "readwrite");
+        var collectionTable = transaction.objectStore(subtitle.CollectionName);
+        updateRecordAfterServerResponse(subtitle, collectionTable);
+    }
+
+    self.markSubtitleToDelete = function (IndexedId, callbackFunction) {
+
+        try {
+            // open a read/write db transaction, ready for clearing the data
+            //var transaction = dbObj.transaction(collectionName, "readwrite");
+
+            var transactionCallback = function (error, transaction) {
+                if (error) {
+                    return writeToConsoleScreen("From markSubtitleToDelete", error);
+                }
+
+                var collectionTable = transaction.objectStore(collectionName);
+
+                var IndexedIdObj = collectionTable.index('IndexedId');
+                var getKeyRequest = IndexedIdObj.get(parseInt(IndexedId));
+
+                getKeyRequest.onsuccess = function () {
+                    var resultData = getKeyRequest.result;
+                    resultData.IsDeleted = "Yes";
+                    var request = collectionTable.put(resultData);
+                    request.onsuccess = function (e) {
+                        self.setGlobalSubtitleModified();
+                        self.decrementEnqueCount();
+                        executeCallBackFunction(callbackFunction);
+                        writeToConsoleScreen("Finished Deleting Subtitle IndexedId - " + IndexedId);
+                    };
+                    request.onerror = function (e) {
+                        writeToConsoleScreen("Error " + e.value);
+                    };
+                }
+
+                getKeyRequest.onerror = function (e) {
+                    writeToConsoleScreen(e)
+                }
+            }
+
+            createTransaction(transactionCallback);
+
+        } catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+    }
+
+    self.getDeletedRecords = function (callbackObj) {
+
+        if (!self.IsIDBSupportAvail()) { return false; }
+        try {
+            // open a read/write db transaction, ready for clearing the data
+            //var transaction = dbObj.transaction(collectionName, "readwrite");
+
+            var transactionCallback = function (error, transaction) {
+                if (error) {
+                    return writeToConsoleScreen("From getDeletedRecords", error);
+                }
+                var collectionTable = transaction.objectStore(collectionName);
+                var IsDeletedIndex = collectionTable.index('IsDeletedIndex');
+                // Select only those records where prop1=value1 and prop2=value2
+                var getAllKeysRequest = IsDeletedIndex.openCursor(IDBKeyRange.only("Yes"));
+
+                var subtitles = [];
+
+                getAllKeysRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        subtitles.push(cursor.value);
+                        //deleteSingleSubtitle(cursor.value.id, collectionTable);                    
+                        cursor.continue();
+                    } else {
+
+                        var deleteFromServer = function () {
+                            SubtitleIDBWrapper.deleteFromServer(subtitles);
+
+                            if (subtitles.length == 0) { callbackObj.millis = 500; }
+                            else { callbackObj.millis = subtitles.length * 50; } //50 milliSec for one record
+                            //callback for process modified and new data
+                            SubtitleIDBWrapper.executeCallbackFunction(callbackObj.callbackFunction, "", [], callbackObj.millis);
+                        };
+
+                        executeCallBackFunction(deleteFromServer);
+                        writeToConsoleScreen("Delete call back");
+                    }
+                }
+
+                getAllKeysRequest.onerror = function (e) {
+                    writeToConsoleScreen(e)
+                }
+            }
+
+            createTransaction(transactionCallback);
+
+
+        } catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+    }
+
+
+    self.getRecordsByID = function (callbackFunction) {
+        try {
+            // open a read/write db transaction, ready for clearing the data
+            //var transaction = dbObj.transaction(collectionName, "readwrite");
+
+            var transactionCallback = function (error, transaction) {
+                if (error) {
+                    return writeToConsoleScreen("From getRecordsByID", error);
+                }
+
+                var collectionTable = transaction.objectStore(collectionName);
+                var IsDeletedIndex = collectionTable.index('IdIndex');
+                // Select only those records where prop1=value1 and prop2=value2
+                var getAllKeysRequest = IsDeletedIndex.openCursor();
+
+                var subtitles = [];
+
+                getAllKeysRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        if (cursor.value.IsModified == "Yes" && cursor.value.IsDeleted == "No") {
+                            subtitles.push(cursor.value);
+                        }
+                        cursor.continue();
+                    } else {
+                        if (typeof callbackFunction == "function") { callbackFunction(subtitles); }
+                    }
+                }
+
+                getAllKeysRequest.onerror = function (e) {
+                    writeToConsoleScreen(e)
+                }
+            }
+
+            createTransaction(transactionCallback);
+
+        } catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+    }
+
+    self.anyRecordModified = function (callbackFunction) {
+        try {
+            var self = this;
+            if (collectionName == null) {
+                self.createCollection(callbackFunction);
+                return;
+            }
+
+            lastCollection = collectionName;
+            if (self.globalSubtitleModifiedFlag == true) {
+                callbackFunction(true);
+            } else {
+                callbackFunction(false);
+            }
+            return;
+
+            /*var transactionCallback = function (error, transaction) {
+                var anyRecordModified = false;
+                if (error) {
+                    return writeToConsoleScreen("From anyRecordModified", error);
+                }
+
+                var collectionTable = transaction.objectStore(collectionName);
+                var IsDeletedIndex = collectionTable.index('IdIndex');
+                // Select only those records where prop1=value1 and prop2=value2
+                var getAllKeysRequest = IsDeletedIndex.openCursor();
+
+                getAllKeysRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        if (cursor.value.IsModified == "Yes" || cursor.value.IsDeleted == "Yes") {
+                            anyRecordModified = true;
+                        } else {
+                            cursor.continue();
+                        }
+                        cursor.continue();
+                    } else {
+                        if (typeof callbackFunction == "function") { callbackFunction(anyRecordModified); }
+                    }
+                }
+
+                getAllKeysRequest.onerror = function (e) {
+                    writeToConsoleScreen(e)
+                }
+            }
+
+            createTransaction(transactionCallback);*/
+
+        } catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+    }
+
+    self.ClearTableData = function () {
+        clearLastCollectionData();
+    }
+
+    self.createCollection = function (callbackFunction) {
+        if (self.checkIDBSupport()) {
+            generateCollectionName();
+            if (!dbObj.objectStoreNames.contains(collectionName)) {
+                createObjectStore(callbackFunction);
+                return;
+            }
+
+            executeCallBackFunction(callbackFunction);
+
+        } else {
+            executeCallBackFunction(callbackFunction);
+        }
+
+    }
+
+    self.checkCollectionExist = function (callbackFunction) {
+        if (self.checkIDBSupport()) {
+            generateCollectionName();
+            if (!dbObj.objectStoreNames.contains(collectionName)) {
+                createObjectStore(callbackFunction);
+                return false;
+            }
+
+            executeCallBackFunction(callbackFunction);
+        }
+
+        return true;
+    }
+
+    self.deleteDatabase = function () {
+        DeleteDataBase();
+    }
+
+    function DeleteDataBase() {
+
+        writeToConsoleScreen("Going to delete DB");
+
+        var DBDeleteRequest = indexedDB.deleteDatabase(database);
+
+        DBDeleteRequest.onerror = function (event) {
+            writeToConsoleScreen("Error deleting database.", event);
+        };
+
+        DBDeleteRequest.onsuccess = function (event) {
+            writeToConsoleScreen("Database deleted successfully");
+
+            writeToConsoleScreen(event.result); // should be undefined
+        };
+    }
+
+    function updateLastEmGuidDataToServer(callbackFunction) {
+        try {
+            // open a read/write db transaction, ready for clearing the data
+            //var transaction = dbObj.transaction(collectionName, "readwrite");
+            var transactionCallback = function (error, transaction) {
+                if (error) {
+                    return writeToConsoleScreen("From updateLastEmGuidDataToServer", error);
+                }
+
+                var collectionTable = transaction.objectStore(collectionName);
+                var IsDeletedIndex = collectionTable.index('EmGuidIndex');
+                // Select only those records where prop1=value1 and prop2=value2
+                var getAllKeysRequest = IsDeletedIndex.openCursor(IDBKeyRange.only(lastEmGuid));
+
+                var subtitles = [];
+
+                getAllKeysRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        if (cursor.value.IsModified == "Yes" && cursor.value.IsDeleted == "No") {
+                            subtitles.push(cursor.value);
+                        }
+                        cursor.continue();
+                    } else {
+                        if (typeof callbackFunction == "function") {
+                            if (subtitles.length) {
+                                callbackFunction(subtitles);
+                            }
+                            clearDataForEmGuid(lastEmGuid);
+                        }
+                    }
+                }
+
+                getAllKeysRequest.onerror = function (e) {
+                    writeToConsoleScreen(e)
+                }
+            }
+
+            createTransaction(transactionCallback);
+
+        } catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+    }
+
+    function insertRecord(subtitleRow, collectionTable, callbackFunction) {
+
+        try {
+            //Insert Subtitle
+            writeToConsoleScreen('Started adding record');
+            var request = collectionTable.add(subtitleRow);
+            request.onsuccess = function (e) {
+                writeToConsoleScreen('Finished adding record');
+                self.lastInsertId = e.target.result;
+                SubtitleIDBWrapper.subtitleIDB.lastCountOfSubtitle++;
+                self.decrementEnqueCount();
+                executeCallBackFunction(callbackFunction);
+            };
+            request.onerror = function (e) {
+                writeToConsoleScreen("Subtitle record was not added.", subtitleRow);
+            };
+
+        } catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+    }
+
+    function updateRecord(subtitleRow, collectionTable) {
+        try {
+            // open a read/write db transaction, ready for clearing the data
+
+            //var OBJIDIndex = collectionTable.index('OBJIDIndex');
+            //var getKeyRequest = OBJIDIndex.get(subtitleRow.OBJID);
+            var IndexedId = collectionTable.index('IndexedId');
+            var getKeyRequest = IndexedId.get(parseInt(subtitleRow.IndexedId));
+           
+            getKeyRequest.onsuccess = function (event) {
+                var resultData = getKeyRequest.result;
+                if (typeof resultData == "undefined") {
+                    writeToConsoleScreen("Failed to update record", subtitleRow); return false;
+                }
+                
+                var resultClone = { "TcIn": resultData.TcIn, "TcOut": resultData.TcOut, "SubTitleText": resultData.SubTitleText }
+                resultData.TcIn = (subtitleRow.TcIn == "no-update") ? resultData.TcIn : subtitleRow.TcIn;
+                resultData.TcOut = (subtitleRow.TcOut == "no-update") ? resultData.TcOut : subtitleRow.TcOut;
+                resultData.SubTitleText = (subtitleRow.SubTitleText == "no-update") ? resultData.SubTitleText : subtitleRow.SubTitleText;
+                resultData.additionalInfo = (subtitleRow.additionalInfo == "no-update") ? resultData.additionalInfo : JSON.stringify(subtitleRow.additionalInfo);
+                resultData.IsModified = "Yes";
+                var request = collectionTable.put(resultData);
+                request.onsuccess = function (e) {
+                    writeToConsoleScreen("Finished Updating Subtitle - " + subtitleRow.OBJID);
+                    self.decrementEnqueCount();
+
+                    if (resultClone.TcIn != subtitleRow.TcIn || resultClone.TcOut != subtitleRow.TcOut || resultClone.SubTitleText != subtitleRow.SubTitleText || resultClone.additionalInfo != JSON.stringify(subtitleRow.additionalInfo))
+                        self.setGlobalSubtitleModified();
+                };
+                request.onerror = function (e) {
+                    writeToConsoleScreen("Error " + e.value);
+                };
+            }
+
+            getKeyRequest.onerror = function (e) {
+                writeToConsoleScreen(e)
+            }
+
+        } catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+    }
+
+    function updateRecordAfterServerResponse(subtitleRow, collectionTable) {
+        try {
+            // open a read/write db transaction, ready for clearing the data
+
+            var getKeyRequest = collectionTable.get(subtitleRow.id);
+            getKeyRequest.onsuccess = function () {
+                var resultData = getKeyRequest.result;
+                if (resultData.IsNewSubtitle == "Yes") {
+                    resultData.OBJID = subtitleRow.newOBJID;
+                }
+                resultData.IsModified = "No";
+                resultData.IsNewSubtitle = "No";
+                var request = collectionTable.put(resultData);
+                request.onsuccess = function (e) {
+                    writeToConsoleScreen("Finished Updating Subtitle after Server response for id = " + e.currentTarget.result);
+                };
+                request.onerror = function (e) {
+                    writeToConsoleScreen("Server response Error " + e.value);
+                };
+            }
+
+            getKeyRequest.onerror = function (e) {
+                writeToConsoleScreen(e)
+            }
+
+        } catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+    }
+
+    function generateCollectionName() {
+        assetId = document.getElementById("objId").value;
+        userId = document.getElementById("usrId").value;
+        launchPoint = document.getElementById("launchPoint").value;
+        var target = jQuery("#sub_lang_ver");
+        var langVervalue = target.find("option:selected").val();
+
+        collectionName = assetId + "-" + launchPoint;
+        if (launchPoint == "library") {
+            collectionName += "-" + userId;
+        }
+        if (langVervalue != null && langVervalue != "select") {
+            collectionName += "-" + langVervalue;
+        }
+
+        if (langVervalue == "select") {
+            collectionName = null;
+        }
+    }
+
+    function createIDBConnectionObjects(callbackFunction) {
+
+        try {
+            if (dbObj != null) dbObj.close();
+            var openRequest = indexedDB.open(database); //version used
+            writeToConsoleScreen('Started database create - ' + database);
+            openRequest.onerror = function (e) {
+                isIDBSupport = false;
+                writeToConsoleScreen("Database error: " + e.target.errorCode);
+            };
+            openRequest.onsuccess = function (event) {
+                writeToConsoleScreen('Finished database create - ' + database);
+                dbObj = openRequest.result;
+                executeCallBackFunction(callbackFunction);
+            };
+            openRequest.onupgradeneeded = function (evt) {
+                if (collectionName == null) { return false; }
+
+                if (!evt.currentTarget.result.objectStoreNames.contains(collectionName)) {
+                    writeToConsoleScreen("Started creating object-store - '" + collectionName);
+                    var subtitles = evt.currentTarget.result.createObjectStore(collectionName, { keyPath: "id", autoIncrement: true }); // key id ID
+                    subtitles.createIndex("IdIndex", "id", { unique: true });
+                    subtitles.createIndex("IndexedId", "IndexedId", { unique: true });
+                    subtitles.createIndex("OBJIDIndex", "OBJID", { unique: true });
+                    //subtitles.createIndex("UserIdIndex", "UserId", { unique: false });
+                    subtitles.createIndex("IsModifiedIndex", "IsModified", { unique: false });
+                    subtitles.createIndex("IsDeletedIndex", "IsDeleted", { unique: false });
+                    //subtitles.createIndex("langVerIndex", "langVer", { unique: false });
+                    //subtitles.createIndex("EmGuidIndex", "EmGuid", { unique: false });
+                    subtitles.createIndex("IsNewSubtitleIndex", "IsNewSubtitle", { unique: false });
+                }
+
+            };
+        }
+        catch (e) {
+            writeToConsoleScreen(e.message);
+        }
+
+    }
+
+
+    function createObjectStore(callbackFunction) {
+
+        if (dbObj != null) { dbObj.close(); }
+
+        var request = indexedDB.open(database);
+        request.onerror = function (e) {
+            isIDBSupport = false;
+        }
+
+        request.onblocked = function (e) {
+            writeToConsoleScreen(e);
+        }
+
+        request.onsuccess = function (e) {
+            var databaseObj = e.target.result;
+            var version = parseInt(databaseObj.version);
+            databaseObj.close();
+            var secondRequest = indexedDB.open(database, version + 1);
+            secondRequest.onerror = function () {
+                isIDBSupport = false;
+            }
+
+            secondRequest.onblocked = function () {
+                writeToConsoleScreen(e);
+            }
+
+            secondRequest.onsuccess = function (e) {
+                writeToConsoleScreen("Second request success");
+                executeCallBackFunction(callbackFunction, "", "", 500);
+            }
+
+            secondRequest.onupgradeneeded = function (e) {
+                dbObj = e.target.result;
+
+                var subtitles = dbObj.createObjectStore(collectionName, { keyPath: "id", autoIncrement: true }); // key id ID
+                subtitles.createIndex("IdIndex", "id", { unique: true });
+                subtitles.createIndex("IndexedId", "IndexedId", { unique: true });
+                subtitles.createIndex("OBJIDIndex", "OBJID", { unique: true });
+                subtitles.createIndex("UserIdIndex", "UserId", { unique: false });
+                subtitles.createIndex("IsModifiedIndex", "IsModified", { unique: false });
+                subtitles.createIndex("IsDeletedIndex", "IsDeleted", { unique: false });
+                subtitles.createIndex("langVerIndex", "langVer", { unique: false });
+                subtitles.createIndex("EmGuidIndex", "EmGuid", { unique: false });
+                subtitles.createIndex("IsNewSubtitleIndex", "IsNewSubtitle", { unique: false });
+
+            }
+        }
+
+    }
+
+    function createTransaction(callbackFunction) {
+        try {
+            var tx = dbObj.transaction(collectionName, "readwrite");
+            callbackFunction(null, tx);
+        } catch (err) {
+            if (err.name === 'InvalidStateError') {
+                createIDBConnectionObjects(function () {
+                    var tx = dbObj.transaction(collectionName, "readwrite");
+                    callbackFunction(null, tx);
+                });
+            }
+
+            if (err.name === 'NotFoundError') {
+                createObjectStore(function () {
+                    var tx = dbObj.transaction(collectionName, "readwrite");
+                    callbackFunction(null, tx);
+                });
+            }
+
+
+            callbackFunction(err);
+        }
+    }
+
+    function clearData(callbackFunction) {
+
+        if (!dbObj.objectStoreNames.contains(collectionName)) {
+            createObjectStore(callbackFunction);
+            return;
+        }
+
+        // open a read/write db transaction, ready for clearing the data
+        var transaction = dbObj.transaction(collectionName, "readwrite");
+
+        // report on the success of the transaction completing, when everything is done
+        transaction.oncomplete = function (event) {
+            writeToConsoleScreen("clearData transaction completed -> " + collectionName);
+        };
+
+        transaction.onerror = function (event) {
+            writeToConsoleScreen('clearData Transaction not opened due to error: ' + transaction.error);
+        };
+
+        // create an object store on the transaction
+        var objectStore = transaction.objectStore(collectionName);
+
+        // Make a request to clear all the data out of the object store
+        var objectStoreRequest = objectStore.clear();
+
+        objectStoreRequest.onsuccess = function (event) {
+            // report the success of our request
+            writeToConsoleScreen("clearData transaction completed -> " + collectionName);
+            executeCallBackFunction(callbackFunction);
+        };
+    }
+
+    function clearLastCollectionData(callbackFunction) {
+
+        if (!dbObj.objectStoreNames.contains(lastCollection) || lastCollection == null) {
+            return;
+        }
+
+        // open a read/write db transaction, ready for clearing the data
+        var transaction = dbObj.transaction(lastCollection, "readwrite");
+
+        // report on the success of the transaction completing, when everything is done
+        transaction.oncomplete = function (event) {
+            writeToConsoleScreen("clearLastCollectionData transaction completed -> " + lastCollection);
+        };
+
+        transaction.onerror = function (event) {
+            writeToConsoleScreen('clearLastCollectionData Transaction not opened due to error: ' + transaction.error);
+        };
+
+        // create an object store on the transaction
+        var objectStore = transaction.objectStore(lastCollection);
+
+        // Make a request to clear all the data out of the object store
+        var objectStoreRequest = objectStore.clear();
+
+        objectStoreRequest.onsuccess = function (event) {
+            // report the success of our request
+            writeToConsoleScreen("clearData transaction completed -> " + lastCollection);
+            executeCallBackFunction(callbackFunction);
+        };
+    }
+
+    function clearDataForLangVer(langVer, callbackFunction) {
+
+        // open a read/write db transaction, ready for clearing the data
+        var transaction = dbObj.transaction(collectionName, "readwrite");
+
+        // report on the success of the transaction completing, when everything is done
+        transaction.oncomplete = function (event) {
+            writeToConsoleScreen("Clear transaction completed -> " + collectionName);
+        };
+
+        transaction.onerror = function (event) {
+            writeToConsoleScreen('Transaction not opened due to error: ' + transaction.error);
+        };
+
+        var subtitles = [];
+        // create an object store on the transaction
+        var objectStore = transaction.objectStore(collectionName);
+        var langVerIndex = objectStore.index('langVerIndex');
+
+        // Select only those records where prop1=value1 and prop2=value2
+        var getAllKeysRequest = langVerIndex.openCursor(IDBKeyRange.only(langVer));
+        ///var getAllKeysRequest = langVerIndex.getAllKeys();
+        getAllKeysRequest.onsuccess = function (event) {
+            var cursor = event.target.result;
+            if (cursor) {
+                subtitles.push(cursor.value);
+                cursor.continue();
+            } else {
+                self.deleteSubtitleFromIDB(subtitles);
+                writeToConsoleScreen("Delete call back from clearDataForLangVer");
+            }
+        }
+    }
+
+
+    function clearDataForEmGuid(EmGuid, callbackFunction) {
+
+        // open a read/write db transaction, ready for clearing the data
+        var transaction = dbObj.transaction(collectionName, "readwrite");
+
+        // report on the success of the transaction completing, when everything is done
+        transaction.oncomplete = function (event) {
+            writeToConsoleScreen("Clear transaction completed -> " + collectionName);
+            executeCallBackFunction(callbackFunction);
+        };
+
+        transaction.onerror = function (event) {
+            writeToConsoleScreen('Transaction not opened due to error: ' + transaction.error);
+        };
+
+        var subtitles = [];
+
+        // create an object store on the transaction
+        var objectStore = transaction.objectStore(collectionName);
+        var EmGuidIndex = objectStore.index('EmGuidIndex');
+
+        // Select only those records where prop1=value1 and prop2=value2
+        var getAllKeysRequest = EmGuidIndex.openCursor(IDBKeyRange.only(EmGuid));
+        ///var getAllKeysRequest = langVerIndex.getAllKeys();
+        getAllKeysRequest.onsuccess = function (event) {
+
+            var cursor = event.target.result;
+            if (cursor) {
+                subtitles.push(cursor.value);
+                cursor.continue();
+            } else {
+                self.deleteSubtitleFromIDB(subtitles);
+                writeToConsoleScreen("Delete call back from clearDataForEmGuid");
+            }
+        }
+
+        getAllKeysRequest.onerror = function (event) {
+            writeToConsoleScreen(event);
+        }
+    }
+
+    //Not in use
+    function deleteByIndex(indexArray, objectStore, callbackFunction) {//accepts an array of index
+
+        if (isArray(indexArray)) {
+
+            indexArray.forEach(function (objId) {
+                // Make a request to delete the specified record out of the object store
+                var objectStoreRequest = objectStore.delete(objId);
+                objectStoreRequest.onsuccess = function (event) {
+                    // report the success of our request
+                    writeToConsoleScreen("Successfully deleted " + objId);
+                };
+
+                objectStoreRequest.onerror = function (event) {
+                    // report the success of our request
+                    writeToConsoleScreen("Failed deletion " + objId)
+                };
+            });
+        }
+
+        executeCallBackFunction(callbackFunction);
+    }
+
+    self.deleteSubtitleFromIDB = function (subtitles) {
+
+        if (isArray(subtitles)) {
+            var transaction = dbObj.transaction(collectionName, "readwrite");
+            var objectStore = transaction.objectStore(collectionName);
+
+            subtitles.forEach(function (obj) {
+                deleteSingleSubtitle(obj.id, objectStore);
+            });
+        }
+
+    }
+
+    function deleteSingleSubtitle(subtitleId, objectStore, callbackFunction) {
+
+        // Make a request to delete the specified record out of the object store
+        var objectStoreRequest = objectStore.delete(subtitleId);
+        objectStoreRequest.onsuccess = function (event) {
+            executeCallBackFunction(callbackFunction);
+            // report the success of our request
+            writeToConsoleScreen("Successfully deleted " + subtitleId);
+        };
+
+        objectStoreRequest.onerror = function (event) {
+            // report the success of our request
+            writeToConsoleScreen("Failed deletion " + subtitleId)
+        };
+    }
+
+    function executeCallBackFunction(callbackFunction, toObj, params, millis) {
+
+        try {
+            if (typeof millis == "undefined") { millis = 100; }
+            if (typeof callbackFunction == "function") {
+                setTimeout(function () {
+                    if (typeof toObj != "undefined" && toObj != "") {
+                        callbackFunction.apply(toObj, params);
+                    } else {
+                        callbackFunction.call();
+                    }
+
+                }, millis);
+            }
+        } catch (err) {
+            writeToConsoleScreen(err);
+        }
+    }
+
+    // Returns if a value is an array
+    function isArray(value) {
+        return (value && typeof value === 'object' && value.constructor === Array) ? true : false;
+    }
+
+    function writeToConsoleScreen(message, error) {
+        return;
+        var now = new Date();
+        var outStr = now.getMinutes() + ':' + now.getSeconds() + ':' + now.getMilliseconds();
+        if (typeof error == "undefined") { error = ""; }
+        //console.log("-> " + outStr, message, error);
+    }
+
+}
+
+
+SubtitleIDBWrapper.subtitleIDB = new subtitleIDB();
+
+//SubtitleIDBWrapper.subtitleIDB.afterLoginPerformSaveOperation();

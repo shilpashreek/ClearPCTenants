@@ -1,0 +1,606 @@
+function TimelineThumbnailController(params) {
+    //Config - start
+    this.projectDirectory = "/BC/Product/JS/TimelineThumbnail/";
+    var MIN_THUMBNAIL_COUNT = 20;
+    //var BASE_LEVEL = [81, 100, 121];
+    var FILMSTRIP_THUMBNAIL_RIGHT_MARGIN = 5;
+    //Config - end
+
+    this.sequenceHandle = params.sequenceHandle;
+    this.isFramePreviewEnabled = params.isFramePreviewEnabled;
+    this.secureInfo = params.secureInfo;
+    this.isTimeCodeDisplayEnabled = params.isTimeCodeRequired;
+    this.helper;
+    this.model;
+    this.isReadyToActivate = false;
+    this.isActivateRequested = false;
+    this.activated = false;
+    this.firstThumbnailIndex;
+    this.thumbnailTimelineLength;
+    this.errorStack = [];
+    this.ishelperJsLoaded;
+    this.isModelJsLoaded;
+    this.isViewJsLoaded;
+    this.styleSheetLoaded;
+    this.totalDuration;
+    this.totalNumberOfSegmentsToShow;
+    this.timelineThumbnailView;
+    var _this = this;
+
+    TimelineThumbnailController.prototype.preInit = function () {
+        this.isHelperJsLoaded = true;
+        this.isModelJsLoaded = true;
+        this.isViewJsLoaded = true;
+        this.checkAndInit();
+    };
+
+    TimelineThumbnailController.prototype.loadNecessaryFiles = function () {
+        this.loadFile(this.projectDirectory + "TimelineThumbnailHelper.js", "ttHepler", 'text/javascript', this.helperJsLoadedHandler);
+        this.loadFile(this.projectDirectory + "TimelineThumbnailModel.js", "ttModel", 'text/javascript', this.modelJsLoadedHandler);
+        this.loadFile(this.projectDirectory + "TimelineThumbnailView.js", "ttView", 'text/javascript', this.viewJsLoadedHandler);
+    };
+
+    TimelineThumbnailController.prototype.loadFile = function (path, id, type, callback) {
+        if (document.getElementById(id))
+            callback();
+        else {
+            var newScript = document.createElement('script');
+            newScript.id = id;
+            newScript.type = type
+            newScript.src = path;
+            document.getElementsByTagName('head')[0].appendChild(newScript);
+            newScript.onload = callback;
+        }
+    };
+
+    TimelineThumbnailController.prototype.helperJsLoadedHandler = function () {
+        _this.isHelperJsLoaded = true;
+        _this.checkAndInit();
+    };
+
+    TimelineThumbnailController.prototype.modelJsLoadedHandler = function () {
+        _this.isModelJsLoaded = true;
+        _this.checkAndInit();
+    };
+
+    TimelineThumbnailController.prototype.viewJsLoadedHandler = function () {
+        _this.isViewJsLoaded = true;
+        _this.checkAndInit();
+    };
+
+    TimelineThumbnailController.prototype.styleSheetLoadedHandler = function () {
+        _this.styleSheetLoaded = true;
+        _this.checkAndInit();
+    }
+
+    TimelineThumbnailController.prototype.checkAndInit = function () {
+        this.isReadyToActivate = true;
+        if (this.isActivateRequested)
+            this.activate();
+
+    };
+
+    TimelineThumbnailController.prototype.activate = function () {
+        this.isActivateRequested = true;
+        if (this.isReadyToActivate) {
+            if (!this.activated) {      //To avoid activating twice for the same instance!
+                this.intialiseModel();
+                if (!this.model.seekbar) {
+                    this.errorStack.push = "Seekbar element could not be found";
+                    return;
+                }
+                this.loadSegmentInfoArray();
+            }
+        }
+        else {
+            this.preInit();
+        }
+    };
+
+    TimelineThumbnailController.prototype.intialiseModel = function () {
+        this.model = new TimelineThumbnailModel();
+
+        if (typeof params.viewportId == "string")
+            this.model.viewport = document.getElementById(params.viewportId);
+        else if (typeof params.viewportId == "object")
+            this.model.viewport = params.viewportId;
+
+        this.model.seekbar = document.getElementById(params.sliderId);
+
+        this.model.isTimecodeDisplayEnable = params.enableTimecodeDisplay;
+        this.model.activeThumbnailHeight = 100;
+        this.model.filmstripThumbnailHeight = 50;
+        this.helper = new TimelineThumbnailHelper(this.sequenceHandle);
+    }
+
+    TimelineThumbnailController.prototype.reInit = function (params) {
+        if (this.activated) {
+            this.sequenceHandle = params.sequenceHandle;
+            this.helper.init(this.sequenceHandle);
+            this.loadSegmentInfoArray();
+        }
+    }
+
+    TimelineThumbnailController.prototype.onError = function (error) {
+        this.model.seekbar.dispatchEvent(new CustomEvent("timelineThumbnailDisabled"));
+    };
+
+    TimelineThumbnailController.prototype.timelineThumbnailEnabled = function () {
+        this.activated = true;
+        this.model.seekbar.dispatchEvent(new CustomEvent("timelineThumbnailEnabled", {
+            detail: {
+                isFramePreviewEnabled: this.isFramePreviewEnabled
+            }
+        }));
+    };
+
+    TimelineThumbnailController.prototype.loadSegmentInfoArray = function () {
+        var segmentInfoArray = [];
+        var sequenceArray = this.helper.getSequenceInfo();
+        this.totalDuration = this.getTotalDuration(sequenceArray);
+        for (var i = 0; i < sequenceArray.length; i++) {
+            this.totalNumberOfSegmentsToShow = this.getThumbnailCountBasedOnDuration(this.totalDuration, sequenceArray[0].framerate);
+            var segmentInfo = new SegmentInfo();
+            segmentInfo.index = i;
+            segmentInfo.framerate = sequenceArray[i].framerate;
+            segmentInfo.clipUrl = sequenceArray[i].clipUrl;
+            var clipThumbnailCount = this.getThumbnailCountBasedOnDuration(sequenceArray[i].clipDuration, sequenceArray[i].framerate);
+            segmentInfo.clipSpriteInfo = this.getSpriteInfoFromThumbnailCount(clipThumbnailCount);
+            segmentInfo.segmentInThumbnailIndex = this.getThumbnailIndexByTime(sequenceArray[i].segmentInTime, sequenceArray[i].clipDuration, clipThumbnailCount);
+            segmentInfo.segmentOutThumbnailIndex = this.getThumbnailIndexByTime(sequenceArray[i].segmentOutTime, sequenceArray[i].clipDuration, clipThumbnailCount);
+            segmentInfo.segmentThumbnailCount = this.getThumbnailCountOfSegment(sequenceArray[i].segmentInTime, sequenceArray[i].segmentOutTime, sequenceArray[i].clipDuration, clipThumbnailCount);
+            segmentInfo.thumbnailsToShow = this.getNumberOfThumbnailsToShow(sequenceArray[i].segmentDuration);
+            segmentInfo.skipFactor = this.getSkipFactor(segmentInfo.segmentThumbnailCount, segmentInfo.thumbnailsToShow);
+            segmentInfoArray[i] = segmentInfo;
+            if (i == 0)
+                this.fetchSpriteFromServer(segmentInfo);
+        }
+        this.model.segmentInfoArray = segmentInfoArray;
+    };
+
+    TimelineThumbnailController.prototype.fetchSpriteFromServer = function (segmentInfo) {
+        segmentInfo.sprite = new Image();
+        segmentInfo.sprite.onload = function () {
+            _this.spriteLoadedHandler(segmentInfo, segmentInfo.sprite);
+        };
+        segmentInfo.sprite.onerror = function () {
+            _this.spriteLoadErrorHandler(segmentInfo);
+        };
+        segmentInfo.sprite.src = this.getSpriteUrl(segmentInfo, segmentInfo.segmentInThumbnailIndex);
+    };
+
+    TimelineThumbnailController.prototype.spriteLoadedHandler = function (segmentInfo, sprite) {
+        this.model.dimension.width = sprite.width;
+        this.model.dimension.height = sprite.height;
+        this.enableTimelineThumbnail();
+    };
+
+    TimelineThumbnailController.prototype.spriteLoadErrorHandler = function (segmentInfo) {
+        if (segmentInfo.index == 0) {
+            _this.errorStack.push = "Couldn't load the image for asset " + segmentInfo.clipUrl;
+        }
+    };
+
+    TimelineThumbnailController.prototype.getTotalDuration = function (sequenceArray) {
+        var totalDuration = 0;
+        for (var i = 0; i < sequenceArray.length; i++) 
+            totalDuration += sequenceArray[i].segmentDuration;
+        return totalDuration;
+    }
+
+    TimelineThumbnailController.prototype.getThumbnailCountBasedOnDuration = function (durationInSec, framerate) {
+        //Algorithm:
+        //=> y = m.LN(x) + c
+        //here, m, multiplication factor = 60, and
+        //c, constant, is the minimum number of thumbnails required to display(when duration is 0)
+        //LN(natural log) is used as we need thumbnail count to not increase linearly with duration as this would mean having way too many thumbnails for long videos 
+        //which is unnecessary considering the available space is constant, depending on the screen size.
+
+        var idealThumbnailCount = ((Math.log(durationInSec) * 60) + MIN_THUMBNAIL_COUNT);
+        var frameCount = durationInSec * framerate;
+        var frameExtractionPeriod = frameCount / idealThumbnailCount;    //This is required by the FFMPEG, to extract frames after every 'frameExtractionPeriod' number of frames
+
+        //Floor value of thumbnail count is used in the following two statements as we cannot extract thumbnail of index Math.Ceil(idealThumbnailCount) as it may not exist!
+        var thumbnailCountWithFloorValue = Math.floor(frameCount / Math.floor(frameExtractionPeriod));
+        var thumbnailCountWithCeilValue = Math.floor(frameCount / Math.ceil(frameExtractionPeriod));
+        return Math.abs(thumbnailCountWithCeilValue - idealThumbnailCount) > Math.abs(thumbnailCountWithFloorValue - idealThumbnailCount) ?
+            thumbnailCountWithFloorValue : thumbnailCountWithCeilValue;   //We choose the thumbnail count value which is closest to the ideal value
+    };
+
+    TimelineThumbnailController.prototype.getSpriteInfoFromThumbnailCount = function (thumbnailCount) {
+        var spriteInfo = new SpriteInfo();
+        spriteInfo.dimension.rowCount = 10;
+        spriteInfo.dimension.columnCount = 10;
+        spriteInfo.count = thumbnailCount % 100 == 0 ? thumbnailCount / 100 : Math.floor(thumbnailCount / 100) + 1;
+        return spriteInfo;
+
+        //Below code is for the sprite optimization that is needed to be implemented in sprite generation code as well, which is not done today.
+        //var baseLevel = BASE_LEVEL;
+        //var dimension;
+        //var levelIndex;
+        //for (levelIndex = 1; levelIndex < 20;) {                     //Upper limit is set to 20 levels(20 x 11 x 11 = 2420 thumbnails) for now!
+        //    if (thumbnailCount - (baseLevel[0] * levelIndex) > 0) {
+        //        if (thumbnailCount - (baseLevel[1] * levelIndex) >= 1) {
+        //            if (thumbnailCount - (baseLevel[2] * levelIndex) >= 1) {
+        //                ++levelIndex;
+        //            }
+        //            else {
+        //                dimension = 11;
+        //                break;
+        //            }
+        //        }
+        //        else {
+        //            dimension = 10;
+        //            break;
+        //        }
+        //    }
+        //    else {
+        //        if (levelIndex == 1) {
+        //            dimension = 9;
+        //        }
+        //        else {
+        //            --levelIndex;
+        //            dimension = 11;
+        //        }
+        //        break;
+        //    }
+        //}
+
+        //var spriteInfo = new SpriteInfo();
+        //spriteInfo.dimension = dimension + "x" + dimension;
+        //spriteInfo.count = levelIndex;
+        //return spriteInfo;
+    };
+
+    TimelineThumbnailController.prototype.getSkipFactor = function (availableThumbnailCount,numberOfThumbnailsToShow) {
+        return availableThumbnailCount / numberOfThumbnailsToShow;
+    };
+
+    TimelineThumbnailController.prototype.getThumbnailIndexByTime = function (time, duration, totalThumbnailCount) {
+        return Math.floor(((time * totalThumbnailCount) / duration));
+    };
+
+    TimelineThumbnailController.prototype.getThumbnailCountOfSegment = function (segmentInTime, segmentOutTime, clipduration, clipThumbnailCount) {
+        return (Math.ceil((segmentOutTime * clipThumbnailCount) / clipduration) - Math.floor((segmentInTime * clipThumbnailCount) / clipduration));
+    };
+
+    TimelineThumbnailController.prototype.getNumberOfThumbnailsToShow = function (segmentDuration) {
+        return (segmentDuration / this.totalDuration) * this.totalNumberOfSegmentsToShow;
+    };
+
+    TimelineThumbnailController.prototype.loadThumbnailInfoArray = function () {
+        this.thumbnailTimelineLength = 0;
+        var thumbnailInfoArray = {};
+        var globalThumbnailIndex = 0;
+        for (var i = 0; i < this.model.segmentInfoArray.length; i++) {
+            var segmentInfo = this.model.segmentInfoArray[i];
+
+            for (var j = segmentInfo.segmentInThumbnailIndex, k = 0;
+                j <= segmentInfo.segmentOutThumbnailIndex;
+                k++, j = Math.round((segmentInfo.segmentInThumbnailIndex) + (segmentInfo.skipFactor * k))) {
+
+                var thumbnailInfo = new ThumbnailInfo();
+                thumbnailInfo.url = this.getSpriteUrl(segmentInfo, j);
+                var thumbnailCoordinates = this.getGridXYPosition(segmentInfo.clipSpriteInfo, j);
+                thumbnailInfo.x = thumbnailCoordinates.x;
+                thumbnailInfo.y = thumbnailCoordinates.y;
+                thumbnailInfo.index = globalThumbnailIndex;
+                thumbnailInfo.segmentIndex = i;
+                thumbnailInfoArray[globalThumbnailIndex] = thumbnailInfo;
+                globalThumbnailIndex++;
+                this.thumbnailTimelineLength += this.model.filmstripThumbnailWidth;
+            }
+        }
+        this.model.thumbnailInfoArray = thumbnailInfoArray;
+    };
+
+    TimelineThumbnailController.prototype.getSpriteUrl = function (segmentInfo, thumbnailIndex) {
+        var isStreamingV2 = false;
+        var queryString = CMPUtils.parseQueryString(segmentInfo.clipUrl, true);
+        isStreamingV2 = (queryString["ss"] == "2") ? true : false;
+
+        var regEx = new RegExp("[\-a-zA-Z0-9]+\.(m3u8|mpd)");
+        var regExResult = regEx.exec(segmentInfo.clipUrl);
+        if (!CMPUtils.IsNullOrEmpty(regExResult) & !isStreamingV2) {
+            var emguid = regExResult[0].replace(".m3u8", "").replace(".mpd", "");
+            var spriteBaseUrl = segmentInfo.clipUrl.split("/" + emguid + "/")[0] + "/others/sec-tn/" + emguid + "-ss1-" +
+                ("00" + this.getSpriteIndexOfThumbnail(segmentInfo, thumbnailIndex)).slice(-3) + ".jpg";
+            var queryParam = "";
+            if (!CMPUtils.IsNullOrEmpty(segmentInfo.clipUrl.split("?")[1]))
+                queryParam = segmentInfo.clipUrl.split("?")[1];
+            if (!CMPUtils.IsNullOrEmpty(queryParam))
+                return spriteBaseUrl + "?" + queryParam + "&w=" + this.secureInfo
+            return spriteBaseUrl + "?w=" + this.secureInfo;
+        }
+        else if (isStreamingV2) {
+            var requestUrl = segmentInfo.clipUrl;
+            var spriteName = "e-" + ("00" + this.getSpriteIndexOfThumbnail(segmentInfo, thumbnailIndex)).slice(-3) + "--spr.jpg";
+            return requestUrl.replace("e.cms", spriteName) + "&w=" + this.secureInfo;
+        }
+        else {
+            this.errorStack.push = "Invalid clip URL: '<emguid>.m3u8' could not be found";
+            return "";
+        }
+    };
+
+    TimelineThumbnailController.prototype.getSpriteIndexOfThumbnail = function (segmentInfo, thumbnailIndex) {
+        var thumbnailsPerSprite = segmentInfo.clipSpriteInfo.dimension.rowCount * segmentInfo.clipSpriteInfo.dimension.columnCount;
+        for (var spriteIndex = 1; spriteIndex <= segmentInfo.clipSpriteInfo.count;) {
+            if (Math.floor(thumbnailIndex / (thumbnailsPerSprite * spriteIndex)) > 0)
+                spriteIndex++;
+            else
+                break;
+        }
+        return spriteIndex;
+    };
+
+    TimelineThumbnailController.prototype.getGridXYPosition = function (spriteInfo, index) {
+        var row = parseInt(spriteInfo.dimension.rowCount);
+        var column = parseInt(spriteInfo.dimension.columnCount);
+
+        var thumbnailsPerSprite = row * column;
+        var relativeIndex = index % thumbnailsPerSprite;
+
+        var coordinates = {};
+        coordinates.x = relativeIndex % (column);
+        coordinates.y = Math.floor(relativeIndex / column);
+
+        return coordinates;
+    };
+
+    TimelineThumbnailController.prototype.getNumberOfFilmstripThumbnails = function () {
+        return Math.floor((this.getViewportDimension().width) / (this.model.filmstripThumbnailWidth + FILMSTRIP_THUMBNAIL_RIGHT_MARGIN)) + 3; //5px margin for each thumbnail
+    };
+
+    TimelineThumbnailController.prototype.registerMouseEvents = function () {
+        if (this.model.seekbar) {
+            this.model.seekbar.addEventListener("mousemove", this.handleMouseEnter, true);
+            this.model.seekbar.addEventListener("mouseout", this.handleMouseOut, true);
+            this.model.seekbar.addEventListener("mousedown", this.handleMouseDown, true);
+        }
+    };
+
+    TimelineThumbnailController.prototype.enableTimelineThumbnail = function () {
+        this.model.activeThumbnailWidth = this.getWidthBasedOnHeightAndDimension(this.model.activeThumbnailHeight, this.model.dimension);
+        this.model.filmstripThumbnailWidth = this.getWidthBasedOnHeightAndDimension(this.model.filmstripThumbnailHeight, this.model.dimension);
+        this.loadThumbnailInfoArray();
+        this.scrubFactor = this.getScrubFactor();
+
+        if (!this.activated) {
+            this.timelineThumbnailView = new TimelineThumbnailView(this.model);
+            _this.registerMouseEvents();     //registering mouse events is the last step of init() to avoid event registration if anything fails during init()
+            
+        }
+        else {
+            this.timelineThumbnailView.model = this.model;
+        }
+        _this.timelineThumbnailEnabled();
+    };
+
+    TimelineThumbnailController.prototype.handleMouseEnter = function (e) {
+        var seekbarRect = _this.model.seekbar.getBoundingClientRect();
+        var timelinePosition = e.clientX - seekbarRect.left;
+        var thumbnailTimelinePosition = timelinePosition * _this.getScrubFactor();
+        //var ttPosAndOffset = _this.getThumbnailTimelinePositionAndOffset(timelinePosition);
+        var activeThumbnailIndex = _this.getActiveThumbnailIndex(thumbnailTimelinePosition);
+        try {
+            _this.model.seekbar.dispatchEvent(new CustomEvent(TimelineThumbnailEvent.SHOW_ACTIVE_THUMBNAIL, {
+                detail: {
+                    thumbnailInfo: _this.getThumbnailInfo(activeThumbnailIndex, _this.model.activeThumbnailWidth, _this.model.activeThumbnailHeight),
+                    left: _this.getLeftValue(timelinePosition, seekbarRect.width),
+                    timecode: _this.getTimecodeBySeekbarPosition(timelinePosition, seekbarRect.width, _this.totalDuration, "00:00:00:00"/*som value*/,
+                        _this.model.segmentInfoArray[_this.model.thumbnailInfoArray[activeThumbnailIndex].segmentIndex].framerate, "NDF")
+                }
+            }));
+        }
+        catch (e) {
+            console.log(e.message);
+        }
+    };
+
+    TimelineThumbnailController.prototype.getThumbnailTimelinePositionAndOffset = function (timelinePosition) {
+        var position = timelinePosition * this.getScrubFactor();
+        var offset = position % this.model.filmstripThumbnailWidth;
+        var ttPosAndOffset = {};
+        ttPosAndOffset.position = position;
+        ttPosAndOffset.offset = offset;
+        return ttPosAndOffset;
+    };
+
+    TimelineThumbnailController.prototype.getWidthBasedOnHeightAndDimension = function (height, dimension) {
+        return height * (dimension.width / dimension.height);
+    }
+
+    TimelineThumbnailController.prototype.getScrubFactor = function () {
+        return this.thumbnailTimelineLength / this.model.seekbar.getBoundingClientRect().width;
+    };
+
+    TimelineThumbnailController.prototype.getActiveThumbnailIndex = function (thumbnailTimelinePosition) {
+        return Math.floor(thumbnailTimelinePosition / this.model.filmstripThumbnailWidth);
+    }
+
+    TimelineThumbnailController.prototype.getThumbnailInfo = function (thumbnailIndex, thumbnailWidth, thumbnailHeight) {
+        var thumbnailInfo = {};
+        thumbnailInfo.posX = this.model.thumbnailInfoArray[thumbnailIndex].x * thumbnailWidth;
+        thumbnailInfo.posY = this.model.thumbnailInfoArray[thumbnailIndex].y * thumbnailHeight;
+        thumbnailInfo.url = this.model.thumbnailInfoArray[thumbnailIndex].url;
+        thumbnailInfo.backgroundWidth = this.getBackgroundWidth(thumbnailIndex, thumbnailWidth);
+        thumbnailInfo.backgroundHeight = this.getBackgroundHeight(thumbnailIndex, thumbnailHeight);
+        return thumbnailInfo;
+    };
+
+    TimelineThumbnailController.prototype.getBackgroundHeight = function (index, thumbnailHeight) {
+        return thumbnailHeight * this.model.segmentInfoArray[this.model.thumbnailInfoArray[index].segmentIndex].clipSpriteInfo.dimension.columnCount;
+    };
+
+    TimelineThumbnailController.prototype.getBackgroundWidth = function (index, thumbnailWidth) {
+        return thumbnailWidth * this.model.segmentInfoArray[this.model.thumbnailInfoArray[index].segmentIndex].clipSpriteInfo.dimension.rowCount;
+    };
+
+    TimelineThumbnailController.prototype.getLeftValue = function (relativePosition, seekbarWidth) {
+        if (relativePosition < this.model.activeThumbnailWidth / 2)
+            relativePosition = this.model.activeThumbnailWidth / 2;
+        else if (relativePosition > (seekbarWidth - (this.model.activeThumbnailWidth / 2)))
+            relativePosition = (seekbarWidth - (this.model.activeThumbnailWidth / 2));
+
+        relativePosition -= this.model.activeThumbnailWidth / 2;
+        return ((relativePosition * 100) / seekbarWidth);
+    };
+
+    TimelineThumbnailController.prototype.handleMouseOut = function (e) {
+        _this.model.seekbar.dispatchEvent(new CustomEvent(TimelineThumbnailEvent.HIDE_ACTIVE_THUMBNAIL));
+    };
+
+    TimelineThumbnailController.prototype.handleMouseDown = function (e) {
+        _this.model.seekbar.removeEventListener("mousemove", _this.handleMouseEnter, true);
+        _this.model.seekbar.removeEventListener("mousedown", _this.handleMouseDown, true);
+
+        window.addEventListener("mouseup", _this.handleMouseDragEnd, true);
+        window.addEventListener("mousemove", _this.handleMouseDragStart, true);
+    };
+
+    TimelineThumbnailController.prototype.handleMouseDragStart = function (e) {
+        window.removeEventListener("mousemove", _this.handleMouseDragStart, true);
+
+        window.addEventListener("mousemove", _this.handleMouseDrag, true);
+
+        _this.model.seekbar.dispatchEvent(new CustomEvent(TimelineThumbnailEvent.HIDE_ACTIVE_THUMBNAIL));
+        var seekbarRect = _this.model.seekbar.getBoundingClientRect();
+        var timelinePosition = e.clientX - seekbarRect.left;
+        var activeThumbnailIndex = _this.getActiveThumbnailIndex(timelinePosition * _this.getScrubFactor());
+
+        _this.model.seekbar.dispatchEvent(new CustomEvent(TimelineThumbnailEvent.CREATE_FILMSTRIP, {
+            detail: {
+                thumbnailCount: _this.getNumberOfFilmstripThumbnails(),
+                filmstripWidth: _this.getViewportDimension().width,
+                filmstripData: _this.getFilmstripDataByTimelinePosition(timelinePosition),
+                startIndex: _this.firstThumbnailIndex,
+                filmstripThumbnailWidth: _this.model.filmstripThumbnailWidth,
+                filmstripThumbnailHeight: _this.model.filmstripThumbnailHeight,
+                lensInfo: _this.getThumbnailInfo(activeThumbnailIndex, _this.model.activeThumbnailWidth, _this.model.activeThumbnailHeight),
+                timecode: _this.getTimecodeBySeekbarPosition(timelinePosition, seekbarRect.width, _this.totalDuration, "00:00:00:00"/*som value*/,
+                        _this.model.segmentInfoArray[_this.model.thumbnailInfoArray[activeThumbnailIndex].segmentIndex].framerate, "NDF")
+            }
+        }));
+
+        var frameDimension = _this.getFrameDimension(_this.model.dimension);
+
+        if (_this.isFramePreviewEnabled) {
+            _this.model.seekbar.dispatchEvent(new CustomEvent(TimelineThumbnailEvent.CREATE_FRAMEPREVIEW, {
+                detail: {
+                    framePreviewInfo: _this.getThumbnailInfo(activeThumbnailIndex, frameDimension.width, frameDimension.height),
+                    frameWidth: frameDimension.width,
+                    frameHeight: frameDimension.height
+                }
+            }));
+        }
+
+        _this.model.seekbar.dispatchEvent(new CustomEvent("timelineThumbnailDragStart"));
+    };
+
+    TimelineThumbnailController.prototype.getViewportDimension = function () {
+        var viewportRect = this.model.viewport.getBoundingClientRect();
+        var viewportDimension = {};
+        viewportDimension.width = viewportRect.width;
+        viewportDimension.height = viewportRect.height;
+        return viewportDimension;
+    };
+
+    TimelineThumbnailController.prototype.getFilmstripDataByTimelinePosition = function (timelinePosition) {
+        var ttPosAndOffset = _this.getThumbnailTimelinePositionAndOffset(timelinePosition);
+        var thumbnailCount = this.getNumberOfFilmstripThumbnails();
+        this.firstThumbnailIndex = this.getActiveThumbnailIndex(ttPosAndOffset.position) - Math.floor(thumbnailCount / 2);
+        return this.getFilmstripData(this.firstThumbnailIndex, thumbnailCount);
+    };
+
+    TimelineThumbnailController.prototype.getFilmstripData = function (firstThumbnailIndex, totalThumbnailsCount) {
+        var filmstripData = [];
+        for (var i = 0; i < totalThumbnailsCount; i++) {
+            var filmstripThumbnailData = {};
+            if (this.model.thumbnailInfoArray[firstThumbnailIndex + i]) {
+                filmstripThumbnailData = this.getThumbnailInfo(firstThumbnailIndex + i, this.model.filmstripThumbnailWidth, this.model.filmstripThumbnailHeight);
+                filmstripThumbnailData.isAvailable = true;
+            }
+            else {
+                filmstripThumbnailData.isAvailable = false;
+            }
+            filmstripData[firstThumbnailIndex + i] = filmstripThumbnailData;
+        }
+        return filmstripData;
+    };
+
+    TimelineThumbnailController.prototype.handleMouseDrag = function (e) {
+        var seekbarRect = _this.model.seekbar.getBoundingClientRect();
+        var timelinePosition = e.clientX - seekbarRect.left;
+        var ttPosAndOffset = _this.getThumbnailTimelinePositionAndOffset(timelinePosition);
+        var activeThumbnailIndex = _this.getActiveThumbnailIndex(ttPosAndOffset.position);
+        var viewportRect = _this.getViewportDimension();
+        
+        _this.model.seekbar.dispatchEvent(new CustomEvent(TimelineThumbnailEvent.MOVE_FILMSTRIP, {
+            detail: {
+                leftValue: ttPosAndOffset.offset,
+                filmstripData: _this.getFilmstripDataByTimelinePosition(timelinePosition),
+                startIndex: _this.firstThumbnailIndex,
+                lensInfo: _this.getThumbnailInfo(activeThumbnailIndex, _this.model.activeThumbnailWidth, _this.model.activeThumbnailHeight),
+                timecode: _this.getTimecodeBySeekbarPosition(timelinePosition, seekbarRect.width, _this.totalDuration, "00:00:00:00"/*som value*/,
+                        _this.model.segmentInfoArray[_this.model.thumbnailInfoArray[activeThumbnailIndex].segmentIndex].framerate, "NDF")
+            }
+        }));
+
+        var frameDimension = _this.getFrameDimension(_this.model.dimension);
+
+        if (_this.isFramePreviewEnabled) {
+            _this.model.seekbar.dispatchEvent(new CustomEvent(TimelineThumbnailEvent.UPDATE_FRAMEPREVIEW, {
+                detail: {
+                    framePreviewInfo: _this.getThumbnailInfo(activeThumbnailIndex, frameDimension.width, frameDimension.height),
+                    frameWidth: frameDimension.width,
+                    frameHeight: frameDimension.height
+                }
+            }));
+        }
+        _this.model.seekbar.dispatchEvent(new CustomEvent("timelineThumbnailDrag"));
+    };
+
+    TimelineThumbnailController.prototype.handleMouseDragEnd = function (e) {
+        window.removeEventListener("mousemove", _this.handleMouseDrag, true);
+        window.removeEventListener("mousemove", _this.handleMouseDragStart, true);
+        window.removeEventListener("mouseup", _this.handleMouseDragEnd, true);
+
+        _this.model.seekbar.dispatchEvent(new CustomEvent(TimelineThumbnailEvent.HIDE_FILMSTRIP));
+
+        if(_this.isFramePreviewEnabled)
+            _this.model.seekbar.dispatchEvent(new CustomEvent(TimelineThumbnailEvent.HIDE_FRAMEPREVIEW));
+
+        _this.model.seekbar.addEventListener("mousemove", _this.handleMouseEnter, true);
+        _this.model.seekbar.addEventListener("mousedown", _this.handleMouseDown, true);
+
+        _this.model.seekbar.dispatchEvent(new CustomEvent("timelineThumbnailDragEnd"));
+    };
+
+    TimelineThumbnailController.prototype.getFrameDimension = function (videoDimension) {
+        var dimension = {};
+        var rect = this.model.viewport.getBoundingClientRect();
+        var scaleFactor = Math.min(rect.width / videoDimension.width, rect.height / videoDimension.height);
+        dimension.width = scaleFactor * videoDimension.width;
+        dimension.height = scaleFactor * videoDimension.height;
+        return dimension;
+    }
+
+    TimelineThumbnailController.prototype.getTimecodeBySeekbarPosition = function (cursorRelativePos, seekbarWidth, mediaDurationInSec,
+        som, frameRate, timecodeDisplayFormat) {
+
+        if (this.model.isTimecodeDisplayEnable) {
+            var timeInSec = ((cursorRelativePos / seekbarWidth) * mediaDurationInSec);
+            var somInSec = CMPUtils.ConvertTimeCodeToSecs(som, frameRate, timecodeDisplayFormat);
+            var timewithSOMInSec = timeInSec + somInSec;
+
+            return CMPUtils.ConvertSecondsToTimeCode(CMPUtils.RoundOffToNearestFrame(timewithSOMInSec, frameRate),
+                    frameRate, timecodeDisplayFormat);
+        }
+        else {
+            return "--:--:--:--";
+        }
+    };
+
+    this.preInit();
+}

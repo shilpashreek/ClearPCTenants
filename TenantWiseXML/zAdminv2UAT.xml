@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Admin_V2_UAT Suite">
+
+
+	<listeners>
+		<listener
+			class-name="com.qa.clearpc.Listeners.ExtentReporterNG" />
+		<listener
+			class-name="com.qa.clearpc.Listeners.TestngListeners" />
+		<!-- <listener class-name = "com.qa.clearpc.Listeners.WebEventListener" 
+			/> -->
+	</listeners>
+
+	<parameter name="tenant" value="zAdminv2UAT" />
+	<parameter name="browser" value="chrome" />
+
+	<test name="Admin_V2_UAT TestCases">
+		<!-- <parameter name="tenant" value="z Admin v2 UAT" /> <parameter name="browser" 
+			value="chrome" /> -->
+		<classes>
+			<!-- <class name="com.qa.clearpc.BaseClass.BaseClass" /> -->
+			<class name="com.qa.clearpc.Login.LoginPageTest" >
+			<methods>
+			<include name="validateLoginForInvalidData" />
+			<include name="validateLogin" />
+			</methods>
+			
+			</class>
+			<!-- <class name="com.qa.clearpc.Home.HomePageTest" /> -->
+			<!-- </class> -->
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

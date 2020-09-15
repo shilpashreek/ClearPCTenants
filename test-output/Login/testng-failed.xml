@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Login]" guice-stage="DEVELOPMENT">
+  <parameter name="browser" value="chrome"/>
+  <parameter name="tenant" value="zAdminv2UAT"/>
+  <listeners>
+    <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
+    <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
+  </listeners>
+  <test name="Login(failed)">
+    <classes>
+      <class name="com.qa.clearpc.Login.LoginPageTest">
+        <methods>
+          <include name="endSuite"/>
+          <include name="BeforesuiteSetup"/>
+          <include name="setUp"/>
+          <include name="validateLogin" invocation-numbers="0"/>
+          <include name="initialisation"/>
+        </methods>
+      </class> <!-- com.qa.clearpc.Login.LoginPageTest -->
+      <class name="com.qa.clearpc.Login.LogoutTest">
+        <methods>
+          <include name="check"/>
+          <include name="validateLogoutFunctionality"/>
+        </methods>
+      </class> <!-- com.qa.clearpc.Login.LogoutTest -->
+    </classes>
+  </test> <!-- Login(failed) -->
+</suite> <!-- Failed suite [Login] -->

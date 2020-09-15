@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Admin_V2_UAT Suite">
+
+
+	<listeners>
+		<listener
+			class-name="com.qa.clearpc.Listeners.ExtentReporterNG" />
+		<listener
+			class-name="com.qa.clearpc.Listeners.TestngListeners" />
+		<!-- <listener class-name = "com.qa.clearpc.Listeners.WebEventListener" /> -->
+	</listeners>
+
+	<parameter name="tenant" value="zAdminv2UAT" />
+	<parameter name="browser" value="chrome" />
+
+	<suite-files>
+      <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Login.xml" />
+      <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Search.xml" />
+	</suite-files>
+</suite>

@@ -1,0 +1,1415 @@
+﻿var $jq = jQuery.noConflict();
+var SetTimer;
+var oktaSignIn = null;
+
+/* PFT-Clear Demo */
+(function setPFTClearReferrer() {
+    if (document.referrer.toUpperCase().indexOf('PFTCLEAR') > 0) {
+        sessionStorage.setItem('Origin', 'Demo');
+    }
+})();
+
+/* Downtime */
+function isIPAddress(currentUrl) {
+    return /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(currentUrl);  // returns a boolean 
+}
+
+function Downtime(isDownTime, currentUrl) {
+    var signIn = currentUrl.split('BC')[0] + 'BC' + '/Product' + '/Modules/SignIn.aspx';
+    if (currentUrl.toLowerCase().indexOf(sessionStorage.PortalsPublicIp) > 0 || isIPAddress(currentUrl) == false) {
+        if (sessionStorage.isDowntimeGoingOn == "1") {
+            var params = {};
+            params.Url = self.location.href;
+
+            jQuery.ajax({
+                type: "POST",
+                url: "/BC/Product/Modules/UserManagement/CheckSessionValidity.aspx" + "/GetDownTimeDetails",
+                data: JSON.stringify(params),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var msg = JSON.parse(response.d);
+                    if (msg.Ticker) {
+                        if (msg.Ticker.TickerReq == "Yes") {
+                            tickerDiv = '<div id="tickerMessageOuterDiv" class = "tickerMessageOuter"><div onclick="closeTicker();" class="tickerClose"></div><div id="tickerMessage" class="tickerMessage">' + msg.Ticker.DisplayMessage + '</div></div>';
+                            if (document.body.innerHTML.indexOf(msg.Ticker.DisplayMessage) > 0) {
+                                if (document.getElementById('tickerMessageOuterDiv').style.display == "none") {
+                                    document.getElementById('tickerMessageOuterDiv').style.display = "";
+                                }
+                            }
+                            else {
+                                var temp = document.createElement('div');
+                                temp.innerHTML = tickerDiv;
+                                document.body.insertBefore(temp, document.body.firstChild);
+                            }
+                        }
+                        else {
+                            if (document.getElementById('tickerMessage'))
+                                document.getElementById('tickerMessage').style.display = "none";
+                        }
+                    }
+                    if (sessionStorage.IsDownTimeReq == "true") {
+                        closeTicker();
+                    }
+                    if (msg.Page) {
+                        if (msg.Page.PageReq == "Yes") {
+                            self.location.href = currentUrl.split('BC')[0] + "BC" + "/Product" + "/Modules/DownTimeTicker.aspx?" + sessionStorage.TenantName + "&message=" + encodeURI(msg.Page.DisplayMessage) + "&startDate=" + msg.Page.StartDate + "&endDate=" + msg.Page.EndDate + "&startTime=" + msg.Page.StartTime + "&endTime=" + msg.Page.EndTime + "&urlOld=" + signIn;
+                        }
+                    }
+                },
+                failure: function (response) {
+                    alert(response.d);
+                }
+            });
+        }
+    }
+    else {
+        if (document.getElementById('tickerMessageOuterDiv')) {
+            document.getElementById('tickerMessageOuterDiv').style.display = "none";
+        }
+    }
+};
+
+function SigninDowntime() {
+
+    var currentUrl = self.location.href.toLowerCase();
+    if (currentUrl.indexOf(sessionStorage.PortalsPublicIp) > 0 || isIPAddress(currentUrl) == false) {
+        if (sessionStorage.isDowntimeGoingOn == "1") {
+            var params = {};
+            params.Url = self.location.href;
+            jQuery.ajax({
+                type: "POST",
+                url: "/BC/Product/Modules/UserManagement/CheckSessionValidity.aspx" + "/GetDownTimeDetails",
+                data: JSON.stringify(params),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var msg = JSON.parse(response.d);
+                    if (msg.Ticker) {
+                        if (msg.Ticker.TickerReq == "Yes") {
+                            tickerDiv = '<div id="tickerMessageOuterDiv" class = "tickerMessageOuter"><div onclick="closeTicker();" class="tickerClose"></div><div id="tickerMessage" class="tickerMessage">' + msg.Ticker.DisplayMessage + '</div></div>';
+                            if (document.body.innerHTML.indexOf(msg.Ticker.DisplayMessage) > 0) {
+                                if (document.getElementById('tickerMessageOuterDiv').style.display == "none") {
+                                    document.getElementById('tickerMessageOuterDiv').style.display = "";
+                                }
+                            }
+                            else {
+                                document.body.innerHTML = tickerDiv + document.body.innerHTML;
+                            }
+                        }
+                    }
+                    if (sessionStorage.IsDownTimeReq == "true") {
+                        closeTicker();
+                    }
+                    if (msg.Page) {
+                        if (msg.Page.PageReq == "Yes") {
+                            self.location.href = "DownTimeTicker.aspx?" + "message=" + encodeURI(msg.Page.DisplayMessage) + "&startDate=" + msg.Page.StartDate + "&endDate=" + msg.Page.EndDate + "&startTime=" + msg.Page.StartTime + "&endTime=" + msg.Page.EndTime + "&urlOld=" + self.location.href;
+                        }
+                    }
+                },
+                failure: function (response) {
+                    alert(response.d);
+                }
+            });
+        }
+        else {
+            if (document.getElementById('tickerMessageOuterDiv')) {
+                document.getElementById('tickerMessageOuterDiv').style.display = "none";
+            }
+        }
+    }
+};
+
+function DownTimeSignIn() {
+    if (sessionStorage.isDowntimeInProgress == "0") {
+        clearInterval(oInterval);
+}
+    else {
+        oInterval = setInterval(fnDoClock, 60000);
+        function fnDoClock() {
+            SigninDowntime();
+        }
+    }
+}
+function closeTicker() {
+    if (document.getElementById('tickerMessageOuterDiv')) {
+        document.getElementById('tickerMessageOuterDiv').style.display = "none";
+        sessionStorage.setItem('IsDownTimeReq', true);
+    }
+}
+
+function CheckIsDowntime() {
+    jQuery.ajax({
+        type: "POST",
+        url: "/BC/DownTimeRequired.htm",
+        type: 'GET',
+        async: false,
+        success: function (response) {
+            if (sessionStorage.isDowntimeGoingOn) {
+                sessionStorage.removeItem("isDowntimeGoingOn");
+            }
+            sessionStorage.setItem("isDowntimeGoingOn", response.trim());
+
+        },
+        failure: function (response) {
+            alert(response.d);
+        }
+    });
+};
+
+function submitWithVerificationToken(FormName) {
+    appendCsrfTokenToForm(FormName);
+    FormName.submit();
+}
+
+function appendCsrfTokenToForm(FormName) {
+    var input = document.createElement('input');
+    input.setAttribute('type', 'hidden');
+    input.setAttribute('name', '_RequestVerificationToken');
+    input.setAttribute('id', '_RequestVerificationToken');
+    input.setAttribute('value', document.getElementById('_RequestVerificationToken').value);
+    FormName.appendChild(input);
+}
+
+function GetServerClientTimeDiffInfo() {
+    var d = new Date();
+    var payload = {};
+    payload.currentBrowserTime = d.toUTCString();
+    jQuery.ajax({
+        type: "POST",
+        url: "/BC/Product/Modules/UserManagement/CheckSessionValidity.aspx/GetServerClientTimeDiffInfo",
+        data: JSON.stringify(payload),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            var browserCurrentTime = new Date();
+            var browserCurrentTimeParsed = Date.parse(browserCurrentTime);
+            var res = (response.d).split('|');
+            var browserOldTime = Date.parse(res[0]);
+            var roundTripTime = browserCurrentTimeParsed - browserOldTime;
+            var serverTime = parseInt(res[1]);
+            var deltaTime = (serverTime + roundTripTime / 2) - browserCurrentTimeParsed;
+            sessionStorage.setItem("DeltaTime", deltaTime);
+        }
+    });
+}
+
+/* Forgot Password */
+function forgotPassword(tenantID) {
+    var loginId = document.getElementById('clearLoginId').value;
+    //document.getElementById('altclearLoginId').innerHTML = '';
+    if (loginId == '') {
+        document.getElementById('altclearLoginId').style.display = '';
+        document.getElementById('altclearLoginId').innerHTML = "Login Id field cannot be empty";
+    }
+    else {
+        document.getElementById('altclearLoginId').style.display = 'none';
+        var params = new Array();
+        params.push("action=" + "UMUserOperation");
+        //there is no use of tenant id in action  we could get from session need to  be removed from signature
+        params.push("tenant_id=" + tenantID);
+        params.push("actionType=" + "ForgotPassword");
+        params.push("loginId=" + loginId);
+        params.push("app_name=" + "BC");
+        var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+        new PFTAjaxWrapper().RequestNoCheck(url, {
+            method: "POST",
+            postBody: params.join('&'),
+            onComplete: function (r) {
+                var response = JSON.parse(r.responseText);
+                if (response.IsSuccess == null) {
+                    document.getElementById('altclearLoginId').style.display = 'none';
+                    document.getElementById('step1').style.display = 'none';
+                    document.getElementById('step2').style.display = '';
+                }
+                else if (response.IsSuccess == true) {
+                    window.location.assign("/BC/Product/Modules/UserManagement/UserForgotPasswordLink.aspx");
+                    //showErrorDetailsNG(response.StatusMessage, "1");
+                }
+
+                else if (response.IsSuccess == false) {
+                    document.getElementById('altclearLoginId').style.display = '';
+                    if (document.getElementById('altclearLoginId1') != null)
+                        jQuery("#altclearLoginId").text(response.StatusMessage);
+                    else
+                        document.getElementById('altclearLoginId').innerHTML = response.StatusMessage;
+                    // window.location.assign("/BC/Product/Modules/UserManagement/PasswordRegenerate.aspx?mfa=true");
+
+                }
+                else {
+
+                    document.getElementById('altclearLoginId').style.display = '';
+                    if (document.getElementById('altclearLoginId1') != null)
+                        jQuery("#altclearLoginId").text(response.StatusMessage);
+                    else
+                        document.getElementById('altclearLoginId').title = response.StatusMessage;
+                }
+            }
+        });
+    }
+}
+
+function GetStaticTemplatePath(Context, tenantId) {
+    showWaitingSymbol('signInWaiting');
+    var payload = {};
+    payload.tenantId = tenantId;
+    payload.purpose = Context;
+    $jq.ajax({
+        type: "POST",
+        url: "/BC/Product/Modules/SignIn.aspx/GetStaticTemplatePath",
+        data: JSON.stringify(payload),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (r) {
+            if (r.d != null && r.d != "")
+                ShowPrivacySettings(Context, r.d)
+        },
+        onError: function () {
+        }
+    });
+    hideWaitingSymbol('signInWaiting');
+}
+
+
+
+function ShowPrivacySettings(Context, Url) {
+
+    switch (Context) {
+        case 'Help':
+            PFTPopupNG("PrivacySettingsDialog", {
+                "url": Url,
+                "height": 170,
+                "width": 450,
+                "title": 'Help',
+                "buttons": ["CANCEL"],
+                "checkValidation": false,
+                "closeIconNeeded": false,
+                "onCompleteCallback": function () {
+                },
+                "onCloseCallback": function () {
+                },
+                "onPopupButtonClick": function (btnName, btnId) {
+
+                }
+            });
+            break;
+
+        case 'Terms':
+            PFTPopupNG("PrivacySettingsDialog", {
+                "url": Url,
+                "height": 500,
+                "width": 600,
+                "title": 'Terms of Use',
+                "buttons": ["Close"],
+                "checkValidation": false,
+                "closeIconNeeded": false,
+                "onCompleteCallback": function () {
+                     loadScroll('termsofUseContent');
+                },
+                "onCloseCallback": function () {
+                },
+                "onPopupButtonClick": function (btnName, btnId) {
+
+                }
+            });
+            break;
+
+        case 'Privacy':
+            PFTPopupNG("PrivacySettingsDialog", {
+                "url": Url,
+                "height": 600,
+                "width": 700,
+                "title": 'Privacy Policy',
+                "buttons": ["Close"],
+                "checkValidation": false,
+                "closeIconNeeded": false,
+                "onCompleteCallback": function () {
+                    loadScroll('privacyPolicy');
+                },
+                "onCloseCallback": function (r) {
+                },
+                "onPopupButtonClick": function (btnName, btnId) {
+                }
+                
+            });
+            break;
+    }
+}
+
+function showWaitingSymbol(elementId) {
+    $(elementId).style.display = "block";
+}
+function hideWaitingSymbol(elementId) {
+    $(elementId).style.display = "none";
+}
+
+function showErrorDetailsNG(message, condition, options) {
+    var classname = "alertSuccessNG";
+    switch (condition) {
+        case 0:
+        case "0": classname = 'alertErrorNG';
+            break;
+        case 1:
+        case "1": classname = 'alertSuccessNG';
+            break;
+        case 2:
+        case "2": classname = 'alertWarningNG';
+            break;
+        case 3:
+        case "3": classname = 'alertInfoNG';
+            break;
+    }
+    closeAlert();
+    var html = '<div id="errorAlert" class="' + classname + '">';
+    html += 'Alert';
+    html += '</div>';
+    html += '<div class="alertMessageNG">';
+    html += message;
+    html += '</div>';
+    html += '<div class="alertCloseNG" onclick="closeAlert();"></div>';
+    var div = document.createElement('div');
+    div.id = "alertWrapper";
+    div.innerHTML = html;
+    div.className = "alertWrapper";
+    document.body.appendChild(div);
+    var alertInterval = 5000;
+    if (options != null) {
+        if (options["alertInterval"] != null) {
+            alertInterval = options["alertInterval"];
+        }
+    }
+    $jq(".alertWrapper").effect("shake", { direction: "up", times: 3, distance: 4 }, 1000);
+    setTimeout(function () {
+        closeAlert();
+    }, alertInterval);
+}
+
+function closeAlert() {
+    var element = document.getElementById("alertWrapper");
+    if (element != null) {
+        element.remove(element);
+    }
+}
+
+function AttachResetPasswordButtonToEnterButtonClick(e, tenantId, functionality) {
+    if (e.keyCode == 13) {
+        switch (functionality) {
+            case 'PwdRegenerate': forgotPassword(tenantId); break;
+            case 'ResetPasswordold': sendConfirmationEmail(); break;
+            case 'ResetPasswordlightning': sendEmailConfirmation4Lightning(); break;
+            case 'LockUser': VerifyLockUser(tenantId); break;
+            case 'ResetPwdforLockUserLightning': sendConfirmationEmailForLockUserLightning(); break;
+            case 'ResetPwdforLockUserOld': sendConfirmationEmailForLockUser(); break;
+            case 'ResetPwdforExpiredUser': ResetUserDetailsForExpiry(); break;
+        }
+    }
+}
+function validateFields(fieldArray) {
+    var mandatoryField = "valid";
+    for (var i = 0; i < fieldArray.length; i++) {
+        if (fieldArray[i].value.trim() == "") {
+            if (!document.getElementById(fieldArray[i].id).classList.contains("appendError")) {
+                document.getElementById(fieldArray[i].id).classList.add("appendError");
+                document.getElementById(fieldArray[i].id).title = document.getElementById(fieldArray[i].id).getAttribute("") + "field is empty.";
+            }
+            mandatoryField = "missing";
+        }
+        else if (fieldArray[i].attributes.getNamedItem('data-valid').value == "false") {
+            if (!document.getElementById(fieldArray[i].id).classList.contains("appendError")) {
+                document.getElementById(fieldArray[i].id).classList.add("appendError");
+                document.getElementById(fieldArray[i].id).title = "Mandatory field as invalid data.";
+            }
+            mandatoryField = "invalid";
+        }
+    }
+    return mandatoryField;
+}
+function validatePwdNull(element) {
+    var id = element.id;
+    if (document.getElementById(id).value != '') {
+        document.getElementById(id).setAttribute("data-valid", "true");
+        if (document.getElementById(id).classList.contains("appendError")) {
+            document.getElementById(id).classList.remove("appendError");
+            if (document.getElementById(id).value == '')
+            {
+                document.getElementById(id).title = "Field cannot be empty";
+            }
+        }
+    }
+    else {
+        document.getElementById(id).setAttribute("data-valid", "false");
+        if (!document.getElementById(id).classList.contains("appendError")) {
+            document.getElementById(id).classList.add("appendError");
+            document.getElementById(id).title = document.getElementById(id).getAttribute("data-msg");
+        }
+    }
+}
+function validatePasswordMatch(newPwd, currentPwd) {
+    var id = newPwd.id;
+    if (document.getElementById(id).getAttribute("data-valid") == "true" && document.getElementById(currentPwd).getAttribute("data-valid") == "true") {
+        if (document.getElementById(id).value != document.getElementById(currentPwd).value) {
+            document.getElementById(id).setAttribute("data-valid", "true");
+            if (document.getElementById(id).classList.contains("appendError")) {
+                document.getElementById(id).classList.remove("appendError");
+                document.getElementById(id).title = "Enter your " + document.getElementById(id).getAttribute("data-msg");
+            }
+        }
+        else {
+            document.getElementById(id).setAttribute("data-valid", "false");
+            if (!document.getElementById(id).classList.contains("appendError")) {
+                document.getElementById(id).classList.add("appendError");
+                document.getElementById(id).title = "Current password and new password cannot be same";
+            }
+        }
+    }
+}
+function validatePasswordMismatch(cnfrmPwd, newPwd, currentPwd) {
+    var id = cnfrmPwd.id;
+    if (document.getElementById(newPwd).value != '' && (currentPwd == undefined || currentPwd == '')) {
+        document.getElementById(newPwd).setAttribute("data-valid", "true");
+    }
+    else {
+        if (document.getElementById(currentPwd) != null) {
+            if (document.getElementById(newPwd).value != document.getElementById(currentPwd).value) {
+                document.getElementById(newPwd).setAttribute("data-valid", "true");
+            }
+        }
+    }
+    if (document.getElementById(id).getAttribute("data-valid") == "true" && document.getElementById(newPwd).getAttribute("data-valid") == "true") {
+        if (document.getElementById(id).value == document.getElementById(newPwd).value) {
+            document.getElementById(id).setAttribute("data-valid", "true");
+            document.getElementById(newPwd).setAttribute("data-valid", "true");
+            if (document.getElementById(id).classList.contains("appendError")) {
+                document.getElementById(id).classList.remove("appendError");
+            }
+            if (document.getElementById(newPwd).classList.contains("appendError")) {
+                document.getElementById(newPwd).classList.remove("appendError");
+            }
+            document.getElementById(id).title = document.getElementById(id).getAttribute("data-msg");
+            document.getElementById(newPwd).title = document.getElementById(newPwd).getAttribute("data-msg");
+        }
+        else {
+            document.getElementById(id).setAttribute("data-valid", "false");
+            if (!document.getElementById(id).classList.contains("appendError")) {
+                document.getElementById(id).classList.add("appendError");
+                document.getElementById(id).title = "New password and Confirm Password must be same";
+            }
+        }
+    }
+}
+function sendConfirmationEmail() {
+    var newPassword = document.getElementById('newPassword').value;
+    var confirmPassword = document.getElementById('confirmPassword').value;
+    var tenantId = document.getElementById('tenantId').value;
+    var isPwdMatch = true;
+    var isvalidPasswordField;
+    if (document.getElementById('flag').value == "True") {
+
+        isvalidPasswordField = ValidatePasswordFields(null, 'newPassword', 'confirmPassword');
+        if (!isvalidPasswordField) {
+            return false;
+        }
+        validatePasswordMismatch(document.getElementById('newPassword'), document.getElementById('confirmPassword'));
+
+        if (document.getElementById('passwordPolicyMessage') != null && document.getElementById('isTypedPasswordValid') != null) {
+            var passwordPolicyMessage = document.getElementById('passwordPolicyMessage').value;
+            var isTypedPasswordValid = document.getElementById('isTypedPasswordValid').value;
+            if (passwordPolicyMessage != "" && passwordPolicyMessage != null && isTypedPasswordValid != null)
+                isPwdMatch = ((isTypedPasswordValid === 'true') ? true : false);
+        }
+
+        // if (mandatoryField == "valid") {
+        if (isPwdMatch == true) {
+            var params = new Array();
+            params.push("action=" + "UMUserOperation");
+            params.push("password=" + newPassword);
+            params.push("confirmPassword=" + confirmPassword);
+            params.push("actionType=" + "UserChangePassword");
+            params.push("tenant_id=" + tenantId);
+            var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+            new PFTAjaxWrapper().RequestNoCheck(url, {
+                method: "POST",
+                postBody: params.join('&'),
+                onComplete: function (r) {
+                    var response = JSON.parse(r.responseText);
+                    if (response.Status) {
+                        $('newPassword').value = "";
+                        $('confirmPassword').value = "";
+                        if (document.getElementById('newPassword').classList.contains("appendError"))
+                            document.getElementById('newPassword').classList.remove("appendError");
+                        if (document.getElementById('confirmPassword').classList.contains("appendError"))
+                            document.getElementById('confirmPassword').classList.remove("appendError");
+
+                        // showErrorDetailsNG("Password reset successfully.", "1");
+                        // window.location.href = '/BC/Product/Modules/Logout.aspx';
+
+                        document.getElementById('ctl00_pageContent_ResetPasswordDivOld').style.display = 'none';
+                        document.getElementById('SucessResultold').style.display = 'block';
+                        document.getElementById('flag').value = "False";
+                        document.removeEventListener("keydown", AttachResetPasswordButtonToEnterButtonClick, true);
+                    }
+                    else {
+                        showErrorDetailsNG(response.Message, "0");
+                    }
+                }
+
+            });
+        }
+        else {
+            showErrorDetailsNG("Password does not match password policy", "0");
+        }
+        // }
+    }
+    else {
+        showErrorDetailsNG("Password not reset.The link has expired.", "0");
+        document.getElementById('resetPassword').style.pointerEvents = 'none';
+
+    }
+}
+function sendEmailConfirmation4Lightning() {
+    var newPassword = document.getElementById('newPasswordLightning').value;
+    var confirmPassword = document.getElementById('confirmPasswordLightning').value;
+    var tenantId = document.getElementById('tenantId').value;
+    var isPwdMatch = true;
+    var isvalidPasswordField;
+    if ($('flag').value == "True") {
+
+        isvalidPasswordField = ValidatePasswordFields(null, 'newPasswordLightning', 'confirmPasswordLightning');
+        if (!isvalidPasswordField) {
+            return false;
+        }
+        if (document.getElementById('passwordPolicyMessage') != null && document.getElementById('isTypedPasswordValid') != null) {
+            var passwordPolicyMessage = document.getElementById('passwordPolicyMessage').value;
+            var isTypedPasswordValid = document.getElementById('isTypedPasswordValid').value;
+            if (passwordPolicyMessage != "" && passwordPolicyMessage != null && isTypedPasswordValid != null)
+                isPwdMatch = ((isTypedPasswordValid === 'true') ? true : false);
+        }
+        //if (mandatoryField == "valid") {
+        if (isPwdMatch == true) {
+            var params = new Array();
+            params.push("action=" + "UMUserOperation");
+            params.push("password=" + newPassword);
+            params.push("confirmPassword=" + confirmPassword);
+            params.push("actionType=" + "UserChangePassword");
+            params.push("tenant_id=" + tenantId);
+            var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+            new PFTAjaxWrapper().RequestNoCheck(url, {
+                method: "POST",
+                postBody: params.join('&'),
+                onComplete: function (r) {
+                    var response = JSON.parse(r.responseText);
+                    if (response.Status) {
+                        $('newPasswordLightning').value = "";
+                        $('confirmPasswordLightning').value = "";
+                        if (document.getElementById('newPasswordLightning').classList.contains("appendError"))
+                            document.getElementById('newPasswordLightning').classList.remove("appendError");
+                        if (document.getElementById('confirmPasswordLightning').classList.contains("appendError"))
+                            document.getElementById('confirmPasswordLightning').classList.remove("appendError");
+                        $('flag').value = "False";
+                        // showErrorDetailsNG("Password reset successfully.", "1");
+                        // window.location.href = '/BC/Product/Modules/Logout.aspx';
+                        document.getElementById('ctl00_pageContent_ResetPasswordDiv').style.display = 'none';
+                        document.getElementById('SucessResult').style.display = 'block';
+                        document.removeEventListener("keydown", AttachResetPasswordButtonToEnterButtonClick, true);
+                    }
+                    else {
+                        showErrorDetailsNG(response.Message, "0");
+                    }
+                }
+
+            });
+        }
+        else {
+            showErrorDetailsNG("Password does not match password policy", "0");
+        }
+        // }
+    }
+    else {
+        showErrorDetailsNG("Password not reset.The link has expired.", "0");
+        document.getElementById('resetPassword').style.pointerEvents = 'none';
+
+    }
+}
+function sendConfirmationEmailForLockUser() {
+    var fieldArray = [];
+    var isPwdMatch = true;
+    var isvalidPasswordField;
+    var newPassword = document.getElementById('newPassword').value;
+    var confirmPassword = document.getElementById('confirmPassword').value;
+    var tenantId = document.getElementById('tenantId').value;
+
+    if (document.getElementById('flag').value == "True") {
+        isvalidPasswordField = ValidatePasswordFields(null, 'newPassword', 'confirmPassword');
+        if (!isvalidPasswordField) {
+            return false;
+        }
+
+        if (document.getElementById('passwordPolicyMessage') != null && document.getElementById('isTypedPasswordValid') != null) {
+            var passwordPolicyMessage = document.getElementById('passwordPolicyMessage').value;
+            var isTypedPasswordValid = document.getElementById('isTypedPasswordValid').value;
+            if (passwordPolicyMessage != "" && passwordPolicyMessage != null && isTypedPasswordValid != null)
+                isPwdMatch = ((isTypedPasswordValid === 'true') ? true : false);
+        }
+        //  if (mandatoryField == "valid") {
+        if (isPwdMatch == true) {
+            var params = new Array();
+            params.push("action=" + "UMUserOperation");
+            params.push("actionType=" + "ResetLockUserDetail");
+            params.push("tenant_id=" + tenantId);
+            params.push("newPwd=" + newPassword);
+            params.push("confirmPwd=" + confirmPassword);
+            var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+            new PFTAjaxWrapper().Request(url, {
+                method: "POST",
+                postBody: params.join('&'),
+                onComplete: function (r) {
+                    var response = JSON.parse(r.responseText);
+                    if (response.Status) {
+                        $('newPassword').value = "";
+                        $('confirmPassword').value = "";
+                        if (document.getElementById('newPassword').classList.contains("appendError"))
+                            document.getElementById('newPassword').classList.remove("appendError");
+                        if (document.getElementById('confirmPassword').classList.contains("appendError"))
+                            document.getElementById('confirmPassword').classList.remove("appendError");
+                        document.getElementById('ctl00_pageContent_ResetPasswordDivOld').style.display = 'none';
+                        document.getElementById('SucessResultold').style.display = 'block';
+                        // showErrorDetailsNG("Password reset successfully.", "1");
+                        //window.location.href = '/BC/Product/Modules/Logout.aspx';
+                        document.getElementById('flag').value = "False";
+                        document.removeEventListener("keydown", AttachResetPasswordButtonToEnterButtonClick, true);
+                    }
+                    else {
+                        showErrorDetailsNG(response.Message, "0");
+                    }
+                }
+
+            });
+        }
+        else {
+            showErrorDetailsNG("Password does not match password policy", "0");
+        }
+        // }
+    }
+    else {
+        showErrorDetailsNG("Password not reset.The link has expired.", "0");
+        document.getElementById('resetPassword').style.pointerEvents = 'none';
+
+    }
+}
+function sendConfirmationEmailForLockUserLightning() {
+    var fieldArray = [];
+    var isPwdMatch = true;
+    var isvalidPasswordField;
+    var newPassword = document.getElementById('newPasswordLightning').value;
+    var confirmPassword = document.getElementById('confirmPasswordLightning').value;
+    var tenantId = document.getElementById('tenantId').value;
+
+    if ($('flag').value == "True") {
+        isvalidPasswordField = ValidatePasswordFields(null, 'newPasswordLightning', 'confirmPasswordLightning');
+        if (!isvalidPasswordField) {
+            return false;
+        }
+
+        if (document.getElementById('passwordPolicyMessage') != null && document.getElementById('isTypedPasswordValid') != null) {
+            var passwordPolicyMessage = document.getElementById('passwordPolicyMessage').value;
+            var isTypedPasswordValid = document.getElementById('isTypedPasswordValid').value;
+            if (passwordPolicyMessage != "" && passwordPolicyMessage != null && isTypedPasswordValid != null)
+                isPwdMatch = ((isTypedPasswordValid === 'true') ? true : false);
+        }
+
+        // if (mandatoryField == "valid") {
+        if (isPwdMatch == true) {
+            var params = new Array();
+            params.push("action=" + "UMUserOperation");
+            params.push("actionType=" + "ResetLockUserDetail");
+            params.push("tenant_id=" + tenantId);
+            params.push("newPwd=" + newPassword);
+            params.push("confirmPwd=" + confirmPassword);
+            var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+            new PFTAjaxWrapper().Request(url, {
+                method: "POST",
+                postBody: params.join('&'),
+                onComplete: function (r) {
+                    var response = JSON.parse(r.responseText);
+                    if (response.Status) {
+                        $('newPasswordLightning').value = "";
+                        $('confirmPasswordLightning').value = "";
+                        if (document.getElementById('newPasswordLightning').classList.contains("appendError"))
+                            document.getElementById('newPasswordLightning').classList.remove("appendError");
+                        if (document.getElementById('confirmPasswordLightning').classList.contains("appendError"))
+                            document.getElementById('confirmPasswordLightning').classList.remove("appendError");
+                        document.getElementById('ctl00_pageContent_ResetPasswordDiv').style.display = 'none';
+                        document.getElementById('SucessResult').style.display = 'block';
+                        //window.location.href = '/BC/Product/Modules/Logout.aspx';
+                        $(flag).value = "False";
+                        document.removeEventListener("keydown", AttachResetPasswordButtonToEnterButtonClick, true);
+                    }
+                    else {
+                        showErrorDetailsNG(response.Message, "0");
+                    }
+                }
+
+            });
+        }
+        else {
+            showErrorDetailsNG("Password does not match password policy", "0");
+        }
+        // }
+    }
+    else {
+        showErrorDetailsNG("Password not reset.The link has expired.", "0");
+        document.getElementById('resetPassword').style.pointerEvents = 'none';
+    }
+}
+function ResetUserDetailsForExpiry() {
+    var isPwdMatch = true;
+    var isvalidPasswordField;
+    var oldPassword = document.getElementById('OldPwd').value;
+    var newPassword = document.getElementById('NewPwd').value;
+    var confirmPassword = document.getElementById('ConfirmPwd').value;
+
+    isvalidPasswordField = ValidatePasswordFields('OldPwd', 'NewPwd', 'ConfirmPwd');
+    if (!isvalidPasswordField) {
+        return false;
+    }
+
+    if (document.getElementById('passwordPolicyMessage') != null && document.getElementById('isTypedPasswordValid') != null) {
+        var passwordPolicyMessage = document.getElementById('passwordPolicyMessage').value;
+        var isTypedPasswordValid = document.getElementById('isTypedPasswordValid').value;
+        if (passwordPolicyMessage != "" && passwordPolicyMessage != null && isTypedPasswordValid != null)
+            isPwdMatch = ((isTypedPasswordValid === 'true') ? true : false);
+    }
+
+    //  if (mandatoryField == "valid") {
+    if (isPwdMatch == true) {
+        var params = new Array();
+        params.push("action=" + "UMUserOperation");
+        params.push("actionType=" + "ResetUserDetail");
+        params.push("tenant_id=" + $('tenantId').value);
+        params.push("currentPwd=" + oldPassword);
+        params.push("newPwd=" + newPassword);
+        params.push("confirmPwd=" + confirmPassword);
+        var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+        new PFTAjaxWrapper().Request(url, {
+            method: "POST",
+            postBody: params.join('&'),
+            onComplete: function (r) {
+                var response = JSON.parse(r.responseText);
+                if (response.Status) {
+                    document.getElementById('ErrorMsg').innerText = "";
+                    $('OldPwd').value = "";
+                    $('NewPwd').value = "";
+                    $('ConfirmPwd').value = "";
+                    if (document.getElementById('OldPwd').classList.contains("appendError"))
+                        document.getElementById('OldPwd').classList.remove("appendError");
+                    if (document.getElementById('NewPwd').classList.contains("appendError"))
+                        document.getElementById('NewPwd').classList.remove("appendError");
+                    if (document.getElementById('ConfirmPwd').classList.contains("appendError"))
+                        document.getElementById('ConfirmPwd').classList.remove("appendError");
+                    document.getElementById('ctl00_pageContent_ResetPasswordDiv').style.display = 'none';
+                    document.getElementById('SucessResult').style.display = 'block';
+                    //jQuery("#SuccessMsg").text("Your Password has been changed. Click on Back button to return back to Login Page.");
+                    document.removeEventListener("keydown", AttachResetPasswordButtonToEnterButtonClick, true);
+                }
+                else {
+                    showErrorDetailsNG(response.Message, "0");
+                }
+            }
+        });
+    }
+    else {
+        showErrorDetailsNG("Password does not match password policy", "0");
+    }
+    //}
+}
+function RedirectToLandingPage() {
+    jQuery.ajax({
+        type: "POST",
+        url: "/BC/Product/Modules/UserManagement/PasswordExpiration.aspx/InitiateCheckForSessionTokens",
+        contentType: "application/json; charset=utf-8",
+        success: function () {
+            if (document.getElementById('RedirectURL') != undefined) {
+                window.location = $('RedirectURL').value;
+            }
+        }
+    });
+}
+
+function VerifyLockUser(tenantID) {
+    var loginId = document.getElementById('clearLoginId').value;
+    if (loginId == '') {
+        document.getElementById('altclearLoginId').style.display = '';
+        document.getElementById('altclearLoginId').innerText = "Login Id field cannot be empty";
+    }
+    else {
+        document.getElementById('altclearLoginId').style.display = 'none';
+        var params = new Array();
+        params.push("action=" + "UMUserOperation");
+        //there is no use of tenant id in action  we could get from session need to  be removed from signature
+        params.push("tenant_id=" + tenantID);
+        params.push("actionType=" + "ValidateLockUser");
+        params.push("loginId=" + loginId);
+        var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+        new PFTAjaxWrapper().RequestNoCheck(url, {
+            method: "POST",
+            postBody: params.join('&'),
+            onComplete: function (r) {
+                if (r.responseText == "") {
+                    document.getElementById('altclearLoginId').style.display = '';
+                    document.getElementById('altclearLoginId').innerText = "Invalid LoginId";
+                }
+                else if (r.responseText == "true") {
+                    window.location.assign("/BC/Product/Modules/UserManagement/LockUserPasswordLink.aspx");
+                    showErrorDetailsNG("An email with reset password link has been sent to the user successfully.", "1");
+                    document.removeEventListener("keydown", AttachResetPasswordButtonToEnterButtonClick, true);
+                }
+                else if (r.responseText == "false") {
+                    document.getElementById('altclearLoginId').style.display = '';
+                    document.getElementById('altclearLoginId').innerText = "Configuration Issue";
+
+                }
+                else {
+                    document.getElementById('altclearLoginId').style.display = '';
+                    document.getElementById('altclearLoginId').title = r.responseText;
+                }
+            }
+        });
+    }
+
+}
+/* Reset Password */
+
+var pftconfirmactive = 0;
+function OpenResetPasswordConfirm() {
+    var loginId = document.getElementById('LoginId').value;
+    var UserId = document.getElementById('UserId').value;
+    var tenantId = document.getElementById('RoleTenantId').value;
+    if (pftconfirmactive == 1)
+        return;
+
+    showModalOverlay();
+    var msg = '';
+    if (document.getElementById('hdnAccountStatus').value == '3') {
+        msg = "The user account is currently locked. Do you want to reset password and unlock the user?";
+
+    }
+    else {
+        msg = "Are you sure you want to reset the user's password?";
+    }
+
+    PFTConfirm({
+        'message': msg,
+        'okHandler': function () {
+            hideConfirmPopup();
+            AdminResetPassword(tenantId, UserId, loginId);
+            ReloadUserPage();
+            pftconfirmactive = 0;
+            hideModalOverlay();
+        },
+        'cancelHandler': function () {
+            pftconfirmactive = 0;
+            hideConfirmPopup();
+            hideModalOverlay();
+        },
+        'popUpWindow': 'confirmation'
+    });
+    pftconfirmactive = 1;
+}
+
+function hideConfirmPopup() {
+    $('ConfirmDivId').remove();
+    hideModalPopupOverlays()
+}
+
+function logout() {
+    window.location.href = '/BC/Product/Modules/Signin.aspx';
+}
+
+function setTimeforMaxLoginAttempt() {
+
+    --totalSeconds;
+
+    if (document.getElementById("seconds") != null && document.getElementById("minutes") != null) {
+
+        jQuery('#seconds').text(pad(totalSeconds % 60));
+        jQuery('#minutes').text(pad(parseInt(totalSeconds / 60)));
+        if (totalSeconds <= 0) {
+            clearInterval(SetTimer)
+            jQuery('#second').text("00");
+            jQuery('#minutes').text("00");
+
+            jQuery('#invalidCredientials').css("display", "none");
+        }
+
+    }
+
+}
+
+function pad(val) {
+    var valString = val + "";
+    if (valString.length < 2) {
+        return "0" + valString;
+    }
+    else {
+        return valString;
+    }
+}
+
+
+function ValidatePasswordFields(currentPasswordDivId, NewPasswordDivId, ConfirmPasswordDivId) {
+    var currentPassword = '';
+    var newPassword = document.getElementById(NewPasswordDivId).value;
+    var confirmPassword = document.getElementById(ConfirmPasswordDivId).value;
+
+    if ((currentPasswordDivId != null || currentPasswordDivId != '' || currentPasswordDivId != undefined) && document.getElementById(currentPasswordDivId)) {
+        currentPassword = document.getElementById(currentPasswordDivId).value;
+    }
+
+    if ((currentPasswordDivId != null && currentPassword == '') || newPassword == '' || confirmPassword == '') {
+        showErrorDetailsNG('Password Fields Cannot be Empty', 0);
+        return false;
+    }
+    else if (document.getElementById(currentPasswordDivId) && (currentPassword == newPassword)) {
+        document.getElementById(NewPasswordDivId).classList.add("appendError");
+        showErrorDetailsNG('Try again with a password you haven\'t used before', 0);
+        return false;
+    }
+    else if (newPassword != confirmPassword) {
+        if (document.getElementById(NewPasswordDivId).classList.contains("appendError")) {
+            document.getElementById(NewPasswordDivId).classList.remove("appendError");
+        }
+        document.getElementById(ConfirmPasswordDivId).classList.add("appendError");
+        showErrorDetailsNG('Your passwords didn\'t match. Try again.', 0);
+        return false;
+    }
+
+    return true;
+}
+
+/***  Start - Login Section ***/
+
+$jq(document).on('keydown', '#x-username', function (e) {
+    $jq('#invalidCredientials').html('');
+    if (e.keyCode == 13) {
+        validateUsername();
+    }
+});
+
+$jq(document).on('click', '#loginContinue', function () {
+    validateUsername();
+});
+
+$jq(document).on('keydown', '#x-pwd', function () {
+    $jq('#invalidCredientials').html('');
+});
+
+$jq(document).on('click', '#go_back', function () {
+    handleBackClick();
+});
+
+$jq(document).on('click', '#editUserName', function () {
+    handleBackClick();
+});
+
+function signinGoback() {
+    $jq('#IsPasswordScreen').val('True');
+    window.location.href = window.location.href;
+}
+
+function signinGobackEnterPress(e) {
+    if (e.keyCode == 13) {
+        handleBackClick();
+    }
+}
+
+function trimUserName()
+{
+    var loginIdinInput = $jq('#x-username').val();
+    var loginIdAfterTrim = loginIdinInput.trim();
+    $jq('#x-username').val(loginIdAfterTrim);
+       
+   }
+function validateUsername() {
+    trimUserName();
+    var username = $jq('#x-username').val();
+    var tenantId = $jq('#TenantId').val();
+    if (username.length <= 0) {
+        $jq('#invalidCredientials').html("Please enter the username");
+        $jq("#invalidCredientials").show();
+        return false;
+    }
+
+    var params = new Array();
+    params.push("action=" + "LoginAction");
+    params.push("tenant_id=" + tenantId);
+    params.push("username=" + username);
+    params.push("actionType=" + "ValidateUsername");
+
+    var url = '/BC/Product/Actions/ExternalActionHandler.aspx';
+    new PFTAjaxWrapper().Request(url, {
+        method: "POST",
+        postBody: params.join('&'),
+        onComplete: function (response) {
+            var result = '';
+            if (response.responseText.indexOf("||") > 0)
+                result = JSON.parse(response.responseText.split("||")[0]);
+            else
+                result = JSON.parse(response.responseText);
+
+            if (result != null && result != undefined) {
+                if (result.IdentityProvider != null && result.IdentityProvider != undefined && result.IdentityProvider.Name == IdentityManager.Name.AD) {
+                    var elem = document.createElement('div');
+                    elem.innerHTML = '<iframe src="' + response.responseText.split("||")[1] + '" height="0" width="0"></iframe>';
+                    document.body.appendChild(elem);
+                    window.setTimeout(ADFormSubmit, 300);                   
+                }
+                else {
+                    $jq('#LoginIdinInput').val(username);
+                    showUserValidationScreen(username, result);
+                }
+            }
+        },
+        onError: function () {
+            showInvalidCredentials();
+        }
+    });
+}
+
+function ADFormSubmit()
+{
+    $jq('#IsPasswordScreen').val('False');
+    $jq("form:first").submit();
+}
+
+function showUserValidationScreen(username, signInConfig) {
+    if (signInConfig.IdentityProvider != null && signInConfig.IdentityProvider != undefined
+        && (signInConfig.IdentityProvider.Name == IdentityManager.Name.OKTA || signInConfig.IdentityProvider.Name == IdentityManager.Name.AzureAD)) {
+        if (signInConfig.IdentityProvider.Name == IdentityManager.Name.OKTA)
+            loadOKTAWidget(JSON.parse(signInConfig.IdentityProvider.Config));
+        else if (signInConfig.IdentityProvider.Name == IdentityManager.Name.AzureAD)
+            loadAzureAdForOIDC(username, JSON.parse(signInConfig.IdentityProvider.Config));
+    }
+    else
+        loadPasswordScreen(username);
+}
+
+function loadPasswordScreen(username) {
+    var passwordContainer = buildHtmlDOMElementWithStandardAttributes('div', 'div_password', 'pad10');
+
+    var contentContainer = buildHtmlDOMElementWithStandardAttributes('div', null, 'TFGroup');
+
+    var divUserName = buildHtmlDOMElementWithStandardAttributes('div', null, 'loginRow div_username');
+    divUserName.appendChild(buildHtmlDOMElementWithStandardAttributes('div', null, 'FL loginusernameImage'));
+        
+    var otherAttributes = [];
+    otherAttributes[0] = "type|text";
+    otherAttributes[1] = "name|x-login-id";
+    otherAttributes[2] = "placeholder|Username";
+    otherAttributes[3] = "title|Enter your 'User Name' here";
+    otherAttributes[4] = "readonly|readonly";
+    otherAttributes[5] = "tabindex|1";
+    otherAttributes[6] = "value|" + username;
+    divUserName.appendChild(buildHtmlDOMElementWithStandardAttributes('input', 'x-username', 'loginText loginDisabledText', otherAttributes));
+
+    otherAttributes = [];
+    otherAttributes[0] = "title|Click here to edit 'User Name'";
+
+    var editButton = buildHtmlDOMElementWithStandardAttributes('div', 'editUserName', 'editusernameLink', otherAttributes);
+    editButton.innerHTML = "edit";
+    divUserName.appendChild(editButton);
+
+    otherAttributes = [];
+    otherAttributes[0] = "type|text";
+    otherAttributes[1] = "style|display: none";
+    divUserName.appendChild(buildHtmlDOMElementWithStandardAttributes('input', 'x-login-id', null, otherAttributes));
+    divUserName.appendChild(buildHtmlDOMElementWithStandardAttributes('div', null, 'clr'));
+    contentContainer.appendChild(divUserName);
+
+    var divPassword = buildHtmlDOMElementWithStandardAttributes('div', null, 'loginRow marT10 div_password');
+    divPassword.appendChild(buildHtmlDOMElementWithStandardAttributes('div', null, 'loginPasswordImage'));
+
+    otherAttributes = [];
+    otherAttributes[0] = "type|password";
+    otherAttributes[1] = "name|x-password";
+    otherAttributes[2] = "autocomplete|off";
+    otherAttributes[3] = "placeholder|Password";
+    otherAttributes[4] = "title|Enter your 'Password' here";
+    otherAttributes[5] = "autofocus|autofocus";
+    otherAttributes[6] = "tabindex|2";
+    divPassword.appendChild(buildHtmlDOMElementWithStandardAttributes('input', 'x-pwd', 'loginText', otherAttributes));
+
+    otherAttributes = [];
+    otherAttributes[0] = "type|password";
+    otherAttributes[1] = "style|display: none";
+    divPassword.appendChild(buildHtmlDOMElementWithStandardAttributes('input', 'x-password', null, otherAttributes));
+    divPassword.appendChild(buildHtmlDOMElementWithStandardAttributes('div', null, 'clr'));
+
+    contentContainer.appendChild(divPassword);
+
+    var buttons = buildHtmlDOMElementWithStandardAttributes('div', null, 'loginRow marT10');
+    therAttributes = [];
+    otherAttributes[0] = "title|Click here to go to previous screen";
+    otherAttributes[1] = "onkeypress|signinGobackEnterPress(event)";
+    otherAttributes[2] = "tabindex|3";
+    var backButton = buildHtmlDOMElementWithStandardAttributes('a', 'go_back', 'forgotPassword FL newBackBtn', otherAttributes);
+    backButton.innerHTML = "Change Username";
+    buttons.appendChild(backButton);
+
+    otherAttributes = [];
+    otherAttributes[0] = "type|submit";
+    otherAttributes[1] = "value|Login";
+    otherAttributes[2] = "title|Click to Login";
+    otherAttributes[3] = "tabindex|4";
+    buttons.appendChild(buildHtmlDOMElementWithStandardAttributes('input', 'loginSubmit', 'submitBtn loginSubmit FL', otherAttributes));
+
+    contentContainer.appendChild(buttons);
+
+    var forgotPasswordContainer = buildHtmlDOMElementWithStandardAttributes('div', null, 'marT10');
+    otherAttributes = [];
+    otherAttributes[0] = "href|UserManagement/PasswordRegenerate.aspx";
+    otherAttributes[1] = "title|Click here to reset your password";
+    otherAttributes[2] = "tabindex|5";
+    var forgotPwd = buildHtmlDOMElementWithStandardAttributes('a', null, 'forgotPassword', otherAttributes);
+    forgotPwd.innerHTML = "Forgot Password?";
+    forgotPasswordContainer.appendChild(forgotPwd);
+    contentContainer.appendChild(forgotPasswordContainer);
+
+    passwordContainer.appendChild(contentContainer);
+
+    $jq('#div_main').html(passwordContainer);
+    $jq('#IsPasswordScreen').val('True');
+    $jq('#x-pwd').focus();
+}
+
+function loadOKTAWidget(idpConfig) {
+    if (oktaSignIn!=null) {
+        oktaSignIn.remove();
+        oktaSignIn.off('pageRendered');
+    }
+    var a = document.getElementById("clear_logo");
+    a.classList = "clearLogo clearLogo2";
+    var oktaWidgetContainer = buildHtmlDOMElementWithStandardAttributes('div', 'okta-login-container');
+    var errorElement = document.getElementById("validation");
+
+    $jq('#div_main').html(oktaWidgetContainer);
+    $jq('#div_main').append(errorElement);
+
+    var redirectUrl = idpConfig.redirecturl;
+    oktaSignIn = new OktaSignIn({
+        baseUrl: idpConfig.clienturl,
+        customButtons: [{
+            title: 'Change Username',
+            className: 'btn-customAuth',
+            click: function () {
+                handleBackClick();
+            }
+        }],
+        features: {
+            rememberMe: false,
+            autoPush: true,
+            multiOptionalFactorEnroll: true,
+            smsRecovery: true
+        },
+        clientId: idpConfig.clientid,
+        redirectUri: redirectUrl,
+        labels: {
+            'primaryauth.title': 'Sign In with OKTA',
+        },
+        authParams: {
+            display: 'page',
+            responseType: 'code',
+            responseMode: 'form_post',
+            scopes: ['openid', 'email', 'profile', 'address', 'phone'],
+            authorizeUrl: idpConfig.authendpoint,
+        },
+        username: $jq('#LoginIdinInput').val()
+    });
+
+    oktaSignIn.renderEl(
+      { el: '#okta-login-container' },
+      function success(res) {
+
+      }
+    );
+
+    oktaSignIn.on('pageRendered', function (data) {
+        updateScroll("div_main");
+        $jq('#div_main').addClass("oktaMainContainer");
+        if (document.getElementById("okta-signin-username"))
+            document.getElementById("okta-signin-username").readOnly = true;
+        if (document.getElementById("okta-signin-submit"))
+            document.getElementById("okta-signin-submit").value = "Login";
+    });
+}
+function moveCursorToEnd(el) {
+    if (typeof el.selectionStart == "number") {
+        el.selectionStart = el.selectionEnd = el.value.length;
+    } else if (typeof el.createTextRange != "undefined") {
+        el.focus();
+        var range = el.createTextRange();
+        range.collapse(false);
+        range.select();
+    }
+}
+function handleBackClick() {
+    var a = document.getElementById("clear_logo");
+    a.classList = "clearLogo";
+    $jq("#div_password").hide();
+    $jq("#invalidCredientials").hide();
+    $jq('#div_main').removeClass("oktaMainContainer");
+    var newdiv_main = buildUserNameDiv();
+    document.getElementById("div_main").innerHTML = newdiv_main.innerHTML;
+    var textarea = document.getElementById("x-username");
+    moveCursorToEnd(textarea);
+    $jq("#x-username").focus();
+  
+ }
+
+function buildUserNameDiv() // CreateFirstPage With UserName Value
+{
+    var usernamefromInput = $jq('#LoginIdinInput').val()
+    var usernameafterRefresh = $jq('#x-login').val();
+    var div_main = document.createElement("div");
+    div_main.setAttribute("id", "div_main");
+    var div_username = document.createElement("div");
+    div_username.setAttribute("id", "div_username");
+    div_username.setAttribute("class", "pad10");
+    div_main.appendChild(div_username);
+    var TFGRoup = document.createElement("div");
+    TFGRoup.setAttribute("class", "TFGroup");
+    div_username.appendChild(TFGRoup);
+    var loginRow = document.createElement("div");
+    loginRow.setAttribute("class", "loginRow div_username");
+    TFGRoup.appendChild(loginRow);
+    var loginusernameImage = document.createElement("div");
+    loginusernameImage.setAttribute("class", "FL loginusernameImage");
+    loginRow.appendChild(loginusernameImage);
+    var input = document.createElement("input");
+    input.setAttribute('type', 'text');
+    input.setAttribute('id', 'x-username');
+    input.setAttribute('name', 'x-login-id');
+    input.setAttribute('class', 'loginText');
+    input.setAttribute('placeholder', 'Username');
+    input.setAttribute('title', "Enter your 'User Name' here");
+    input.setAttribute('autocomplete', 'off');
+    input.setAttribute('autocorrect', 'off');
+    if (usernamefromInput)
+        input.setAttribute('value', usernamefromInput);
+    else
+        input.setAttribute('value', usernameafterRefresh);
+    loginRow.appendChild(input);
+    var inputWithoutDisplay = document.createElement("input");
+    inputWithoutDisplay.setAttribute('type', 'text');
+    inputWithoutDisplay.setAttribute('id', 'x-login-id');
+    inputWithoutDisplay.style.display = "none";
+    loginRow.appendChild(inputWithoutDisplay);
+    var clr = document.createElement("div");
+    clr.setAttribute("class", "clr");
+    loginRow.appendChild(clr);
+    var div_LoginContinue = document.createElement("div");
+    div_LoginContinue.setAttribute("id", "div_LoginContinue");
+    div_LoginContinue.setAttribute("class", "marT10 div_loginContinue");
+    div_username.appendChild(div_LoginContinue);
+    var loginContinue = document.createElement("input");
+    loginContinue.setAttribute('type', 'button');
+    loginContinue.setAttribute('id', 'loginContinue');
+    loginContinue.setAttribute('class', 'continueBtn loginSubmit W100P');
+    loginContinue.setAttribute('value', 'Continue');
+    loginContinue.setAttribute('title', "Click to continue");
+    div_LoginContinue.appendChild(loginContinue);
+    return div_main;
+
+}
+
+function showInvalidCredentials() {
+    $jq('.div_invalidCred_Continue').html("Username and/or password is invalid. Please verify both.");
+}
+
+function loadScroll(customScrollDivId) {
+
+    if (typeof (fleXenv) == "object") { fleXenv.fleXcrollMain(customScrollDivId); }
+
+    else if (typeof (Ps) == "object") {
+        if ($(customScrollDivId)) {
+            Ps.initialize(document.getElementById(customScrollDivId));
+        }
+        else {
+            [].forEach.call(document.querySelectorAll('.container'), function (el) {
+                Ps.initialize(el);
+            });
+        }
+    }
+}
+
+//Function to update scroller when the height changes.
+function updateScroll(containerID) {
+    if ($(containerID)) {
+        var actColScroll = document.getElementById(containerID).querySelectorAll('*[class^="ps-scrollbar-"]');
+        for (var len = 0; len < actColScroll.length; len++) {
+            actColScroll[len].parentNode.removeChild(actColScroll[len]);
+        }
+    }
+    else {
+        var ele = document.getElementsByClassName('container');
+        for (i = 0 ; i < ele.length; i++) {
+            var actColScroll = ele[i].querySelectorAll('*[class^="ps-scrollbar-"]');
+            for (var len = 0; len < actColScroll.length; len++)
+                actColScroll[len].parentNode.removeChild(actColScroll[len]);
+        }
+    }
+    loadScroll(containerID);
+    //  Ps.update(document.getElementById(containerID));
+
+}
+
+
+function loadScrollByIdWithWheelSpeed(containerId, speed) {
+    Ps.initialize(document.getElementById(containerId), { wheelSpeed: speed });
+}
+
+/***  End - Login Section ***/
+
+
+function buildHtmlDOMElementWithStandardAttributes(elementType, id, className, otherAttributes) {
+    if (elementType != null | elementType != undefined) {
+        var htmlElement = document.createElement(elementType);
+        if (id != null || id != undefined)
+            htmlElement.id = id;
+        if (className != null || className != undefined)
+            htmlElement.className = className;
+        if (otherAttributes) {
+            for (var index = 0; index < otherAttributes.length; index++) {
+                var attribute = otherAttributes[index].split("|");
+                htmlElement.setAttribute(attribute[0], attribute[1]);
+            }
+        }
+        return htmlElement;
+    }
+    return false;
+}
+
+if (typeof IdentityManager == "undefined")
+    loadJS("/BC/Product/JS/IdentityManager/IdentityManager.js");
+
+function loadJS(scriptPath) {
+    newScript = document.createElement('script');
+    newScript.type = 'text/javascript';
+    newScript.src = scriptPath;
+    document.getElementsByTagName('head')[0].appendChild(newScript);
+}
+
+function loadAzureAdForOIDC(username, idpConfig) {
+    var redirectionUrl = idpConfig.authendpoint + '?client_id=' + idpConfig.clientid
+        + '&response_type=code&response_mode=form_post&scope=openid+email+profile&redirect_uri='
+        + idpConfig.redirecturl + '&state=state-' + generateRandomGuidId() + '&login_hint=' + username;
+    window.location = redirectionUrl;
+}
+
+function generateRandomGuidId() {
+    var d = new Date().getTime();
+    return 'xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+}

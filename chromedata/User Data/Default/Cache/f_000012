@@ -1,0 +1,672 @@
+﻿var PFTObserver = function () {
+
+    var model = {
+        applicationlocksettimer: 0,
+        applicationlockShown: false,
+        sessionTimeout: 0,
+        inactivityTimout: 0,
+        sessionExtendTimeOut: 2 * 60 * 1000,// Every 2 minute.
+
+        keepAliveTick: 0,
+        sessionExtendTick: 0,
+        logoutTick: 0,
+
+        applockExtendTick : 0,
+        pollTimeoutAfterAppLock : 1*30*1000  //Every 30 seconds
+    };
+
+    var disableKeys = function (event) {
+        if (model.applicationlockShown) {
+            if (document.getElementById('ApplicationOTP') != null)
+                document.getElementById('x-ApplicationLockOTP').focus();
+            else
+                document.getElementById('ApplicationLockconfirmpassword').focus();
+            event.stopPropagation();
+        }
+    };
+
+    var setTimoutValesAndBindEvents = function () {
+        var params = "actionType=GetTimeoutValues&action=SessionManagement";
+        new PFTAjaxWrapper().Request("/BC/Product/Actions/ClearActionHandler.aspx?", {
+            method: "POST",
+            postBody: params,
+            onComplete: function (r) {
+                var response = JSON.parse(r.responseText);
+                if (response != null) {
+                    model.sessionTimeout = response.SessionTimeout > 0 ? (response.SessionTimeout * 60 * 1000) - (30 * 1000) : 0;
+                    model.inactivityTimout = response.InactivityTimeout > 0 ? response.InactivityTimeout * 60 * 1000 : 0;
+                    handlerBindControls();
+                }
+            }
+        });
+    };
+
+    var addEventHandler = function (elem, eventType, handler) {
+        if (elem.addEventListener)
+            elem.addEventListener(eventType, handler, false);
+        else if (elem.attachEvent)
+            elem.attachEvent('on' + eventType, handler);
+    };
+
+    var resetIdleTimer = function () {
+        if (window.navigator.onLine) {
+            if (model.inactivityTimout > 0) {
+                clearTimeout(model.keepAliveTick);
+                if (!model.applicationlockShown)
+                    model.keepAliveTick = setTimeout(showLockScreen, model.inactivityTimout);
+            }
+            else {
+                clearTimeout(model.logoutTick);
+                model.logoutTick = setTimeout(redirectToSignIn, model.sessionTimeout - model.inactivityTimout);
+            }
+        }
+    };
+
+    var stopIdleTimer = function () {
+        clearTimeout(model.keepAliveTick);
+    };
+
+    var startSessionExtendTimer = function () {
+        //Increment the idle time counter every 2 minutes.
+        clearInterval(model.sessionExtendTick);
+        if ((model.sessionTimeout > 0 || model.inactivityTimout > 0) && !model.applicationlockShown)
+            model.sessionExtendTick = setInterval(sessionExtendTimerCheck, model.sessionExtendTimeOut);
+    };
+
+    var stopSessionExtendTimer = function () {
+        clearInterval(model.sessionExtendTick);
+    };
+
+    var startLogoutTimer = function () {
+        clearTimeout(model.logoutTick);
+        model.logoutTick = setTimeout(redirectToSignIn, model.sessionTimeout - model.inactivityTimout);
+    };
+
+    var stopLogoutTimer = function () {
+        clearTimeout(model.logoutTick);
+    };
+
+    var startAllTimers = function () {
+        if (model.inactivityTimout > 0) {
+            resetIdleTimer();
+            startSessionExtendTimer();
+            stopLogoutTimer();
+            stopPollAfterAppLock();
+        }
+        else {
+            startSessionExtendTimer();
+            startLogoutTimer();
+        }
+    };
+
+    var stopAllTimers = function () {
+        stopIdleTimer();
+        stopSessionExtendTimer();
+        startLogoutTimer();
+    };
+
+    var showLockScreen = function () {
+        if (!isActivity()) {
+            showApplicationLockAndStopAllTimers();
+        }
+    };
+
+    var sessionExtendTimerCheck = function () {
+        updateServerSession();
+    };
+    var isActivity = function () {
+        var isActive = false;
+        var activityListStorage = decodeURIComponent(sessionStorage.getItem('activityList'));
+        activityList = JSON.parse(activityListStorage);
+        $jq(jQuery.parseJSON(JSON.stringify(activityList))).each(function () {
+            isActive = runCallBackFunction(this.key, this.FunctionName, this.Arguments);
+            if (isActive == true)
+                return isActive;
+        });
+        return isActive;
+    };
+
+    var runCallBackFunction = function (key, name, arguments) {
+        var fn = window[name];
+        var result = false;
+        if (typeof fn !== 'function')
+            return false;
+        try {
+            if (arguments == null || arguments == undefined || arguments.length == 0)
+                result = fn.apply(window);
+            else
+                result = fn.apply(window, arguments);
+        }
+        catch (err) {
+            return false;
+        }
+        if (!result)
+            activityStopped(key);
+        return result;
+    };
+
+    var redirectToSignIn = function () {
+        if (checkOnline()) {
+            if (model.inactivityTimout > 0) {
+                stopLogoutTimer();
+                window.location.href = '/BC/Product/Modules/Logout.aspx';
+            }
+            else {
+                if (!isActivity()) {
+                    stopLogoutTimer();
+                    window.location.href = '/BC/Product/Modules/Logout.aspx';
+                }
+            }
+        }
+        else {
+            force_logout(false);
+        }
+    };
+
+    var activityStarted = function (keyObject, functionName, arguments) {
+        if (model.sessionTimeout > 0 || model.inactivityTimout > 0) {
+            var activityListStorage = decodeURIComponent(sessionStorage.getItem('activityList'));
+            if (activityListStorage == null || activityListStorage == "null") {
+                activityList = [];
+                activityList.push({ "key": keyObject, "FunctionName": functionName, "Arguments": arguments });
+            } else {
+                activityList = JSON.parse(activityListStorage);
+                activityList.push({ "key": keyObject, "FunctionName": functionName, "Arguments": arguments });
+
+            }
+            sessionStorage.setItem('activityList', encodeURIComponent(JSON.stringify(activityList)));
+        }
+    };
+
+    var activityStopped = function (keyObject) {
+        if (model.sessionTimeout > 0 || model.inactivityTimout > 0) {
+            var activityListStorage = decodeURIComponent(sessionStorage.getItem('activityList'));
+            activityList = JSON.parse(activityListStorage);
+            activityList = $jq.grep(activityList, function (e) {
+                return e.key != keyObject;
+            });
+            sessionStorage.setItem('activityList', encodeURIComponent(JSON.stringify(activityList)));
+        }
+    };
+
+    var isActivityRegistered = function (keyObject) {
+        var isActiveStatus = false;
+        var activityListStorage = decodeURIComponent(sessionStorage.getItem('activityList'));
+        activityList = JSON.parse(activityListStorage);
+        $jq(jQuery.parseJSON(JSON.stringify(activityList))).each(function (index, value) {
+            if (value.key == keyObject) {
+                isActiveStatus = true;
+                return;
+            }
+        });
+        return isActiveStatus;
+    };
+
+    var updateServerSession = function () {
+        var params = "actionType=ExtendSession&action=SessionManagement";
+        new PFTAjaxWrapper().Request("/BC/Product/Actions/ClearActionHandler.aspx?", {
+            method: "POST",
+            postBody: params,
+            onComplete: function (r) {
+
+            }
+        });
+        document.dispatchEvent(new CustomEvent("WriteLog"));
+    }
+
+    var setApplicationLockVariables = function () {
+        model.applicationlockShown = true;
+        var params = "actionType=SetApplicationLock&action=SessionManagement";
+        new PFTAjaxWrapper().Request("/BC/Product/Actions/ClearActionHandler.aspx?", {
+            method: "POST",
+            postBody: params,
+            onComplete: function (r) {
+
+            }
+        });
+    }
+
+    var removeApplicationLockVariables = function () {
+        model.applicationlockShown = false;
+        var params = "actionType=RemoveApplicationLock&action=SessionManagement";
+        new PFTAjaxWrapper().Request("/BC/Product/Actions/ClearActionHandler.aspx?", {
+            method: "POST",
+            postBody: params,
+            onComplete: function (r) {
+
+            }
+        });
+    }
+
+    var applicationLockConfirmPassword = function () {
+        var Password = document.getElementById('ApplicationLockconfirmpassword').value;
+        var tenantid = document.getElementById('tenant_id').value;
+
+        if (Password == '') {
+            jQuery("#error1").text("Password field cannot be empty");
+        }
+        else {
+            var params = new Array();
+            params.push("action=" + "ReAuthentication");
+            params.push("tenant_id=" + tenantid);
+            //there is no use of tenant id in action  we could get from session need to  be removed from signature
+            params.push("actionType=" + "ApplicationLockConfirmPassword");
+            params.push("applicationLock=" + "true");
+
+            params.push("Password=" + Password);
+            var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+            new PFTAjaxWrapper().RequestNoCheck(url, {
+                method: "POST",
+                postBody: params.join('&'),
+                onSuccess: function (r) {
+                    document.getElementById('ApplicationLockconfirmpassword').value = '';
+                    document.getElementById('ApplicationLockconfirmpassword').focus();
+                    if (r.responseText == "true") {
+                        jQuery('#overlay1').css('z-index', '');
+                        document.removeEventListener("keydown", disableKeys, true);
+                        document.removeEventListener("keydown", attachSubmitButtonToClick, true);
+                        removeApplicationLockVariables();
+                        startAllTimers();
+                        CloseReAuthenticationPopUp();
+                        document.dispatchEvent(new CustomEvent("APP_LOCK_AUTHENTICATION_SUCCESS"));
+                    }
+                    else if (r.responseText == "3" || r.responseText == "4" || r.responseText == "6") {
+                        jQuery('#overlay1').css('z-index', '');
+                        window.location.assign("/BC/PRODUCT/Modules/Logout.aspx");
+                    }
+                    else if (r.responseText == 'Invalid credentials, please try again') {
+                        jQuery("#error1").text("Invalid Password, please try again");
+                    }
+
+                    else if (r.responseText == 'Failed to login.') {
+                        jQuery("#error1").text("Failed to login.");
+                    }
+                    else if (jQuery.isNumeric(r.responseText)) {
+                        if (totalSeconds != null) {
+                            clearInterval(applicationlocksettimer)
+                            jQuery('#seconds').text("00");
+                            jQuery('#minutes').text("00");
+                        }
+                        totalSeconds = r.responseText;
+                        if (totalSeconds != 'undefined' || totalSeconds != null) {
+                            jQuery('#applicationlocktime').css("display", "block");
+                            jQuery('#applockbtn').css("display", "block");
+                            applicationlocksettimer = setInterval(applicationLocksetTime, 1000);
+                            jQuery("#error1").text("Account has been locked temporarily, due to maximum failed login attempts.");
+                        }
+                        else {
+                            jQuery('#error1').css("display", "block");
+                            jQuery("#error1").text(r.responseText);
+                        }
+                    }
+
+                    else {
+                        jQuery("#error1").text("Failed to login.");
+                    }
+                }
+            });
+        }
+
+    }
+
+    var applicationLockOTP = function (resendFlag) {
+        var otp = document.getElementById('x-ApplicationLockOTP').value;
+        var tenantid = document.getElementById('tenant_id').value;
+        clearInterval(SetTimer);
+        if (resendFlag == null) {
+            if (otp == '') {
+                jQuery("#error1").text("OTP field cannot be empty");
+            }
+            else {
+                var params = new Array();
+                params.push("resendFlag=" + "false");
+                clearInterval(SetTimer);
+                params.push("OTP=" + otp);
+                params.push("action=" + "ReAuthentication");
+                params.push("actionType=" + "ApplicationLockReAuthenticationOTP");
+                params.push("tenant_id=" + tenantid);
+                params.push("ApplicationLock=" + "true");
+                var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+                new PFTAjaxWrapper().RequestNoCheck(url, {
+                    method: "POST",
+                    postBody: params.join('&'),
+                    onComplete: function (r) {
+                        document.getElementById('x-ApplicationLockOTP').value = '';
+                        document.getElementById('x-ApplicationLockOTP').focus();
+                        if (r.responseText == "true") {
+                            jQuery('#overlay1').css('z-index', '');
+                            document.removeEventListener("keydown", disableKeys, true);
+                            document.removeEventListener("keydown", attachSubmitButtonOTPClick, true);
+                            if (typeof (SetTimer) != 'undefined')
+                                clearInterval(SetTimer);
+                            removeApplicationLockVariables();
+                            startAllTimers();
+                            document.removeEventListener("keydown", applicationLockOTP);
+                            closePopupNG();
+                            document.dispatchEvent(new CustomEvent("APP_LOCK_AUTHENTICATION_SUCCESS"));
+                        }
+                        else if (r.responseText == "3" || r.responseText == "4" || r.responseText == "5" || r.responseText == "6") {
+                            jQuery('#overlay1').css('z-index', '');
+                            window.location.assign("/BC/PRODUCT/Modules/Logout.aspx");
+
+                        }
+                        else if (r.responseText == '') {
+                            jQuery("#error1").text("Please try again.");
+                        }
+                        else {
+                            jQuery("#error1").text(r.responseText);
+                        }
+                    }
+                });
+            }
+        }
+        else {
+
+            var params = new Array();
+            clearInterval(SetTimer);
+            if (resendFlag == 'true') {
+                params.push("resendFlag=" + "true");
+
+                clearInterval(SetTimer);
+                if (typeof (SetTimer) != 'undefined')
+                    clearInterval(SetTimer);
+                MFAOTPActiveremainingTimeotp(document.getElementById('tenant_id').value, document.getElementById('userid').value, document.getElementById('isforgot').value)
+                jQuery('#seconds').text("00");
+                jQuery('#minutes').text("00");
+                clearInterval(SetTimer);
+
+            }
+            else
+                params.push("resendFlag=" + "false");
+
+            params.push("OTP=" + otp);
+            params.push("action=" + "ReAuthentication");
+            params.push("actionType=" + "ApplicationLockReAuthenticationOTP");
+            params.push("tenant_id=" + tenantid);
+            params.push("ApplicationLock=" + "true");
+            var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+            new PFTAjaxWrapper().RequestNoCheck(url, {
+                method: "POST",
+                postBody: params.join('&'),
+                onComplete: function (r) {
+                    document.getElementById('x-ApplicationLockOTP').value = '';
+                    document.getElementById('x-ApplicationLockOTP').focus();
+                    if (r.responseText == "true") {
+                        jQuery('#overlay1').css('z-index', '');
+                        document.removeEventListener("keydown", disableKeys, true);
+                        document.removeEventListener("keydown", attachSubmitButtonOTPClick, true);
+                        if (typeof (SetTimer) != 'undefined')
+                            clearInterval(SetTimer);
+                        removeApplicationLockVariables();
+                        startAllTimers();
+                        closePopupNG();
+                        document.dispatchEvent(new CustomEvent("APP_LOCK_AUTHENTICATION_SUCCESS"));
+                    }
+                    else if (r.responseText == "3" || r.responseText == "4" || r.responseText == "5" || r.responseText == "6") {
+                        jQuery('#overlay1').css('z-index', '');
+                        window.location.assign("/BC/PRODUCT/Modules/Logout.aspx");
+                    }
+                    else if (r.responseText == '') {
+                        jQuery("#error1").text("Please try again.");
+                    }
+                    else {
+                        jQuery("#error1").text(r.responseText);
+                    }
+
+                }
+            });
+        }
+    }
+
+
+    function MFAOTPActiveremainingTimeotp(tenantId, userId, isForgot) {
+        var params = new Array();
+        params.push("action=" + "MFAOTPActiveremainingTime");
+        params.push("tenant_id=" + tenantId);
+        params.push("actionType=" + "RemainingTime");
+        params.push("userId=" + userId);
+        params.push("isForgot=" + isForgot);
+        var url = '/BC/Product/Actions/ClearActionHandler.aspx';
+        new PFTAjaxWrapper().RequestNoCheck(url, {
+            method: "POST",
+            postBody: params.join('&'),
+            onComplete: function (r) {
+
+                if (r.responseText.indexOf('-') == "0")
+                    totalSeconds1 = 0;
+                else
+                    totalSeconds1 = r.responseText;
+
+                if (typeof (SetTimer) != 'undefined') {
+                    clearInterval(SetTimer);
+                }
+                SetTimer = setInterval(setTimeotp1, 1000);
+            }
+        });
+    }
+
+
+
+    function setTimeotp1() {
+
+        --totalSeconds1;
+        jQuery('#seconds').text(pad(parseInt(totalSeconds1) % 60));
+        jQuery('#minutes').text(pad(parseInt(totalSeconds1 / 60)));
+        if (totalSeconds1 <= 0) {
+            clearInterval(SetTimer)
+            jQuery('#seconds').text("00");
+            jQuery('#minutes').text("00");
+        }
+    }
+
+
+    var attachSubmitButtonToClick = function (e) {
+        if (e.keyCode == 13) {
+            applicationLockConfirmPassword();
+        }
+
+    }
+
+    var attachSubmitButtonOTPClick = function (e) {
+        if (e.keyCode == 13) {
+            applicationLockOTP();
+        }
+
+    }
+
+    var applicationLocksetTime = function () {
+        --totalSeconds;
+
+        jQuery('#seconds').text(pad(parseInt(totalSeconds) % 60));
+        jQuery('#minutes').text(pad(parseInt(totalSeconds / 60)));
+        if (totalSeconds <= 0) {
+
+            clearInterval(applicationlocksettimer)
+            jQuery('#applicationlocktime').css("display", "none");
+            jQuery('#seconds').text("00");
+            jQuery('#minutes').text("00");
+
+
+        }
+    }
+
+    //* Handler*//
+    var handlerBindControls = function () {
+
+        if (model.inactivityTimout > 0 || model.sessionTimeout > 0) {
+            //this.addEventHandler(window, 'load', startAllTimers);
+            startAllTimers();
+            this.addEventListener("mousemove", resetIdleTimer, true);
+            this.addEventListener("mousedown", resetIdleTimer, true);
+            this.addEventListener("keypress", resetIdleTimer, true);
+            this.addEventListener("click", resetIdleTimer, true);
+
+            //this.addEventListener("DOMMouseScroll", resetIdleTimer, false);
+            //this.addEventListener("mousewheel", resetIdleTimer, false);
+            //this.addEventListener("touchmove", resetIdleTimer, false);
+            //this.addEventListener("MSPointerMove", resetIdleTimer, false);
+        }
+    };
+
+    var registeringNeeded = function () {
+        return model.inactivityTimout > 0 || model.sessionTimeout > 0 ? true : false;
+    }
+
+    var force_logout = function (isOnline) {
+        if (!isOnline)
+            sessionStorage.setItem('force_logout', true);
+        stopIdleTimer();
+        stopSessionExtendTimer();
+        stopLogoutTimer();
+        window.location.href = '/BC/Product/Modules/Logout.aspx';
+    };
+
+    var checkOnline = function () {
+        var xhr = new XMLHttpRequest();
+        var file = "/BC/Product/Theme/Dark/Images/Elements/Connectivity_check.png";
+
+        try {
+            xhr.open('GET', file, false);
+            xhr.send();
+            if (xhr.status >= 200 && xhr.status < 304) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (e) {
+            return false;
+        }
+    };
+
+    var showApplicationLockAndStopAllTimers = function () {
+        if (checkOnline()) {
+            var applicationlock = '/BC/Product/Modules/Applicationlock.aspx';
+            //do ajax call if session is active dont call app lock
+            var params = "actionType=CheckLastActiveUserSession&action=SessionManagement";
+            new PFTAjaxWrapper().Request("/BC/Product/Actions/ClearActionHandler.aspx?", {
+                method: "POST",
+                postBody: params,
+                onComplete: function (r) {
+                    var response = JSON.parse(r.responseText);
+                    if (!response.UserIsActive) {
+                        PFTPopupNG('Applicationlock',
+                {
+                    'url': applicationlock,
+                    'height': 280,
+                    'width': 350,
+                    'title': 'Application Lock',
+                    'closePopUpOnButtonClick': false,
+                    'closeIconNeeded': false,
+                    'onCompleteCallback': function (response) {
+
+                        //do ajax call
+
+                        stopAllTimers();
+                        setApplicationLockVariables();
+                        startPollAfterAppLock();
+                        document.addEventListener("keydown", disableKeys, true);
+                        if (document.getElementById('ApplicationOTP') != null) {
+                            document.getElementById('x-ApplicationLockOTP').focus();
+                            document.addEventListener("keydown", attachSubmitButtonOTPClick, true);
+
+                            MFAOTPActiveremainingTimeotp(document.getElementById('tenant_id').value, document.getElementById('userid').value, document.getElementById('isforgot').value);
+                            jQuery('#seconds').text("00");
+                            jQuery('#minutes').text("00");
+                            clearInterval(SetTimer);
+                        }
+                        else {
+
+                            document.getElementById('ApplicationLockconfirmpassword').focus();
+                            document.addEventListener("keydown", attachSubmitButtonToClick, true);
+                        }
+                        jQuery('#overlay1').css('z-index', '9000');
+                    },
+                });
+                    }
+                    else {
+                        resetIdleTimer();
+                    }
+
+
+                }
+            });
+        }
+        else {
+            force_logout(false);
+        }
+    };
+
+
+    function removeAppLock() {
+
+        console.log('Removing App Lock automatically after plooing');
+        model.applicationlockShown = false;
+        jQuery('#overlay1').css('z-index', '');
+        document.removeEventListener("keydown", disableKeys, true);
+        document.removeEventListener("keydown", attachSubmitButtonToClick, true);
+        startAllTimers();
+        closePopupNG();
+        document.dispatchEvent(new CustomEvent("APP_LOCK_AUTHENTICATION_SUCCESS"));
+    }
+
+    function startPollAfterAppLock() {
+        model.applockExtendTick = setTimeout(CheckLastActiveUserSession, model.pollTimeoutAfterAppLock);
+    }
+
+    function stopPollAfterAppLock() {
+        clearTimeout(model.applockExtendTick);
+    }
+
+
+    function CheckLastActiveUserSession() {
+        var params = "actionType=CheckLastActiveUserSession&action=SessionManagement";
+        new PFTAjaxWrapper().Request("/BC/Product/Actions/ClearActionHandler.aspx?", {
+            method: "POST",
+            postBody: params,
+            onComplete: function (r) {
+                var response = JSON.parse(r.responseText);
+                if (response.UserIsActive) {
+                    removeAppLock();
+                    stopPollAfterAppLock();
+                }
+                else {
+                    startPollAfterAppLock();
+                }
+
+            }
+        });
+    }
+
+    //* END:CORE HANDLERS   *//
+    return {
+        //main function to initiate ApplicationLock
+        init: function () {
+            var isForce_logout = sessionStorage.getItem('force_logout');
+            sessionStorage.removeItem('activityList');
+            if (isForce_logout == "true") {
+                sessionStorage.removeItem('force_logout');
+                force_logout(true);
+            }
+            else {
+                setTimoutValesAndBindEvents();
+            }
+        },
+        getModel: function () { return model; },
+        applicationLockConfirmPassword: function () { applicationLockConfirmPassword(); },
+        applicationLockOTP: function (resendFlag) { applicationLockOTP(resendFlag); },
+        activityStarted: function (actTopicName, functionName, arguments) { activityStarted(actTopicName, functionName, arguments); },
+        activityStopped: function (actTopicName) { activityStopped(actTopicName); },
+        resetIdleTimer: function () { resetIdleTimer() },
+        startSessionExtendTimer: function () { startSessionExtendTimer(); },
+        isActivityRegistered: function (actTopicName) { return isActivityRegistered(actTopicName); },
+        registeringNeeded: function () { return registeringNeeded(); }
+    }
+}();
+
+var jq = jQuery.noConflict();
+$jq(document).ready(function () {
+    PFTObserver.init();
+});
+
+
+

@@ -1,0 +1,1292 @@
+﻿
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, tt, var,
+u, i, center,
+dl, dt, dd, b, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: top;
+    font-family: 'RobotoRegular', Verdana, Helvetica;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+html, body, form {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    color: #787878;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 18px;
+}
+
+body, .bodyWrapper, .bodyCntrl {
+    background: #212121;
+}
+
+input, select, textarea {
+    font-family: 'RobotoLight', helvetica;
+}
+
+.H100P {
+    height: 100%;
+}
+
+.fullWidth {
+    width: 100%;
+    height: 100%;
+}
+
+.FL {
+    float: left;
+}
+
+.FR {
+    float: right;
+}
+
+.clr {
+    clear: both;
+}
+
+.marT10 {
+    margin-top: 10px;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.PopupHeader, .popHeader {
+    background: #212121;
+    padding: 10px;
+    border-bottom: 1px solid #383838;
+}
+
+.popupBG {
+    background: #212121;
+}
+
+.popBody {
+    font-family: 'robotolight', helvetica;
+    font-size: 13px;
+    line-height: 20px;
+    padding: 10px 20px 15px 20px;
+    color: #787878;
+}
+
+h1 {
+    font: 15px/16px 'robotoregular', Helvetica;
+    color: #b8b8b8;
+    text-align: center;
+}
+
+h2 {
+    font: 13px/18px 'robotomedium', Helvetica;
+    color: #b8b8b8;
+    text-align: left;
+}
+
+/*================= LOGIN page Starts =======================*/
+#PrivacySettingsDialog .popFooter {
+    padding: 0 20px 10px 0;
+}
+
+.loginWrapper {
+    width: 100%;
+    height: 100%;
+    background: url(/BC/Product/Theme/Dark/Images/Elements/DAXLogin-BG.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+    .loginWrapper:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+
+
+.loginPanel {
+    min-height: 100%;
+    width: 29vw;
+    float: left;
+    vertical-align: top;
+    background: rgba(0, 115, 165, 0.7);
+    position: relative;
+}
+
+.loginPgImage {
+    height: 100%;
+    float: left;
+    position: relative;
+    width: calc(100vw - 29vw);
+}
+
+.clearLogo {
+    /*width: 100%;
+    height: 35.5%;*/
+    width: 100%;
+    height: 26.5vh;
+    clear: both;
+    display: block;
+    position: relative;
+    transition: all 0.3s ease-In-Out;
+    margin: auto;
+}
+
+/*.clearLogo:before {
+        content: '';
+        background: url(/BC/Product/Theme/Dark/Images/Elements/DAX-Logo-White.png) no-repeat 0 0 !important;
+        background-size: contain !important;
+    }*/
+
+.mainWrapper {
+    width: 100%;
+    height: calc(100vh - 26.5vh - 150px);
+    margin: auto;
+    position:relative;
+}
+
+.loginWrapper .pad10 {
+    padding: 0;
+}
+
+    .loginWrapper .pad10 label {
+        width: 315px;
+        display: block;
+    }
+
+.loginWrapper .pad10 #mfaAuthentication label {
+    width: auto;
+    display: inline;
+}
+
+.loginWrapper .div_main {
+    width: 100%;
+    height: 100%;
+    padding: 0 10%;
+    box-sizing: border-box;
+}
+
+.TFGroup {
+}
+
+.loginRow {
+    position: relative;
+    width: 100%;
+    clear: both;
+    color: #ffffff;
+}
+
+    .div_loginContinue:after,
+    .loginRow:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+
+.loginHead {
+}
+
+.loginWrapper .linksWp {
+    display: inline-block;
+    margin: 0;
+}
+
+.privacyNTerms {
+    position: absolute;
+    bottom: 20px;
+    color: #969696;
+    text-align: center;
+    font-family: 'robotolight', helvetica;
+    font-size: 12px;
+    line-height: 14px;
+    width: 100%;
+    min-width: 240px;
+}
+
+    .privacyNTerms .Links {
+        color: #E7E7E7;
+        float: left;
+        margin-right: 8px;
+        cursor: pointer;
+    }
+
+        .privacyNTerms .Links:hover {
+            color: #05d4f3;
+        }
+
+.copyrightText {
+    line-height: 16px;
+    margin-top: 10px;
+    padding-bottom: 5px;
+    color: #ffffff;
+}
+
+    .copyrightText br {
+        display: none;
+    }
+
+.powered {
+    color: #ffffff;
+    font-family: 'robotolight', helvetica;
+    font-size: 11px;
+    text-align: center;
+    vertical-align: bottom;
+    width: 18%;
+    min-height: 62px;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 6px 0;
+    border-radius: 4px;
+    /*border: 1px solid #6298a6;*/
+    border: 1px solid #d1d1d1;
+}
+
+    .powered .mediaERP {
+        font-family: 'Clear';
+        font-size: 40px;
+        line-height: 1;
+        vertical-align: bottom;
+        color: #f2f2f2;
+        display: block;
+        width: auto;
+        height: auto;
+        margin-top: 8px;
+    }
+
+.mediaERP:before {
+    content: "\e903";
+}
+
+.powered1 {
+    color: #A0A0A0;
+    font-family: 'robotolight', helvetica;
+    font-size: 12px;
+    text-align: left;
+    vertical-align: bottom;
+    margin-top: 20px;
+}
+
+    .powered1 span {
+        color: #ffffff;
+        font-family: 'robotomedium', helvitica;
+        font-size: 12px;
+        vertical-align: bottom;
+    }
+
+    .powered1 sup {
+        color: #C5C5C5;
+        font-size: 8px;
+        padding: 0 0 0 2px;
+    }
+
+.navigationCntrl .navFooter .powered {
+    width: 150px;
+    border-radius: 0px;
+    border: none;
+}
+
+.loginusernameImage, .loginPasswordImage, .MFACodeImage {
+    font-family: 'Clear' !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 19px;
+    text-align: center;
+    color: #A9A9A9;
+    border-right: 1px solid rgb(40, 126, 161);
+    width: 40px;
+    height: 46px;
+    line-height: 46px;
+}
+
+    .loginusernameImage:before, .clear-user:before {
+        content: "\ea93";
+    }
+
+    .loginPasswordImage:before, .clear-password:before {
+        content: "\eaa1";
+    }
+
+.MFACodeImage {
+}
+
+    .MFACodeImage:before {
+        content: "\eaa1";
+    }
+
+input:-webkit-autofill,
+input[type="password"]:-webkit-autofill,
+input:-internal-autofill-selected {
+    -webkit-box-shadow: 0px 0px 0px 80px rgb(36, 77, 94) inset;
+    border: 1px solid #244d5e;
+    color: #ffffff !important;
+}
+
+.mainWrapper .div_password {
+    margin-top: 15px;
+}
+
+.editusernameLink {
+    position: absolute;
+    right: 6px;
+    top: 0;
+    font-size: 14px;
+    text-align: center;
+    line-height: 46px;
+    color: #05d4f3;
+    cursor: pointer;
+}
+
+.MFACode {
+    width: 35px;
+    padding: 6px 0 7px 7px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #ffffff;
+}
+
+.loginText {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid transparent;
+    color: #fcfcfc;
+    padding: 0 0 0 50px;
+    margin: 0;
+    font-size: 15px;
+    width: 100%;
+    line-height: 44px;
+    border-radius: 4px;
+    outline: none;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    min-height: 46px;
+}
+
+input.loginText::placeholder {
+    color: #cdcdcd;
+}
+
+.loginTextLimit {
+}
+
+.loginText:focus {
+    border: 1px solid #00eaff;
+    box-shadow: 0 0 5px #00eaff;
+}
+
+.loginWrapper .loginSubmit {
+    color: #000000;
+    transition: all 0.2s ease-in-out;
+    background: #39a8e1;
+    border: 1px solid #39a8e1;
+    padding: 10px 0px;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    margin: 10px 0 10px 10px !important;
+    width: calc(50% - 10px) !important;
+    font: 14px/22px 'RobotoRegular', Helvetica;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    float: right;
+}
+
+.loginSubmit:hover {
+    color: #ffffff;
+    background: #4ab6ec;
+    border: 1px solid #4ab6ec;
+}
+
+
+.loginDisabledText {
+    color: rgba(255, 255, 255, 0.40) !important;
+    padding-right: 35px !important;
+}
+
+.ResetPasswordSubmit {
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    background: #39a8e1;
+    border: 1px solid #39a8e1;
+    color: #fff;
+    padding: 10px 0;
+    width: calc(50% - 10px);
+    margin: 10px 0px 10px 10px;
+    font: 14px/22px 'Robotoregular', Helvetica;
+}
+
+.MFASubmit {
+    width: calc(50% - 10px);
+    margin-left: 10px;
+}
+
+.loginSubmitMFA {
+    background: transparent;
+    border: lightgray;
+    border-style: solid;
+    border-width: thin;
+    width: 50px;
+    height: 34px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #191919;
+    text-align: center;
+    padding: 8px;
+    border-radius: 4px 4px 4px 4px;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0px;
+}
+
+.forgotPWHeader {
+    color: #fff;
+    text-align: center;
+    padding: 0 0 15px 0;
+    margin: 0 0 20px 0;
+    border-bottom: 1px solid #2088b7;
+}
+
+.forgotPasswordDiv {
+    text-align: left;
+}
+
+.forgotPassword {
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+    .forgotPassword[tabindex="3"] {
+        /*top: 68px;
+        position: relative;*/
+    }
+
+    .forgotPassword[tabindex="5"] {
+        float: right;
+    }
+
+    .forgotPassword:hover {
+        color: #00eaff;
+    }
+
+.invalidCredientials {
+    color: #ff9393;
+    display: inline-block;
+    clear: both;
+    font-size: 14px;
+    /*max-width: 300px;*/
+}
+
+.backTextBtn {
+}
+
+.divResendOTP {
+    font-size: 15px;
+    text-align: center;
+    color: #00eaff;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #0a3d4a;
+    width: 100px;
+    padding: 14px 13px;
+    float: left;
+    margin: 0 0 0 10px;
+    border-radius: 4px 4px 4px 4px;
+    box-sizing: border-box;
+}
+
+    .divResendOTP Label {
+        color: #ff7800;
+    }
+
+.msgInfoDiv {
+    width: 100%;
+    /*max-width: 300px;*/
+    color: #cccccc;
+    text-align: -webkit-left;
+    font-size: 12px;
+    margin-top: 10px;
+    line-height: 14px;
+    margin-bottom: 15px;
+}
+
+.Resendmsg {
+    display: block;
+    background: #F3F3F3;
+    position: absolute;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 0 7px #7d7d7d;
+    color: black;
+    width: 222px;
+    padding: 15px 8px;
+    opacity: 0.9;
+    z-index: 1;
+    right: -210px;
+    top: 55px;
+}
+
+.mfa_loginText {
+    width: calc(100% - 110px);
+    float: left;
+    padding: 0 0 0 50px !important;
+    background: rgba(0, 0, 0, 0.5);
+    color: #cacaca;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    outline: none;
+    margin: 0;
+    box-sizing: border-box;
+    line-height: 46px;
+    min-height: 46px;
+}
+
+    .mfa_loginText:focus {
+        border: 1px solid #00eaff;
+        box-shadow: 0 0 5px #00eaff;
+    }
+
+    .mfa_loginText::placeholder {
+        color: #cdcdcd;
+    }
+
+.submitbtn {
+    background-color: rgb(67, 198, 227);
+    color: black;
+    border: 1px solid rgb(67, 198, 227);
+    border-radius: 4px !important;
+}
+
+.Resendmsg::before {
+    position: absolute;
+    top: 35px;
+    bottom: 0;
+    left: -14px;
+    content: "";
+    height: 0;
+    width: 0px;
+    padding: 0;
+    margin: 0px;
+    border: 7px solid transparent;
+    border-right-color: #f3f3f3;
+    border-left: 7px solid transparent;
+    border-right: 7px solid #f3f3f3;
+    border-bottom: 7px solid transparent;
+    border-top: 7px solid transparent;
+}
+
+/*.MFAButton {
+    margin-left: 0px;
+}*/
+
+.MFAButton, .newBackBtn {
+    /*background: #acacac;
+    border: 1px solid #acacac;*/
+    background: #30667e;
+    border: 1px solid #30667e;
+    color: #ffffff;
+    letter-spacing: 0px;
+    cursor: pointer;
+    margin: 10px 0 10px 0 !important;
+    width: calc(50% - 0px) !important;
+    padding: 10px 0px;
+    display: block;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 22px;
+    float: left;
+}
+
+    .newBackBtn:hover {
+        /*background: #9c9c9c;
+        border: 1px solid #9c9c9c;*/
+        background: #235e79;
+        border: 1px solid #30667e;
+        color: #ffffff;
+    }
+
+.MFAButtonSubmit {
+    background: #15baff;
+    border: 1px solid #15baff;
+    color: #fff;
+    text-align: center;
+    padding: 12px 0;
+    width: 100%;
+    margin: 10px 0px 10px 0;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.loginSubmit.W100P {
+    width: 100% !important;
+}
+
+.timerCode {
+    display: block;
+    float: left;
+    width: 81px;
+    font-size: 12px;
+    line-height: 18px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.infoParagraph {
+    padding: 10px 0;
+    color: #ffffff;
+    font-size: 12px;
+    /*max-width: 300px;*/
+}
+
+#Time {
+    margin-left: 0px;
+    text-align: center;
+    float: none;
+}
+
+#btnSendPwd {
+    position: relative;
+}
+
+/*#btnSendPwd div[ title="Cancel"] {
+        position: absolute;
+        right: 0;
+        top: 50px;
+        cursor: pointer;
+    }*/
+
+.loginHelp {
+    padding: 3px 0;
+    line-height: 30px;
+}
+
+/*.loginPgImage:before {
+        content: '';
+        background: url(/BC/Product/Theme/Dark/Images/Elements/BrandLogos.png) no-repeat;
+        background-position: -200px -410px;
+        position: absolute;
+        width: 235px;
+        height: 60px;
+        left: 5%;
+        top: 5%;
+        transition: all 0.3s ease-in-out;
+        background-size: 440px;
+    }
+
+    .loginPgImage:after {
+        content: '';
+        background: url(/BC/Product/Theme/Dark/Images/Elements/BrandLogos.png) no-repeat;
+        background-position: -2px -379px;
+        background-size: 420px;
+        position: absolute;
+        width: 176px;
+        height: 85px;
+        right: 5%;
+        top: 5%;
+        transition: all 0.3s ease-in-out;
+    }*/
+
+.loginPgImage:before,
+.loginPgImage:after {
+    display: none;
+}
+
+.loginWrapper .div_main .marR10 {
+    margin-right: 0;
+}
+
+.paswordLinkOKBtn {
+    width: 100%;
+    margin: 0px;
+}
+
+.changePWDiv {
+    margin-top: -20px;
+}
+
+.changePWHeader {
+    text-align: center;
+    padding: 0 0 10px 0;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid #2f6377;
+}
+
+.changePWText {
+    text-align: center;
+    padding-bottom: 10px;
+    color: #b8b8b8;
+}
+
+.daxPWimage {
+    /*display: none;*/
+}
+
+.W100P {
+    width: 100% !important;
+}
+
+.marT40 {
+    margin-top: 40px;
+}
+
+#confirmpasswordtab .errorMesg {
+    text-align: left;
+}
+
+.RedirectLink {
+    color: #15d4f3;
+}
+/*================= LOGIN page Ends =======================*/
+
+/*================= Reauthentication Starts =======================*/
+
+.errorMesg {
+    color: #FF0000;
+    text-align: center;
+    padding: 5px 0;
+}
+
+#ReAuthentication .divResendOTP {
+    color: #585858;
+}
+
+.authCode {
+    border-right: 1px solid #666666;
+    width: 35px;
+    height: 30px;
+    margin: 2px 0 0px 4px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    line-height: 28px;
+    font-size: 11px;
+    text-align: center;
+}
+
+.codeExpiresOTP {
+    font-size: 12px;
+    text-align: left;
+}
+
+    .codeExpiresOTP label {
+        color: #FF0000;
+    }
+/*================= Reauthentication Starts =======================*/
+
+.textBtnAppLock {
+    color: #05d4f3;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+    .textBtnAppLock:hover {
+        text-decoration: underline;
+    }
+/*================= Resetpasword Starts =======================*/
+.passwordRules {
+    font-size: 18px;
+    position: absolute;
+    top: 2px;
+    right: -8px;
+}
+
+.passwordRulesLight {
+    font-size: 18px;
+    position: absolute;
+    top: 9px;
+    right: 8px;
+}
+
+.passwordRulesLocked {
+    font-size: 18px;
+    position: absolute;
+    top: 9px;
+    right: 7px;
+}
+
+.passwordRules:not(.nohover):hover {
+    color: #05d4f3;
+}
+
+    .passwordRules:not(.nohover):hover + .pwdInfoCallout {
+        display: block;
+    }
+
+.passwordRulesLight:not(.nohover):hover {
+    color: #05d4f3;
+}
+
+    .passwordRulesLight:not(.nohover):hover + .pwdInfoCallout {
+        display: block;
+    }
+
+.passwordRulesLocked:not(.nohover):hover {
+    color: #05d4f3;
+}
+
+    .passwordRulesLocked:not(.nohover):hover + .pwdInfoCallout {
+        display: block;
+    }
+
+.pwdInfoCallout {
+    display: none;
+    background: #F3F3F3;
+    position: absolute;
+    top: -4px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 0 7px #7d7d7d;
+    z-index: 1;
+    left: 220px;
+    width: 270px;
+}
+
+.resetPwdLockedLight {
+    left: 255px;
+}
+
+.resetPwd {
+    left: 229px;
+}
+
+.pwdInfoCallout::before {
+    position: absolute;
+    top: 14px;
+    bottom: 0;
+    left: -13px;
+    content: "";
+    height: 0;
+    width: 0;
+    padding: 0;
+    margin: 0px;
+    border: 7px solid transparent;
+    border-right-color: #f3f3f3;
+}
+
+.pwdInfoBody {
+    color: #323232;
+    padding: 6px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.appendError {
+    border: 1px solid #b90404 !important;
+}
+
+.MFAErrorMsg {
+    color: #ffffff;
+    line-height: 25px;
+}
+
+.loginRHS {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.oneSoftware {
+    display: none;
+    font-family: 'RobotoLight', Helvetica;
+    color: #ffffff;
+    font-size: 1.8em;
+    text-align: center;
+    line-height: 1;
+    position: absolute;
+    top: 50%;
+    margin-top: 5%;
+    width: 100%;
+}
+
+    .oneSoftware span {
+        font-family: 'Robotomedium', Helvetica;
+    }
+
+.didYouKnow {
+    display: none;
+
+    background: url(/BC/Product/Theme/Dark/Images/Elements/didYouKnow_Clear.png) no-repeat 0 0;
+    background-size: 100%;
+    width: 72%;
+    height: 29%;
+    top: 50%;
+    position: absolute;
+    margin-top: 10%;
+    left: 50%;
+    margin-left: -36%;
+}
+/*.didYouKnow:after {
+    content: 'Think Automation Think CLEAR';
+    font-size: 30px;
+    position: absolute;
+    top: -40px;
+    text-align: center;
+    width: 100%;
+    color: #fff;
+    line-height: 1;
+}*/
+
+/*================= Resetpasword Starts =======================*/
+
+.newPasswordCalloutdiv {
+    position: absolute;
+    right: -340px;
+     display: none; 
+    margin: 0;
+    width: 300px;
+    border: 1px solid #373737;
+    background-color: #373737;
+    border-radius: 3px;
+    top: -60px;
+    box-shadow: 0 0 16px #000000;
+    padding: 10px;
+    text-align: left;
+    z-index: 1;
+}
+
+    .newPasswordCalloutdiv::before {
+        position: absolute;
+        top: 70px;
+        bottom: 0;
+        left: -30px;
+        content: "";
+        height: 0;
+        width: 0;
+        padding: 0;
+        margin: 0px;
+        border: 15px solid transparent;
+        border-right-color: #373737;
+    }
+
+
+.pwdMsg /*for password callout */ {
+    padding-top: 5px;
+    border-top: 1px solid #5f5f5f;
+    margin-top: 5px;
+    font-size: 11px;
+    line-height: normal;
+    float: left;
+    font-family: 'RobotoLight', Helvetica;
+    color: #bbb;
+}
+
+.pwdRuleList li {
+    list-style: disc;
+    list-style-position: inside;
+    line-height: 22px;
+}
+.pwdRuleList li span {
+    display: inline-block;
+    vertical-align: middle;
+}
+    .pwdRuleList li:first-child,
+    .pwdRuleList li:last-child {
+        list-style: none;
+    }
+
+.pwdRuleList .pwdCallOutHeader {
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.pwdRuleList li .pwdRule {
+    font-family: 'RobotoLight', Helvetica;
+    color: #b8b8b8;
+    width: 260px;
+    font-size: 13px;
+}
+
+
+.pwdRuleIsValid /*for changing color of tick to green against rules in password callout*/ {
+    color: #009900;
+    font-size: 12px;
+}
+
+.pwdRuleIsNotValid /*for changing color of cross to red against rules in password callout*/ {
+    color: #ff0000;
+    font-size: 12px;
+}
+
+.pwdMsg /* for note in password callout */ {
+    font-size: 10px;
+    line-height: normal;
+}
+
+.pwdRuleList {
+    list-style: none;
+}
+
+
+/*================= Resetpasword ends =======================*/
+/*================= okta panel alignment =======================*/
+/*.loginWrapper .div_main {
+    height: calc(100vh - 300px) !important;
+    margin-top: -46px;
+}
+
+#okta-sign-in {
+    margin: 0px auto 8px !important;
+}*/
+
+.flashCheck {
+    color: #b8b8b8;
+}
+
+    .flashCheck a {
+        color: #15baff;
+    }
+
+
+/* ================= Alert ================== */
+.alertWrapper {
+    position: fixed;
+    top: 10px;
+    background: #3A3A3A;
+    padding: 10px;
+    left: 50%;
+    margin-left: -125px;
+    width: 250px;
+    box-shadow: 0 0 10px #000000;
+    border-radius: 5px;
+    z-index: 99999;
+}
+.alertSuccessNG {
+    color: #00d904;
+    font: 14px/18px 'RobotoMedium', Helvetica;
+}
+.alertErrorNG {
+    color: #ff0000;
+    font: 14px/18px 'RobotoMedium', Helvetica;
+}
+.alertWarningNG{
+    color: #f6ad00;
+    font: 14px/18px 'RobotoMedium', Helvetica;
+}
+.alertInfoNG{
+    color: #ffffff;
+    font: 14px/18px 'RobotoMedium', Helvetica;
+}
+.alertMessageNG {
+    color: #cacaca;
+	text-align: left;
+    padding: 5px 0;
+    font: 12px/18px 'Robotolight', Helvetica;
+}
+.alertCloseNG {
+    background: url(/BC/Product/Theme/Dark/Images/Elements/thumbDel.png) no-repeat center center;
+    background-size: 70%;
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px 5px 5px 5px;
+    cursor: pointer;
+    opacity: 0.4;
+}
+
+/*.alertCloseNG:after {
+    content:'\e9be';
+    font-family: Clear;
+    color: #ffffff
+}*/
+
+/* ================= Alert ================== */
+
+/* Browser Check */
+/* updated for commit request */
+
+.leftDiv
+{
+    width:30%;
+    height:260px;
+    float:left;
+    background:#313131;
+}
+.leftDiv span
+{
+    float:left;
+    width:100%;
+    text-align:center;
+    font-size:16px;
+    color:#CBCBCB;
+    margin-top:40px;
+}
+
+.leftDiv a
+{
+    float:left;
+    width:100%;
+    text-decoration:none;
+    color:#15BAFF;
+    font-size:12px;
+    text-align:center;
+    margin-top:-32px;
+    line-height:16px;
+}
+.leftDiv a:hover {
+        text-decoration:underline;
+}
+.rightDiv
+{
+    width:70%;
+    height:auto;
+    overflow:hidden;
+    float: left;
+}
+.sfBrwsr.rightDiv p,.ffBrwsr.rightDiv p
+{
+    margin:0;
+    padding: 8px 0;
+    font-size: 14px;
+    color:#15BAFF;
+    float:left;
+    text-indent: 16px;
+}
+.sfBrwsr.rightDiv a,.ffBrwsr.rightDiv a{
+    font-size: 20px;
+    float:right;
+    text-decoration: none;
+    color: #cbcbcb;
+    padding: 10px 22px;
+}
+.rightDiv ul
+{
+    list-style-type:none;
+    color:#CBCBCB;
+    font-size:14px;
+    margin:0;
+    padding: 15px 0 0 0;
+    overflow: hidden;
+    border-top: rgba(203, 203, 203, 0.2) solid 1px;
+    float: left;
+    width: 100%;
+}
+.rightDiv ul li
+{
+    margin:0;
+    padding: 0 0 10px 25px;
+    float:left;
+    width: 90%;
+    font-size: 12px;
+}
+.rightDiv ul li i
+{
+    width: 14px;
+    height: 14px;
+    text-align:center;
+    font-style: inherit;
+    float: left;
+    background: #17b9ff;
+    color: #212121;
+    font-size: 10px;
+    line-height: 14px;
+    border-radius: 100%;
+    margin-right: 6px;
+    margin-top:3px;
+}
+.rightDiv ul li:last-child
+{
+    padding-bottom: 0;
+}
+
+
+.safa, .ffox
+{
+    width:90%;
+    height:100px;
+    float:left;
+    margin:7px 0px 7px 20px;
+}
+
+.safa
+{
+    background:url(/BC/Product/Theme/Dark/Images/Elements/settimgSafa.png);
+    background-size: contain;
+    height: 150px;
+    background-repeat: no-repeat;
+}
+
+.ffox {
+    background: url(/BC/Product/Theme/Dark/Images/Elements/settImg.png) center center no-repeat;
+    background-size: contain;
+}
+
+
+.flashIco
+{
+    background: url(/BC/Product/Theme/Dark/Images/Elements/flash-icon.png) center center no-repeat;
+    background-size: 100%;
+    width: 150px;
+    height: 150px;
+    float:left;
+    margin-top:25px;
+}
+
+#setFlash.Notchrome {
+    left: calc(63vw) !important;
+    margin-top: -240px !important;
+}
+
+#setFlash.Notchrome .flashCheck {
+ margin: 20px 15px;
+}
+.popupClose {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    color: #c0c0c0;
+    text-align: center;
+    line-height: 35px;
+    font-size: 10px;
+    cursor: pointer;
+    font-family:Clear !important;
+}
+.popupClose:hover {
+    color: #05d4f3;
+    background: #191919;
+}
+.popupClose::before {
+    content: '\e9be';
+}
+#setFlash.Notchrome .popBody {
+    padding: 0;
+}
+.shift-overlay {
+    left: 29vw;
+}

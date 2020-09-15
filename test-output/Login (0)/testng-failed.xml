@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Login (0)]" guice-stage="DEVELOPMENT">
+  <parameter name="browser" value="chrome"/>
+  <parameter name="tenant" value="zAdminv2UAT"/>
+  <listeners>
+    <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
+    <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
+  </listeners>
+  <test name="Login(failed)">
+    <classes>
+      <class name="com.qa.clearpc.search.Search_pageTest">
+        <methods>
+          <include name="endSuite"/>
+          <include name="BeforesuiteSetup"/>
+          <include name="ValidateSearchTipsMessageIsDispalyed"/>
+          <include name="validateSearchForInvalidData"/>
+          <include name="performSearchWithinOrganisation"/>
+          <include name="validateAutosuggetionsForAdvancedSearch"/>
+          <include name="initialisation"/>
+          <include name="setUp"/>
+        </methods>
+      </class> <!-- com.qa.clearpc.search.Search_pageTest -->
+    </classes>
+  </test> <!-- Login(failed) -->
+</suite> <!-- Failed suite [Login (0)] -->

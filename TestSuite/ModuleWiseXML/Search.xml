@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Login">
+	<test name="Login">
+        <classes>
+        <class name="com.qa.clearpc.search.Search_pageTest" />
+        </classes>
+		<!-- <packages>
+			<package name="com.qa.clearpc.search" />
+		</packages> -->
+
+	</test>
+
+</suite> 

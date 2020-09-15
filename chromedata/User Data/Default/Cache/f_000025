@@ -1,0 +1,394 @@
+﻿<dom-module id="PFT-TaskBoard">
+    <template>
+        <div class="lhsGrid FL setWide">
+            <div id="PFTToolbar" class="PFTToolbar">
+                <pft-toolbar id="toolBar" sort-data="{{sortData}}" filter-data="{{filterData}}" static-filter="{{staticFilter}}" function-params='{{requestParams.TaskType}}'
+                             context="{{requestParams.context}}" dashboardactiontype="{{requestParams.actionType}}" action="{{action}}">
+                </pft-toolbar>
+
+            </div>
+            <div id="Task_BoardDataContainer" class="dataContainer TaskDataContainer">
+
+
+                <!--<pft-header t-id="headerTable" checkbox-class="true" t-class="headerTable dboardTable task_headers" header-data="{{headerData}}" function-name="AddorRemoveAllTaskAttributes"> </pft-header>-->
+
+                <div class="taskV2HeaderWrap">
+                    <table id="" class="taskV2 taskBoardV2">
+                        <tr>
+                            <th class="cl1 chckbox">
+                                <div id="checkAllBoxDiv" class="SelectBoxH SelectAllBox"><input id="checkAllBox" type="checkbox" on-tap="checkUncheckAllCheckbox"><label for="checkAllBox"></label></div>
+                            </th>
+                            <th class="cl2 pftpriority"></th>
+                            <th class="cl3 pftduedate">Due On</th>
+                            <th class="cl4 titleInfo">Title</th>
+                            <th class="cl5 pfttaskboardassignmentcomponent">Assign To</th>
+                            <th class="cl6 pftstatusicon">Status</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="TaskBoardDiv" class="taskV2Scroll container" dashboarddatacontainer>
+                    <div content="content">
+                        <table id="taskBoardBody" class="taskV2 taskBoardV2">
+                            <template is="dom-if" if="{{isEmptyData(data.PFTBody.PFTRow)}}">
+                                <tr><td><p class="noData">No Record(s) Found.</p></td></tr>
+                            </template>
+                            <template is="dom-repeat" items="{{data.PFTBody.PFTRow}}" as="MyList" index-as="task_Index">
+                                <template is="dom-repeat" items="{{MyList.PFTRow}}" as="obj">
+                                    <tr id="task_row[[task_Index]]" class="">
+
+                                        <td class="cl1 chckbox">
+                                            <div id="checkboxDiv_[[task_Index]]" class="SelectBoxN"><input type="checkbox" id="checkbox_[[task_Index]]" on-tap="AddorRemoveTaskAttributes" /><label for$="checkbox_[[task_Index]]"></label></div>
+                                        </td>
+
+                                        <td class="cl2 pftpriority">
+                                            <div class="priorityWrapper">
+                                                <pft-priority priority={{MyList.StdAttributes.Priority}} priorityname={{MyList.StdAttributes.PriorityName}} taskid={{MyList.StdAttributes.TaskId}} tasktenantid={{MyList.StdAttributes.ObjTenantId}} statusacronym={{MyList.StdAttributes.StatusAcronym}} actionfor="UPDATETASKPRIORITY"></pft-priority>
+                                            </div>
+                                        </td>
+                                        <td class="cl3 pftduedate">
+                                            <div class="smartAlertWrapper" title={{obj.PFTColumn.1.PFTCell.0.Value}}>
+                                                <pft-smartalerts id$="Alert_{{MyList.StdAttributes.TaskId}}" tenantid="{{MyList.StdAttributes.TaskTenantId}}" data=" []"></pft-smartalerts>
+                                            </div>
+                                            <div class="dueDateWrapper">
+                                                <pft-duedate due-date="{{obj.PFTColumn.2.PFTCell.1.Value}}" prev-due-date="{{getPrevDueDateForTaskBoard(obj.PFTColumn.2.PFTCell.11.Value,MyList.StdAttributes.StatusAcronym)}}" completion-status="{{getTaskCompletionStatus(obj.PFTColumn.14.PFTCell.0.Value,MyList.StdAttributes.StatusAcronym)}}"></pft-duedate>
+                                            </div>
+                                        </td>
+
+                                        <td class="cl4 titleInfo">
+                                            <div class="metaDetailsWrapper" title={{obj.PFTColumn.1.PFTCell.0.Value}}>
+                                                <pft-title id="tasktitle_{{task_Index}}" title="{{obj.PFTColumn.1.PFTCell.0.Value}}"></pft-title>
+                                                <pft-textcomponentvt data="{{obj.PFTColumn.1.PFTCell.1.Value}}" labels="PFTCell0:Type"></pft-textcomponentvt>
+                                                <pft-conditionalmetadata conditional-value="{{MyList.StdAttributes}}" conditional-metadata="{{conditionalMetadata}}" row-data="{{obj}}"></pft-conditionalmetadata>
+                                            </div>
+                                        </td>
+                                        <td class="cl5 pfttaskboardassignmentcomponent">
+                                            <div class="assignmentWrapper">
+                                                <pft-taskboardassignmentcomponent id="UserDetailsTemplate"
+                                                                                  userdetails="{{obj.PFTColumn.2.PFTCell.0.Value}}"
+                                                                                  taskid="{{MyList.StdAttributes.TaskId}}"
+                                                                                  tasktype="{{MyList.StdAttributes.TaskTypeAcronym}}"
+                                                                                  skill="{{obj.PFTColumn.7.PFTCell.2.Value}}"
+                                                                                  objtenantid="{{MyList.StdAttributes.ObjTenantId}}"
+                                                                                  usergroupid="{{obj.PFTColumn.8.PFTCell.2.Value}}"
+                                                                                  status="{{MyList.StdAttributes.StatusAcronym}}"
+                                                                                  taskduedate="{{obj.PFTColumn.2.PFTCell.1.Value}}"
+                                                                                  taskestimate="{{obj.PFTColumn.9.PFTCell.0.Value}}"
+                                                                                  usertags="{{GetUserTagsFromAdditionalInfo(data.AdditionalInfo)}}"
+                                                                                  activetransferstatusacronym="{{obj.PFTColumn.13.PFTCell.0.Value}}"
+                                                                                  activetransfergroupid="{{obj.PFTColumn.13.PFTCell.1.Value}}"
+                                                                                  usergroupname="{{obj.PFTColumn.8.PFTCell.1.Value}}"
+                                                                                  activetransfergroupname="{{obj.PFTColumn.13.PFTCell.2.Value}}"
+                                                                                  tasktitle="{{obj.PFTColumn.1.PFTCell.0.Value}}"
+                                                                                  activetransferactedby="{{obj.PFTColumn.13.PFTCell.3.Value}}"
+                                                                                  iscompletionstatus="{{obj.PFTColumn.14.PFTCell.0.Value}}"
+                                                                                  task-tenant-id="{{MyList.StdAttributes.TaskTenantId}}"
+                                                                                  issplittable="{{MyList.StdAttributes.IsSplittable}}"
+                                                                                  activetransferinitiatedby="{{obj.PFTColumn.13.PFTCell.4.Value}}">
+                                                </pft-taskboardassignmentcomponent>
+                                            </div>
+                                        </td>
+                                        <td class="cl6 pftstatusicon">
+                                            <div class="statusWrapper">
+                                                <pft-statusicon status={{MyList.StdAttributes.StatusAcronym}} tooltip="{{obj.PFTColumn.4.PFTCell.3.Value}}"></pft-statusicon>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="fusionCharts" class="PFTGraphWrap FL">
+            <div class="chartsAreaMyTasks">
+                <pft-chart id="Stack_TaskExecutionSummary" chartconfig="{{chartData}}"></pft-chart>
+            </div>
+            <div class="chartsAreaMyTasks">
+                <pft-chart id="Doughnut_UnAssigned-Assigned" chartconfig="{{chartData}}"></pft-chart>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "PFT-TaskBoard",
+            attached: function () {
+                OnDashboardLoad(this.domHost, this.data);
+                InitializeTask();
+                this.async(function () {
+                    LoadAlertIcons(this.data, "TASKBOARD");
+                });
+            },
+            GetDataonScrollEnd: function () {
+                var container = document.getElementById('TaskBoardDiv');
+                if (this.pageNo < 10) {
+                    this.pageNo++;
+                    this.loadData(true);
+                    scrollbarPosition = container.scrollTop;
+                }
+            },
+            loadData: function (isPaginationRequired) {
+                LoadDashBoardData(isPaginationRequired);
+            },
+            onLoadData: function (isPaginationRequired) {
+                if (!isPaginationRequired) {
+                    WOM_taskList = [];
+                    $jq("#TaskBoardDiv input:checked").each(function () {
+                        $jq(this).prop('checked', false);
+                    });
+                    $jq('#checkAllBox').prop('checked', false);
+                    $jq(".selectedTask").each(function () {
+                        $jq(this).removeClass("selectedTask");
+                    });
+                }
+                this.async(function () {
+                    LoadAlertIcons(this.data, "TASKBOARD");
+                });
+
+            },
+            properties: {
+                pageNo: {
+                    type: Number,
+                    value: 0
+                },
+                pageSize: {
+                    type: Number,
+                    value: 0
+                },
+                requestType: {
+                    type: String,
+                    value: ""
+                },
+                data:
+                       {
+                           type: Array,
+                           value: function () {
+                               return [];
+                           }
+                       },
+                action: {
+                    type: Array,
+                    value: function () {
+                        return [];
+                    }
+                },
+                sortData: {
+                    type: Array,
+                    value: function () {
+                        return [];
+                    }
+                },
+                filterData: {
+                    type: Array,
+                    value: function () {
+                        return [];
+                    }
+                },
+                requestParams: {
+                    type: Array,
+                    value: function () {
+                        return [];
+                    }
+                },
+
+                TaskIdArray: {
+                    type: Array,
+                    value: function () {
+                        return [];
+                    }
+                },
+                skill: {
+                    type: String,
+                    value: ""
+                },
+                objTenantId: {
+                    type: String,
+                    value: ""
+                },
+                userGroupId: {
+                    type: String,
+                    value: ""
+                },
+                taskduedate: {
+                    type: String,
+                    value: ""
+                },
+                taskestimate: {
+                    type: Number
+                },
+                staticFilter: {
+                    type: Array,
+                    value: function () {
+                        return [];
+                    }
+                },
+                workOrderIdList: {
+                    type: Array,
+                    value: function () {
+                        return [];
+                    }
+                },
+                headerData: {
+                    type: Array,
+                    value: function () {
+                        return [];
+                    }
+                },
+                chartData: {
+                    type: Array,
+                    value: function () {
+                        return [];
+                    }
+                },
+                taskTenantId: {
+                    type: String,
+                    value: ""
+                }
+            },
+            isEmptyData: function (data) {
+                if (data === null || data == undefined || data.length == 0) {
+                    if (data != undefined && data.length == 0) {
+                        $jq('#checkAllBox').prop('disabled', true);
+                    }
+                    return true;
+                }
+                if (data != null || data != undefined || data.length > 0) {
+                    $jq('#checkAllBox').prop('disabled', false);
+                }
+
+            },
+            AssignTable_th_Class: function (header_indx) {
+                return GetDynamicRowId(header_indx);
+            },
+
+            checkUncheckAllCheckbox: function (e) {
+                this.TaskIdArray = new Array();
+                var userDetails;
+                if ($('checkAllBox').checked) {
+                    for (var i = 0; i < this.data.PFTBody.PFTRow.length; i++) {
+                        this.TaskIdArray.push(this.data.PFTBody.PFTRow[i].StdAttributes.TaskId);
+                        userDetails = !this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[2].PFTCell[0].Value ? null : JSON.parse(this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[2].PFTCell[0].Value);
+                        AddAssignTaskDetailsData(this.data.PFTBody.PFTRow[i].StdAttributes.TaskId,
+                            this.data.PFTBody.PFTRow[i].StdAttributes.TaskTypeAcronym,
+                            this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[7].PFTCell[2].Value,
+                            this.data.PFTBody.PFTRow[i].StdAttributes.ObjTenantId,
+                            this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[8].PFTCell[2].Value,
+                            this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[2].PFTCell[1].Value,
+                            this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[9].PFTCell[0].Value, userDetails,
+                           this.data.PFTBody.PFTRow[i].StdAttributes.WorkorderId,
+                           this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[0].PFTCell[0].Value,
+                             this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[1].PFTCell[0].Value, i,
+                             this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[13].PFTCell[0].Value,
+                        this.data.PFTBody.PFTRow[i].StdAttributes.StatusAcronym,
+                        this.data.PFTBody.PFTRow[i].PFTRow[0].PFTColumn[14].PFTCell[0].Value);
+                        this.data.PFTBody.PFTRow[i].StdAttributes.TaskTenantId,
+                        $('checkbox_' + i).checked = true;
+                    }
+                    EnableDisableTaskboardActions();
+                }
+                else {
+                    $jq("#TaskBoardDiv input:checked").each(function () {
+                        $jq(this).prop('checked', false);
+                    });
+                    $jq(".selectedTask").each(function () {
+                        $jq(this).removeClass("selectedTask");
+                    });
+                    WOM_taskList = new Array();
+                    if (WOM_taskList.length == 0) {
+                        HideAllCheckBoxesVisiblity('#checkboxDiv_', this.data.PFTBody.PFTRow.length);
+                    }
+                    EnableAllToolbarActions();
+                }
+            },
+            AddorRemoveTaskAttributes: function (e) {
+                var model = e.model;
+                var index = model.task_Index;
+                var taskId = this.data.PFTBody.PFTRow[index].StdAttributes.TaskId;
+                var userDetails = !model.obj.PFTColumn[2].PFTCell[0].Value ? null : JSON.parse(model.obj.PFTColumn[2].PFTCell[0].Value);
+                if ($('checkbox_' + index).checked == true) {
+                    $jq('#task_row' + index).addClass("selectedTask");
+                    var isSkippableTaskType = (model.obj.PFTColumn[11] && model.obj.PFTColumn[11].PFTCell[1] && model.obj.PFTColumn[11].PFTCell[1].Value) ? model.obj.PFTColumn[11].PFTCell[1].Value : false;
+                    AddAssignTaskDetailsData(taskId, this.data.PFTBody.PFTRow[index].StdAttributes.TaskTypeAcronym,
+                        model.obj.PFTColumn[7].PFTCell[2].Value,
+                        this.data.PFTBody.PFTRow[index].StdAttributes.ObjTenantId,
+                        model.obj.PFTColumn[8].PFTCell[2].Value,
+                        model.obj.PFTColumn[2].PFTCell[1].Value,
+                        model.obj.PFTColumn[9].PFTCell[0].Value, userDetails,
+                       this.data.PFTBody.PFTRow[index].StdAttributes.WorkorderId,
+                       model.obj.PFTColumn[0].PFTCell[0].Value,
+                       model.obj.PFTColumn[1].PFTCell[0].Value, index,
+                        model.obj.PFTColumn[13].PFTCell[0].Value,
+                        this.data.PFTBody.PFTRow[index].StdAttributes.StatusAcronym,
+                        model.obj.PFTColumn[14].PFTCell[0].Value,
+                        this.data.PFTBody.PFTRow[index].StdAttributes.TaskTenantId,
+                        isSkippableTaskType);
+                    EnableDisableTaskboardActions();
+                    if (WOM_taskList.length == 1) {
+                        MakeAllCheckBoxesVisible('#checkboxDiv_', this.data.PFTBody.PFTRow.length);
+                    }
+                    if ($jq("#TaskBoardDiv input:checked").length == this.data.PFTBody.PFTRow.length)
+                        MarkCheckAllBox("checkAllBox");
+
+
+                }
+                else {
+                    if (WOM_taskList.length == 1) {
+                        HideAllCheckBoxesVisiblity('#checkboxDiv_', this.data.PFTBody.PFTRow.length);
+                    }
+                    if ($jq("#TaskBoardDiv input:checked").length < this.data.PFTBody.PFTRow.length)
+                        UnMarkCheckAllBox("checkAllBox");
+                    $jq('#task_row' + index).removeClass("selectedTask");
+                    var filtered = jQuery.grep(WOM_taskList, function (item, index) {
+                        return (item.TaskId == taskId);
+                    });
+                    if (filtered.length > 0) {
+                        userList = jQuery.grep(WOM_taskList, function (item, index) {
+                            return (item.TaskId != taskId);
+                        });
+                        WOM_taskList = userList;
+                    }
+                    EnableDisableTaskboardActions();
+                }
+            },
+            GetLanguage: function (taskTypeAcronym, language) {
+                if (taskTypeAcronym.toString().toUpperCase() == "SUB_REV_TSK" || taskTypeAcronym.toString().toUpperCase() == "CC_REV_TSK" || taskTypeAcronym.toString().toUpperCase() == "DUB_REV_TSK") {
+                    return " - " + language;
+                }
+            },
+            isSelectable: function (status) {
+                if (status.toUpperCase() == "ABORTED")
+                    return false;
+                else
+                    return true;
+            },
+            GetUserTagsFromAdditionalInfo: function (additionalInfo) {
+                var userTags = '';
+                if (additionalInfo != null && additionalInfo != undefined) {
+                    $jq.each(additionalInfo, function (index, value) {
+                        if (value.propertyName.toUpperCase() == 'USERTAGS') {
+                            {
+                                userTags = value.propertyValue;
+                                return false;
+                            }
+
+                        }
+                    });
+                }
+                return userTags;
+            },
+            InvokeTransferActionMethod: function () {
+                LaunchTransferTool();
+            },
+            GetUserDetailsObj: function (userDetails) {
+                return GetUserDetailsObj(userDetails);
+            },
+            getPrevDueDateForTaskBoard: function (prevDueDate, statusAcronym) {
+                return GetPrevDueDateForTaskBoard(prevDueDate, statusAcronym);
+            },
+            getTaskCompletionStatus: function (completionStatus, statusAcronym) {
+                return GetTaskCompletionStatus(completionStatus, statusAcronym);
+            }
+        });
+    </script>
+</dom-module>
