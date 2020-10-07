@@ -78,4 +78,10 @@ public class JavascriptUtils extends BaseClass
     	js.executeScript("arguments[0].scrollIntoView(true);", element);
     }
 	
+    public static void doubleClick(WebElement element,WebDriver driver)
+    {
+    	JavascriptExecutor js = ((JavascriptExecutor) driver);
+    	js.executeScript("arguments[0].dblclick;", element);
+    	
+    }
 }

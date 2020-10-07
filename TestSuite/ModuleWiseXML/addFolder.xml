@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="AddFolder Module">
+    <test name="AddFolder">
+    <!-- <classes>
+			<class name="com.qa.clearpc.Login.LoginPageTest" />
+			<class name="com.qa.clearpc.Login.LogoutTest" />
+			</classes> -->
+	 <!-- <test name="Login">
+		<classes>
+			<class name="com.qa.clearpc.Login.LoginPageTest" >
+			<methods>
+			<include name="validateLoginForInvalidData" />
+			<include name="validateLogin" />
+			</methods>
+			</class>
+		</classes>
+	</test>
+
+	<test name="Logout">
+		<classes>
+			<class name="com.qa.clearpc.Login.LogoutTest" >
+			<methods>
+			<include name="validateLogoutFunctionality" />
+			</methods>
+			</class>
+		</classes>
+		</test>
+		 -->
+		<packages>
+		<package name="com.qa.clearpc.AddFolder" />
+		</packages>
+		
+  </test>	
+
+</suite> 

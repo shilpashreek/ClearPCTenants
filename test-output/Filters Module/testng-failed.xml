@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Filters Module]" guice-stage="DEVELOPMENT">
+  <parameter name="browser" value="chrome"/>
+  <parameter name="tenant" value="zAdminv2UAT"/>
+  <listeners>
+    <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
+    <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
+  </listeners>
+  <test name="Filters(failed)">
+    <classes>
+      <class name="com.qa.clearpc.search.FilterPageTest">
+        <methods>
+          <include name="endSuite"/>
+          <include name="validateCategoriesFilterTypeResults"/>
+          <include name="BeforesuiteSetup"/>
+          <include name="setUp"/>
+          <include name="initialisation"/>
+          <include name="tearDown"/>
+        </methods>
+      </class> <!-- com.qa.clearpc.search.FilterPageTest -->
+    </classes>
+  </test> <!-- Filters(failed) -->
+</suite> <!-- Failed suite [Filters Module] -->

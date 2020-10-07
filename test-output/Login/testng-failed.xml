@@ -12,18 +12,13 @@
       <class name="com.qa.clearpc.Login.LoginPageTest">
         <methods>
           <include name="endSuite"/>
+          <include name="validateLoginForInvalidData" invocation-numbers="0"/>
           <include name="BeforesuiteSetup"/>
           <include name="setUp"/>
           <include name="validateLogin" invocation-numbers="0"/>
           <include name="initialisation"/>
         </methods>
       </class> <!-- com.qa.clearpc.Login.LoginPageTest -->
-      <class name="com.qa.clearpc.Login.LogoutTest">
-        <methods>
-          <include name="check"/>
-          <include name="validateLogoutFunctionality"/>
-        </methods>
-      </class> <!-- com.qa.clearpc.Login.LogoutTest -->
     </classes>
   </test> <!-- Login(failed) -->
 </suite> <!-- Failed suite [Login] -->

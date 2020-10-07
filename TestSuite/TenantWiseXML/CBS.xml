@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="CBS Suite">
+
+
+	<listeners>
+		<listener
+			class-name="com.qa.clearpc.Listeners.ExtentReporterNG" />
+		<listener
+			class-name="com.qa.clearpc.Listeners.TestngListeners" />
+		<!-- <listener class-name = "com.qa.clearpc.Listeners.WebEventListener" /> -->
+	</listeners>
+
+	<parameter name="tenant" value="CBS" />
+	<parameter name="browser" value="chrome" />
+
+	<suite-files>
+      <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Login.xml" /> -->
+      <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Search.xml" /> -->
+      <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Filters.xml" /> -->
+      <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/addFolder.xml" />
+      
+	</suite-files>
+</suite>
