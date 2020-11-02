@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -36,7 +37,8 @@ public class GenericUtils extends BaseClass {
 	WebElement secondarySearchTag;
 	@FindBy(xpath = "(//div[@class='tagClose'])[2]")
 	WebElement search_closeTag;
-	@FindBy(id="spanSearchCount") WebElement searchCountResults;
+	@FindBy(id = "spanSearchCount")
+	WebElement searchCountResults;
 
 	public GenericUtils() {
 		PageFactory.initElements(driver, this);
@@ -104,7 +106,16 @@ public class GenericUtils extends BaseClass {
 	}
 
 	public String getBreadCrumbName() {
+		log.info("BreadCrum path is displaying as " + " "
+				+ driver.findElement(By.cssSelector(".Ellipsis.leftTrimCont")).getText());
 		return driver.findElement(By.cssSelector(".Ellipsis.leftTrimCont")).getText();
+
+	}
+
+	public String returnBredaCrumbCurrentFolder() {
+		log.info("Currently user is in the following folder/asset page"
+				+ SeleniumUtility.getElementText(driver.findElement(By.className("breadcrumbsCurrentFolder"))));
+		return SeleniumUtility.getElementText(driver.findElement(By.className("breadcrumbsCurrentFolder")));
 
 	}
 
@@ -163,9 +174,9 @@ public class GenericUtils extends BaseClass {
 	}
 
 	public boolean unCheckCurrentAndApplyNewFilter() throws Exception {
-		String filter_count=null;
-		boolean searchResult=false;
-		
+		String filter_count = null;
+		boolean searchResult = false;
+
 		genericUtils = new GenericUtils();
 		List<WebElement> categoryFilters = driver
 				.findElements(By.xpath(ConfigUtils.getConfigData("Category_searchFilter_path")));
@@ -185,15 +196,14 @@ public class GenericUtils extends BaseClass {
 					String filterCountXpath = filter_count.replace("*", j);
 					String count = SeleniumUtility.getElementText(driver.findElement(By.xpath(filterCountXpath)));
 					String count_value = splitString(count);
-					log.info("Splitted count value" +count_value);
+					log.info("Splitted count value" + count_value);
 					SeleniumUtility.Click(driver, 15, driver.findElement(By.xpath(filter_xpath)));
 					SeleniumUtility.waitTill_invisibility_of_Element(driver, 15, genericUtils.textLoadingSymbol());
 					Thread.sleep(3000);
 					String search_text = splitSearchSpanText(SeleniumUtility.getElementText(searchCountResults));
-					log.info("Extracted search result" +search_text);
-					if(count_value.equals(search_text))
-					{
-						searchResult=true;
+					log.info("Extracted search result" + search_text);
+					if (count_value.equals(search_text)) {
+						searchResult = true;
 					}
 					Thread.sleep(5000);
 
@@ -206,15 +216,14 @@ public class GenericUtils extends BaseClass {
 					String filterCountXpath = filter_count.replace("*", j);
 					String count = SeleniumUtility.getElementText(driver.findElement(By.xpath(filterCountXpath)));
 					String count_value = splitString(count);
-					log.info("Splitted count value" +count_value);
+					log.info("Splitted count value" + count_value);
 					SeleniumUtility.Click(driver, 15, driver.findElement(By.xpath(filter_xpath)));
 					SeleniumUtility.waitTill_invisibility_of_Element(driver, 15, genericUtils.textLoadingSymbol());
 					Thread.sleep(3000);
 					String search_text = splitSearchSpanText(SeleniumUtility.getElementText(searchCountResults));
-					log.info("Extracted search result" +search_text);
-					if(count_value.equals(search_text))
-					{
-						searchResult=true;
+					log.info("Extracted search result" + search_text);
+					if (count_value.equals(search_text)) {
+						searchResult = true;
 					}
 					Thread.sleep(5000);
 				}
@@ -222,11 +231,10 @@ public class GenericUtils extends BaseClass {
 			}
 			return searchResult;
 		}
-		
-         return searchResult;
+
+		return searchResult;
 	}
-	
-	
+
 	/*
 	 * public String filterAssetsCount() { WebElement filterCount =
 	 * driver.findElement(By.xpath(ConfigUtils.getConfigData("Filter_Count")));
@@ -235,38 +243,68 @@ public class GenericUtils extends BaseClass {
 	 * 
 	 * }
 	 */
-	//method to split search results count value
-	public String splitString(String value)
-	{
-		String[] k=value.split("\\(");
-		System.out.println("first 1-->"+k[0] +" " +"second-->" +k[1]);
-		String[] j=k[1].split("\\)");
+	// method to split search results count value
+	public String splitString(String value) {
+		String[] k = value.split("\\(");
+		System.out.println("first 1-->" + k[0] + " " + "second-->" + k[1]);
+		String[] j = k[1].split("\\)");
 		log.info(j[0]);
 		return j[0];
 	}
-	
-	//method to split search span text value
-	public String splitSearchSpanText(String text)
-	{
-		String[] v=text.split(" ");
+
+	// method to split search span text value
+	public String splitSearchSpanText(String text) {
+		String[] v = text.split(" ");
 		System.out.println(v[5]);
 		return v[5];
 	}
-	
-	
-	
-	//return's date with cuurent seconds 
-	public String getTodaysDate()
-	{
-		 SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy mm:ss");
-		 Date date = new Date();
-		 String d = format.format(date);
-		 return d;
-	 
+
+	// return's date with cuurent seconds
+	public String getTodaysDate(String Dateformat) {
+		SimpleDateFormat format = new SimpleDateFormat(Dateformat);
+		Date date = new Date();
+		String d = format.format(date);
+		return d;
+
 	}
-	
-	
-	
-	
+
+	final public String openNewTab() {
+		String childWindowId = null;
+
+		String parentWinId = driver.getWindowHandle();
+		log.info("Parent window id is" + parentWinId);
+		JavascriptUtils.launchNewTab();
+		Set<String> allWindows = driver.getWindowHandles();
+		for (String windows : allWindows) {
+			log.info("child window id" + windows);
+			if (!parentWinId.equalsIgnoreCase(windows)) {
+				driver.switchTo().window(windows);
+				childWindowId = driver.getWindowHandle();
+				log.info("child window id" + childWindowId);
+
+			}
+
+		}
+		return childWindowId;
+	}
+
+	final public void closeOtherTabsExpectChildWindow(String childWinID) {
+		try {
+			for (String allWindows : driver.getWindowHandles()) {
+				if (!childWinID.equalsIgnoreCase(allWindows)) {
+					driver.switchTo().window(allWindows);
+					driver.close();
+
+				}
+
+			}
+			driver.switchTo().window(childWinID);
+		} catch (Exception e) {
+			log.error("Failed to close extra tabs in the browser" + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+	}
 
 }

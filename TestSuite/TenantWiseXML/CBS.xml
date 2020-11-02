@@ -19,7 +19,9 @@
       <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Login.xml" /> -->
       <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Search.xml" /> -->
       <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Filters.xml" /> -->
-      <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/addFolder.xml" />
+     <!--  <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/addFolder.xml" /> -->
+     <!--  <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Actions.xml" /> -->
+      <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/ShareLink.xml" />
       
 	</suite-files>
 </suite>

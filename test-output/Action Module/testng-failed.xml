@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Action Module]" guice-stage="DEVELOPMENT">
+  <parameter name="browser" value="chrome"/>
+  <parameter name="tenant" value="zAdminv2UAT"/>
+  <listeners>
+    <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
+    <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
+  </listeners>
+  <test name="Action(failed)">
+    <classes>
+      <class name="com.qa.clearpc.Library.ActionPageTest">
+        <methods>
+          <include name="tearDown"/>
+          <include name="endSuite"/>
+          <include name="BeforesuiteSetup"/>
+          <include name="setup"/>
+          <include name="validateRenamedAssetSearchResult"/>
+          <include name="initialisation"/>
+        </methods>
+      </class> <!-- com.qa.clearpc.Library.ActionPageTest -->
+    </classes>
+  </test> <!-- Action(failed) -->
+</suite> <!-- Failed suite [Action Module] -->

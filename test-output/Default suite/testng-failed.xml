@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test name="Default test(failed)">
     <classes>
-      <class name="com.qa.clearpc.AddFolder.AddFolderTest">
+      <class name="com.qa.clearpc.search.Search_pageTest">
         <methods>
-          <include name="validateFieldsInAddFolderPopup"/>
           <include name="endSuite"/>
+          <include name="performSearchWithinOrganisation" invocation-numbers="0 1 2 3 4 5"/>
           <include name="initialisation"/>
         </methods>
-      </class> <!-- com.qa.clearpc.AddFolder.AddFolderTest -->
+      </class> <!-- com.qa.clearpc.search.Search_pageTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

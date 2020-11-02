@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Search Module]" guice-stage="DEVELOPMENT">
   <parameter name="browser" value="chrome"/>
-  <parameter name="tenant" value="zAdminv2UAT"/>
+  <parameter name="tenant" value="DAXProdCloud"/>
   <listeners>
     <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
     <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
@@ -11,11 +11,10 @@
     <classes>
       <class name="com.qa.clearpc.search.Search_pageTest">
         <methods>
-          <include name="validateDetailedAssetView"/>
           <include name="endSuite"/>
-          <include name="validateListAssetView"/>
           <include name="BeforesuiteSetup"/>
           <include name="tearDown"/>
+          <include name="performSearchWithinOrganisation" invocation-numbers="4 5 6"/>
           <include name="initialisation"/>
           <include name="setUp"/>
         </methods>
