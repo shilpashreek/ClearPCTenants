@@ -41,8 +41,12 @@ public class ShareLinkPage extends BaseClass {
 	WebElement linkPermissionDetails;
 	@FindBy(id = "close1")
 	WebElement closeSharePopup;
-	@FindBy(id = "shareLink_shareInfoPanel")
+	@FindBy(xpath = "//div[contains(@class,'rightTab')]")
 	WebElement shareLinkTab;
+	@FindBy(xpath = "//div[contains(@class,'leftTab')]")
+	WebElement shareAssetTab;
+	@FindBy(id = "assetViewerHeaderTitle")
+	WebElement assetTitleInViewerHeader;
 
 	public ShareLinkPage() {
 		PageFactory.initElements(driver, this);
@@ -61,11 +65,11 @@ public class ShareLinkPage extends BaseClass {
 							.getElementText(driver.findElement(By
 									.xpath(ConfigUtils.getConfigData("folderTitle").replace("*", Integer.toString(j)))))
 							.trim();
-					log.info("title Content selected to share" + " " + titleOftheSelectedContent);
+					log.info("title of the Content selected to share" + " " + titleOftheSelectedContent);
 					log.info("Attribute of the content at" + libEntries.get(i) + " "
 							+ SeleniumUtility.getAttribute(libEntries.get(i), "assetclass"));
 					SeleniumUtility.Click(driver, 15, driver.findElement(By.xpath(
-							ConfigUtils.getConfigData("listOf_ContextMenuIcon").replace("*", Integer.toString(i)))));
+							ConfigUtils.getConfigData("listOf_ContextMenuIcon").replace("*", Integer.toString(j)))));
 					log.info("Clicked on assetContextMenuIcon");
 					JavascriptUtils.scrollIntoView(shareLinkBtn, driver);
 					SeleniumUtility.Click(driver, 10, shareLinkBtn);
@@ -145,8 +149,36 @@ public class ShareLinkPage extends BaseClass {
 
 	}
 
-	public void clickOnShareLinkTab() {
-		SeleniumUtility.Click(driver, 15, shareLinkTab);
+	public String clickOnShareLinkTab() {
+
+		String share_Link = null;
+		if (SeleniumUtility.elementDispalyed(shareLinkTab)) {
+
+			SeleniumUtility.Click(driver, 15, shareLinkTab);
+			SeleniumUtility.waitTill_invisibility_of_Element(driver, 20, genericUtils.loadingSymbol());
+			share_Link = getShareLink();
+		} else {
+			share_Link = getShareLink();
+		}
+		return share_Link;
+	}
+
+	public boolean verifyAssetViewerIsDisplayed() {
+		boolean assetViewer = false;
+		if (SeleniumUtility.elementDispalyed(Share_popup)) {
+			assetViewer = true;
+		}
+		return assetViewer;
+	}
+
+	public String validateAssetTitleInViewer() {
+		if (verifyAssetViewerIsDisplayed()) {
+
+			log.info("Asset viewer is displayed for the asset" + " "
+					+ SeleniumUtility.getElementText(assetTitleInViewerHeader));
+
+		}
+		return SeleniumUtility.getElementText(assetTitleInViewerHeader);
 	}
 
 }

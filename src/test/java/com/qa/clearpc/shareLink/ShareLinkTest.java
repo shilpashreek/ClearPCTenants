@@ -116,24 +116,53 @@ public class ShareLinkTest extends BaseClass {
 		Assert.assertEquals(shareLinkLoadedPage, contentSelectedToShare);
 	}
 
-	@Test(priority = 4, enabled = true, description = "Verify asset share link functionality", dataProvider = "getShareAssetLocators")
-	public void verifyAssetSharePopup(String id) throws Exception {
+	@Test(priority = 4, enabled = false, description = "Verify asset share link functionality")
+	public void verifyAssetShareLinkFunctionality() throws Exception {
 
-		extentTest = extent.startTest("verifyAssetSharePopup");
+		extentTest = extent.startTest("verifyAssetShareLinkFunctionality");
 		shareLink.closeSharePopUpWindow();
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
 		SeleniumUtility.waitTill_invisibility_of_Element(driver, 30, genericUtils.loadingSymbol());
 		searchPage.selectTestFolder();
 		SeleniumUtility.waitTill_invisibility_of_Element(driver, 20, genericUtils.textLoadingSymbol());
-		shareLink.selectContentToShare(ConfigUtils.getConfigData("CopyAsset_content_type"));
+		String titleOfSharedAsset = shareLink.selectContentToShare(ConfigUtils.getConfigData("CopyAsset_content_type"));
 		SeleniumUtility.waitTill_invisibility_of_Element(driver, 20, genericUtils.loadingSymbol());
-		shareLink.clickOnShareLinkTab();
-		SeleniumUtility.waitTill_invisibility_of_Element(driver, 20, genericUtils.loadingSymbol());
+		String link = shareLink.clickOnShareLinkTab();
 		ArrayList<Boolean> popUpFields = shareLink
 				.validateFieldsInSharePopUp(ConfigUtils.getConfigData("AssetSharePermissions"));
 		Assert.assertEquals(popUpFields, searchPage.targetList());
-		String linkCopied[] = shareLink.shareTheContentAndCaptureSuccessAlertMessage(id).split("\n");
+		String linkCopied[] = shareLink.shareTheContentAndCaptureSuccessAlertMessage("COPY & EXIT1").split("\n");
 		Assert.assertTrue(linkCopied[0].equals("Alert") && linkCopied[1].equals("Success: Link copied"));
+		driver.manage().deleteAllCookies();
+		driver.navigate().refresh();
+		String childWindow = genericUtils.openNewTab();
+		genericUtils.closeOtherTabsExpectChildWindow(childWindow);
+		driver.get(link);
+		if (driver.getCurrentUrl().equalsIgnoreCase(ConfigUtils.getConfigData("url"))) {
+			loginPage.login(ConfigUtils.getConfigData("username"), ConfigUtils.getConfigData("password"),
+					ConfigUtils.getConfigData("host"), ConfigUtils.getConfigData("Username"),
+					ConfigUtils.getConfigData("Password"), ConfigUtils.getConfigData("Sender"),
+					ConfigUtils.getConfigData("Subject"), Constants.mail_Body_path);
+		} else {
+			log.info("Portal is logged in already");
+		}
+
+		Thread.sleep(15000);
+		String assetTitleInViewerMode = shareLink.validateAssetTitleInViewer();
+		Assert.assertEquals(assetTitleInViewerMode.trim(), titleOfSharedAsset.trim());
+
+	}
+
+	@Test(priority = 5, enabled = true, description = "Validate asset share popup")
+	public void validateAssetSharePopUp() {
+		extentTest = extent.startTest("validateAssetSharePopUp");
+		shareLink.closeSharePopUpWindow();
+		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
+		SeleniumUtility.waitTill_invisibility_of_Element(driver, 30, genericUtils.loadingSymbol());
+		searchPage.selectTestFolder();
+		SeleniumUtility.waitTill_invisibility_of_Element(driver, 20, genericUtils.textLoadingSymbol());
+		String titleOfSharedAsset = shareLink.selectContentToShare(ConfigUtils.getConfigData("CopyAsset_content_type"));
+		SeleniumUtility.waitTill_invisibility_of_Element(driver, 20, genericUtils.loadingSymbol());
 
 	}
 

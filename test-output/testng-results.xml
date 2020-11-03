@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="3" total="5" passed="2" failed="0" skipped="0">
+<testng-results ignored="4" total="5" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2020-10-30T15:30:14Z" name="Share Module" finished-at="2020-10-30T15:32:31Z" duration-ms="137775">
+  <suite started-at="2020-11-02T14:53:02Z" name="Share Module" finished-at="2020-11-02T14:54:20Z" duration-ms="77566">
     <groups>
     </groups>
-    <test started-at="2020-10-30T15:30:14Z" name="ShareLink" finished-at="2020-10-30T15:32:31Z" duration-ms="137775">
+    <test started-at="2020-11-02T14:53:02Z" name="ShareLink" finished-at="2020-11-02T14:54:20Z" duration-ms="77566">
       <class name="com.qa.clearpc.shareLink.ShareLinkTest">
-        <test-method is-config="true" signature="BeforesuiteSetup(java.lang.String, java.lang.String)[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@37d4349f]" started-at="2020-10-30T21:00:13Z" name="BeforesuiteSetup" finished-at="2020-10-30T21:00:14Z" duration-ms="720" status="PASS">
+        <test-method is-config="true" signature="BeforesuiteSetup(java.lang.String, java.lang.String)[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:23:01Z" name="BeforesuiteSetup" finished-at="2020-11-02T20:23:02Z" duration-ms="729" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -23,48 +23,30 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- BeforesuiteSetup -->
-        <test-method is-config="true" signature="initialisation()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@37d4349f]" started-at="2020-10-30T21:00:14Z" name="initialisation" finished-at="2020-10-30T21:00:14Z" duration-ms="27" status="PASS">
+        <test-method is-config="true" signature="initialisation()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:23:02Z" name="initialisation" finished-at="2020-11-02T20:23:02Z" duration-ms="30" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- initialisation -->
-        <test-method is-config="true" signature="SetUp()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@37d4349f]" started-at="2020-10-30T21:00:14Z" name="SetUp" finished-at="2020-10-30T21:00:37Z" depends-on-methods="com.qa.clearpc.BaseClass.BaseClass.initialisation" duration-ms="23337" status="PASS">
+        <test-method is-config="true" signature="SetUp()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:23:02Z" name="SetUp" finished-at="2020-11-02T20:23:29Z" depends-on-methods="com.qa.clearpc.BaseClass.BaseClass.initialisation" duration-ms="26765" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- SetUp -->
-        <test-method signature="verifyAssetSharePopup(java.lang.String)[pri:4, instance:com.qa.clearpc.shareLink.ShareLinkTest@37d4349f]" started-at="2020-10-30T21:00:37Z" name="verifyAssetSharePopup" description="Verify asset share link functionality" data-provider="getShareAssetLocators" finished-at="2020-10-30T21:01:33Z" duration-ms="55335" status="PASS">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[COPY & EXIT1]]>
-              </value>
-            </param>
-          </params>
+        <test-method signature="validateAssetSharePopUp()[pri:5, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:23:29Z" name="validateAssetSharePopUp" description="Validate asset share popup" finished-at="2020-11-02T20:24:18Z" duration-ms="49266" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- verifyAssetSharePopup -->
-        <test-method signature="verifyAssetSharePopup(java.lang.String)[pri:4, instance:com.qa.clearpc.shareLink.ShareLinkTest@37d4349f]" started-at="2020-10-30T21:01:33Z" name="verifyAssetSharePopup" description="Verify asset share link functionality" data-provider="getShareAssetLocators" finished-at="2020-10-30T21:02:30Z" duration-ms="57456" status="PASS">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[COPY LINK1]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- verifyAssetSharePopup -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@37d4349f]" started-at="2020-10-30T21:02:31Z" name="tearDown" finished-at="2020-10-30T21:02:31Z" duration-ms="573" status="PASS">
+        </test-method> <!-- validateAssetSharePopUp -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:24:19Z" name="tearDown" finished-at="2020-11-02T20:24:20Z" duration-ms="623" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="endSuite()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@37d4349f]" started-at="2020-10-30T21:02:32Z" name="endSuite" finished-at="2020-10-30T21:02:32Z" duration-ms="441" status="PASS">
+        <test-method is-config="true" signature="endSuite()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:24:20Z" name="endSuite" finished-at="2020-11-02T20:24:20Z" duration-ms="501" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- endSuite -->
       </class> <!-- com.qa.clearpc.shareLink.ShareLinkTest -->
     </test> <!-- ShareLink -->
   </suite> <!-- Share Module -->
-  <suite started-at="2020-10-30T15:32:32Z" name="Admin_V2_UAT Suite" finished-at="2020-10-30T15:32:32Z" duration-ms="0">
+  <suite started-at="2020-11-02T14:54:21Z" name="Admin_V2_UAT Suite" finished-at="2020-11-02T14:54:21Z" duration-ms="0">
     <groups>
     </groups>
   </suite> <!-- Admin_V2_UAT Suite -->

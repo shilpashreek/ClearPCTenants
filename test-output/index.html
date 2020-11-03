@@ -91,7 +91,7 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">2 methods,   2 passed</span>
+                    <span class="method-stats">1 method,   1 passed</span>
                   </li>
                   <li>
                     <span class="method-list-title passed">Passed methods</span>
@@ -102,12 +102,7 @@
                     <div class="method-list-content passed suite-Share_Module">
                       <span>
                         <img src="passed.png" width="3%"/>
-                        <a href="#" panel-name="suite-Share_Module" title="com.qa.clearpc.shareLink.ShareLinkTest" class="method navigator-link" hash-for-method="verifyAssetSharePopup(COPY LINK1)">verifyAssetSharePopup(COPY LINK1)</a> <!-- method navigator-link -->
-                      </span>
-                      <br/>
-                      <span>
-                        <img src="passed.png" width="3%"/>
-                        <a href="#" panel-name="suite-Share_Module" title="com.qa.clearpc.shareLink.ShareLinkTest" class="method navigator-link" hash-for-method="verifyAssetSharePopup(COPY &amp; EXIT1)">verifyAssetSharePopup(COPY & EXIT1)</a> <!-- method navigator-link -->
+                        <a href="#" panel-name="suite-Share_Module" title="com.qa.clearpc.shareLink.ShareLinkTest" class="method navigator-link" hash-for-method="validateAssetSharePopUp">validateAssetSharePopUp</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                     </div> <!-- method-list-content passed suite-Share_Module -->
@@ -130,22 +125,11 @@
             <div class="main-panel-content rounded-window-bottom">
               <div class="method">
                 <div class="method-content">
-                  <a name="verifyAssetSharePopup(COPY LINK1)">
-                  </a> <!-- verifyAssetSharePopup(COPY LINK1) -->
-                  <span class="method-name">verifyAssetSharePopup</span>
-                  <span class="parameters">(COPY LINK1)</span>
+                  <a name="validateAssetSharePopUp">
+                  </a> <!-- validateAssetSharePopUp -->
+                  <span class="method-name">validateAssetSharePopUp</span>
                   <em>
-(Verify asset share link functionality)                  </em>
-                </div> <!-- method-content -->
-              </div> <!-- method -->
-              <div class="method">
-                <div class="method-content">
-                  <a name="verifyAssetSharePopup(COPY &amp; EXIT1)">
-                  </a> <!-- verifyAssetSharePopup(COPY & EXIT1) -->
-                  <span class="method-name">verifyAssetSharePopup</span>
-                  <span class="parameters">(COPY & EXIT1)</span>
-                  <em>
-(Verify asset share link functionality)                  </em>
+(Validate asset share popup)                  </em>
                 </div> <!-- method-content -->
               </div> <!-- method -->
             </div> <!-- main-panel-content rounded-window-bottom -->
@@ -251,20 +235,16 @@ data.addColumn('number', 'Number');
 data.addColumn('string', 'Method');
 data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
-data.addRows(2);
+data.addRows(1);
 data.setCell(0, 0, 0)
-data.setCell(0, 1, 'verifyAssetSharePopup')
+data.setCell(0, 1, 'validateAssetSharePopUp')
 data.setCell(0, 2, 'com.qa.clearpc.shareLink.ShareLinkTest')
-data.setCell(0, 3, 57456);
-data.setCell(1, 0, 1)
-data.setCell(1, 1, 'verifyAssetSharePopup')
-data.setCell(1, 2, 'com.qa.clearpc.shareLink.ShareLinkTest')
-data.setCell(1, 3, 55335);
+data.setCell(0, 3, 49266);
 window.suiteTableData['Share_Module']= { tableData: data, tableDiv: 'times-div-Share_Module'}
 return data;
 }
               </script>
-              <span class="suite-total-time">Total running time: 1 minutes</span>
+              <span class="suite-total-time">Total running time: 49 seconds</span>
               <div id="times-div-Share_Module">
               </div> <!-- times-div-Share_Module -->
             </div> <!-- times-div -->
@@ -310,7 +290,7 @@ return data;
         </div> <!-- panel -->
         <div panel-name="ignored-methods-Share_Module" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">3 ignored methods</span>
+            <span class="header-content">4 ignored methods</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <div class="ignored-class-div">
@@ -319,6 +299,8 @@ return data;
                 <span class="ignored-method-name">validateSuccessMessageaUponCopyingShareLink</span>
                 <br/>
                 <span class="ignored-method-name">validateSharePopUp</span>
+                <br/>
+                <span class="ignored-method-name">verifyAssetShareLinkFunctionality</span>
                 <br/>
                 <span class="ignored-method-name">validateShareFunctionality</span>
                 <br/>
@@ -346,27 +328,23 @@ return data;
               </div> <!-- configuration-suite before -->
               <div class="configuration-test before">
                 <span class="method-name">initialisation</span>
-                <span class="method-start">723 ms</span>
+                <span class="method-start">732 ms</span>
               </div> <!-- configuration-test before -->
               <div class="configuration-test before">
                 <span class="method-name">SetUp</span>
-                <span class="method-start">750 ms</span>
+                <span class="method-start">762 ms</span>
               </div> <!-- configuration-test before -->
               <div class="test-method">
-                <span class="method-name">verifyAssetSharePopup(COPY & EXIT1)</span>
-                <span class="method-start">24181 ms</span>
-              </div> <!-- test-method -->
-              <div class="test-method">
-                <span class="method-name">verifyAssetSharePopup(COPY LINK1)</span>
-                <span class="method-start">79966 ms</span>
+                <span class="method-name">validateAssetSharePopUp</span>
+                <span class="method-start">27688 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-test after">
                 <span class="method-name">tearDown</span>
-                <span class="method-start">137922 ms</span>
+                <span class="method-start">77672 ms</span>
               </div> <!-- configuration-test after -->
               <div class="configuration-suite after">
                 <span class="method-name">endSuite</span>
-                <span class="method-start">138521 ms</span>
+                <span class="method-start">78438 ms</span>
               </div> <!-- configuration-suite after -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
