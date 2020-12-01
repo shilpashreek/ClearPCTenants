@@ -85,4 +85,11 @@ public class JavascriptUtils extends BaseClass {
 		js.executeScript("window.open()");
 
 	}
+
+	public static void selectDateByJS(WebElement element, String date) {
+		JavascriptExecutor js = ((JavascriptExecutor) driver);
+		js.executeScript("arguments[0].setAttribute('value','" + date + "');", element);
+
+	}
+
 }

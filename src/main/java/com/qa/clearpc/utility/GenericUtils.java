@@ -1,5 +1,6 @@
 package com.qa.clearpc.utility;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +40,8 @@ public class GenericUtils extends BaseClass {
 	WebElement search_closeTag;
 	@FindBy(id = "spanSearchCount")
 	WebElement searchCountResults;
+	@FindBy(xpath = "//span[@class='aciTreeText' and .='Library']")
+	WebElement libraryTab;
 
 	public GenericUtils() {
 		PageFactory.initElements(driver, this);
@@ -305,6 +308,37 @@ public class GenericUtils extends BaseClass {
 
 		}
 
+	}
+
+	public void expandLibraryTab() {
+		try {
+			if (SeleniumUtility
+					.getAttribute(driver.findElement(By.xpath(ConfigUtils.getConfigData("LibraryTabStatusPath"))),
+							"aria-expanded")
+					.equalsIgnoreCase("false")) {
+				SeleniumUtility.Click(driver, 20,
+						driver.findElement(By.xpath(ConfigUtils.getConfigData("LibraryTabStatusPath"))));
+				log.info("Expanded library tab");
+
+			}
+
+		} catch (Exception e) {
+			log.error("Failed to click on library Tab" + e.getMessage());
+			e.printStackTrace();
+		}
+
+	}
+
+	public String parseStringToDateFormat(String date) {
+		String dateInFormat = "";
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-YYYY");
+		try {
+			Date d = dateFormat.parse(date);
+			dateInFormat = dateFormat.format(d);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return dateInFormat;
 	}
 
 }

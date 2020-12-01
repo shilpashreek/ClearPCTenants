@@ -48,11 +48,9 @@ public class BaseClass {
 	private static ChromeOptions chromeOptions;
 	static String portalUrl;
 
-	
 	/*
 	 * public BaseClass() { reader=new Xls_Reader(); }
 	 */
-	 
 
 	@Parameters(value = { "tenant", "browser" })
 	@BeforeSuite(alwaysRun = true)
@@ -60,14 +58,14 @@ public class BaseClass {
 	public void BeforesuiteSetup(String tenant, String browser) {
 		tenantName = tenant;
 		browserName = browser;
-		
+
 		// extent report setup
-		extent = new ExtentReports(Constants.REPORT_FOLDER_PATH);
+		extent = new ExtentReports(Constants.REPORT_FOLDER_PATH + tenantName + File.separator + (tenantName + ".html"));
 		extent.addSystemInfo("enviroment", "production");
 		extent.addSystemInfo("Tenant", "DaxPC");
 
 		// logs configuration
-		//DOMConfigurator.configure(Constants.LOG4J_PROPERTIES_PATH);
+		// DOMConfigurator.configure(Constants.LOG4J_PROPERTIES_PATH);
 		PropertyConfigurator.configure(Constants.LOG4J_PROPERTIES_PATH);
 		log = Logger.getLogger(this.getClass().getName());
 
@@ -76,7 +74,7 @@ public class BaseClass {
 		configUtils.loadTenantConfig(tenant);
 		reader = new Xls_Reader();
 
-		log.info("Following Tenant Configuration is being loaded--" +tenant);
+		log.info("Following Tenant Configuration is being loaded--" + tenant);
 		// loading chrome user data
 		if (browser.equalsIgnoreCase("chrome")) {
 			try {
@@ -154,8 +152,6 @@ public class BaseClass {
 			chromeOptions.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			chromeOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
 
-			
-			
 			break;
 
 		case "ie":
@@ -167,25 +163,25 @@ public class BaseClass {
 
 	// loads portal
 	public static void loadPortal() {
-		
+
 		// suppress chrome browser error logs
-	   System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
-       System.setProperty("webdriver.chrome.driver", Constants.CHROME_DRIVER);
-		
+		System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
+		System.setProperty("webdriver.chrome.driver", Constants.CHROME_DRIVER);
+
 		driver = new ChromeDriver(chromeOptions);
-		//driver = new ChromeDriver();
+		// driver = new ChromeDriver();
 
 		// webdriverFiring event setup
 		event_driver = new EventFiringWebDriver(driver);
 		eventListener = new WebEventListener();
 		event_driver.register(eventListener);
-		//driver = event_driver;
+		// driver = event_driver;
 
 		// driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().pageLoadTimeout(Constants.PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
 		driver.manage().timeouts().implicitlyWait(Constants.IMPLICIT_WAIT, TimeUnit.SECONDS);
-		
+
 		try {
 			portalUrl = ConfigUtils.getConfigData("url");
 			log.info("launching portal url--" + portalUrl);
