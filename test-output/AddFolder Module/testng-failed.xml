@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [AddFolder Module]" guice-stage="DEVELOPMENT">
   <parameter name="browser" value="chrome"/>
-  <parameter name="tenant" value="CBS"/>
+  <parameter name="tenant" value="FOX"/>
   <listeners>
     <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
     <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
@@ -11,12 +11,11 @@
     <classes>
       <class name="com.qa.clearpc.AddFolder.AddFolderTest">
         <methods>
-          <include name="validateEditFolderFucntionality"/>
           <include name="endSuite"/>
+          <include name="validateAddFolderPopupDisplaying"/>
           <include name="BeforesuiteSetup"/>
           <include name="SetUp"/>
           <include name="tearDown"/>
-          <include name="validateAddFolderFunctionality_SaveAndCloseFunctionality"/>
           <include name="initialisation"/>
         </methods>
       </class> <!-- com.qa.clearpc.AddFolder.AddFolderTest -->

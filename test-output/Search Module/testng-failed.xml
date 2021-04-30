@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Search Module]" guice-stage="DEVELOPMENT">
   <parameter name="browser" value="chrome"/>
-  <parameter name="tenant" value="DAXProdCloud"/>
+  <parameter name="tenant" value="Turner"/>
   <listeners>
     <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
     <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
@@ -14,7 +14,7 @@
           <include name="endSuite"/>
           <include name="BeforesuiteSetup"/>
           <include name="tearDown"/>
-          <include name="performSearchWithinOrganisation" invocation-numbers="4 5 6"/>
+          <include name="performSearchWithinOrganisation" invocation-numbers="5 6"/>
           <include name="initialisation"/>
           <include name="setUp"/>
         </methods>

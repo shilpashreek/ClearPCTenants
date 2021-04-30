@@ -9,6 +9,7 @@
 			class-name="com.qa.clearpc.Listeners.ExtentReporterNG" />
 		<listener
 			class-name="com.qa.clearpc.Listeners.TestngListeners" />
+			<listener class-name="com.qa.clearpc.utility.Transformer" />
 		<!-- <listener class-name = "com.qa.clearpc.Listeners.WebEventListener" /> -->
 	</listeners>
 

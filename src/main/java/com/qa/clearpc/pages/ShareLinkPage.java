@@ -425,7 +425,7 @@ public class ShareLinkPage extends BaseClass {
 				log.info("************");
 				assetTitleWithExtension = SeleniumUtility.getElementText(assetTitle_ShareAssetPopup);
 				String[] asset_Title = SeleniumUtility.getElementText(assetTitle_ShareAssetPopup).split("\\.");
-				if (AssetTitle.equals(asset_Title[0])) {
+				if (AssetTitle.contains(asset_Title[0])) {
 					SeleniumUtility.Click(driver, 20, assetShare_ShareBtn);
 					SeleniumUtility.waitTill_invisibility_of_Element(driver, 30, genericUtils.loadingSymbol());
 					assetShared = SeleniumUtility.getElementText(alertMessage);

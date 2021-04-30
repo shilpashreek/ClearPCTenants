@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Action Module]" guice-stage="DEVELOPMENT">
   <parameter name="browser" value="chrome"/>
-  <parameter name="tenant" value="zAdminv2UAT"/>
+  <parameter name="tenant" value="Turner"/>
   <listeners>
     <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
     <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
@@ -14,7 +14,10 @@
           <include name="tearDown"/>
           <include name="endSuite"/>
           <include name="BeforesuiteSetup"/>
+          <include name="validateRenameFunctionality"/>
+          <include name="validateMoveFunctionality"/>
           <include name="setup"/>
+          <include name="validateCopiedAssetInDestFolder"/>
           <include name="validateRenamedAssetSearchResult"/>
           <include name="initialisation"/>
         </methods>

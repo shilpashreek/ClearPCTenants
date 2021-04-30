@@ -1,0 +1,5 @@
+[0328/181820.629:INFO:CONSOLE(5)] "Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user's experience. For more help, check https://xhr.spec.whatwg.org/.", source: https://ladc-static-js.oneclear.com/BC/Product/JS/jquery.min.js?v=1521152944 (5)
+[0328/181823.701:INFO:CONSOLE(31)] "%c [object HTMLImageElement]", source: https://cdn.walkme.com/player/lib/walkme_lib_20210316-193146-16591d50.js (31)
+[0328/181826.910:INFO:CONSOLE(0)] "Autofocus processing was blocked because a document already has a focused element.", source: https://www.oneclear.com/BC/Product/Modules/SignIn.aspx (0)
+[0328/181832.572:INFO:CONSOLE(31)] "%c [object HTMLImageElement]", source: https://cdn.walkme.com/player/lib/walkme_lib_20210316-193146-16591d50.js (31)
+[0331/064814.487:INFO:CONSOLE(0)] "Access to XMLHttpRequest at 'https://ec.walkme.com/event/backEvent' from origin 'https://www.oneclear.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: https://www.oneclear.com/BC/Product/Modules/MFAuthentication.aspx (0)

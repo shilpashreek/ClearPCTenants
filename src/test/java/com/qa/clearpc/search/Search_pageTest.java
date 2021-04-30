@@ -39,7 +39,7 @@ public class Search_pageTest extends BaseClass {
 		searchPage = new SearchPage();
 	}
 
-	@Test(priority = 0, enabled = false)
+	@Test(priority = 0, enabled = true)
 	public void ValidateSearchTipsMessageIsDispalyed() throws Exception {
 		extentTest = extent.startTest("ValidateSearchTipsMessageIsDispalyed");
 
@@ -99,7 +99,7 @@ public class Search_pageTest extends BaseClass {
 		Assert.assertTrue(searchResultVerification);
 	}
 
-	@Test(priority = 2, enabled = false)
+	@Test(priority = 2, enabled = true)
 	public void validateSearchForInvalidData() {
 		extentTest = extent.startTest("validateSearchWithInFolder");
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
@@ -110,7 +110,7 @@ public class Search_pageTest extends BaseClass {
 
 	}
 
-	@Test(priority = 3, enabled = false)
+	@Test(priority = 3, enabled = true)
 	public void validateAutosuggetionsForAdvancedSearch() {
 		extentTest = extent.startTest("validateAutosuggetionsForAdvancedSearch");
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
@@ -122,7 +122,7 @@ public class Search_pageTest extends BaseClass {
 
 	}
 
-	@Test(priority = 4, enabled = false, description = "Verify grid asset view")
+	@Test(priority = 4, enabled = true, description = "Verify grid asset view")
 	public void validateGridAssetView() {
 		extentTest = extent.startTest("validateGridAssetView");
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
@@ -134,7 +134,7 @@ public class Search_pageTest extends BaseClass {
 
 	}
 
-	@Test(priority = 5, enabled = false, description = "Verify list asset view")
+	@Test(priority = 5, enabled = true, description = "Verify list asset view")
 	public void validateListAssetView() {
 		extentTest = extent.startTest("validateListAssetView");
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
@@ -145,7 +145,7 @@ public class Search_pageTest extends BaseClass {
 		Assert.assertTrue(listViewStatus);
 	}
 
-	@Test(priority = 6, enabled = false, description = "Verify Detailed asset view")
+	@Test(priority = 6, enabled = true, description = "Verify Detailed asset view")
 	public void validateDetailedAssetView() {
 		extentTest = extent.startTest("validateDetailedAssetView");
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));

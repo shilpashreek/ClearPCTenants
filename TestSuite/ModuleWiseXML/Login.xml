@@ -31,6 +31,16 @@
 		<packages>
 		<package name="com.qa.clearpc.Login" />
 		</packages>
+		<!-- <classes>
+		<class name="com.qa.clearpc.LoginPageTest">
+		<methods>
+		<include name="ValidateloginToPortal" />
+		<include name="validateLogout" />
+		<include name="validateLoginForInvalidData" />
+		</methods>
+		</class>
+		
+		</classes> -->
 		
   </test>	
 

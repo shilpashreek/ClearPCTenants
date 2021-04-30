@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test name="Default test(failed)">
     <classes>
-      <class name="com.qa.clearpc.search.Search_pageTest">
+      <class name="com.qa.clearpc.Login.LoginPageTest">
         <methods>
+          <include name="ValidateloginToPortal" invocation-numbers="0"/>
           <include name="endSuite"/>
-          <include name="performSearchWithinOrganisation" invocation-numbers="0 1 2 3 4 5"/>
           <include name="initialisation"/>
         </methods>
-      </class> <!-- com.qa.clearpc.search.Search_pageTest -->
+      </class> <!-- com.qa.clearpc.Login.LoginPageTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

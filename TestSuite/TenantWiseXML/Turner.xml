@@ -9,6 +9,7 @@
 			class-name="com.qa.clearpc.Listeners.ExtentReporterNG" />
 		<listener
 			class-name="com.qa.clearpc.Listeners.TestngListeners" />
+			<listener class-name="com.qa.clearpc.utility.Transformer" />
 		<!-- <listener class-name = "com.qa.clearpc.Listeners.WebEventListener" /> -->
 	</listeners>
 
@@ -16,12 +17,12 @@
 	<parameter name="browser" value="chrome" />
 
 	<suite-files>
-      <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Login.xml" /> -->
-      <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Search.xml" /> -->
-      <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Filters.xml" /> -->
+      <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Login.xml" />
+      <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Search.xml" />
+      <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Filters.xml" />
       <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/addFolder.xml" /> -->
-      <!-- <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Actions.xml" /> -->
-       <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/ShareLink.xml" />
+      <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/Actions.xml" />
+       <suite-file path="${basedir}/../TestSuite/ModuleWiseXML/ShareLink2.xml" />
       
 	</suite-files>
 </suite>

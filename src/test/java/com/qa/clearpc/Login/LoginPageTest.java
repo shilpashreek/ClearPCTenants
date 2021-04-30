@@ -46,8 +46,9 @@ public class LoginPageTest extends BaseClass {
 	public void validateLogin(String host, String username, String password, String Expected_Sender,
 			String Expected_subject) {
 		try {
-			seleniumUtility = new SeleniumUtility();
 			extentTest = extent.startTest("validateLogin");
+			seleniumUtility = new SeleniumUtility();
+
 			loginPage.loginToPortal(ConfigUtils.getConfigData("username"), ConfigUtils.getConfigData("password"));
 			String currentUrl = seleniumUtility.returnCurrentUrl();
 			if (currentUrl.equalsIgnoreCase(ConfigUtils.getConfigData("Mfa_page_url"))) {
@@ -98,8 +99,9 @@ public class LoginPageTest extends BaseClass {
 			String Expected_subject) {
 		try {
 
-			seleniumUtility = new SeleniumUtility();
 			extentTest = extent.startTest("validateLogin");
+			seleniumUtility = new SeleniumUtility();
+
 			String url = loginPage.login(ConfigUtils.getConfigData("username"), ConfigUtils.getConfigData("password"),
 					host, username, password, Expected_Sender, Expected_subject, Constants.mail_Body_path);
 			Assert.assertTrue(url.equalsIgnoreCase(ConfigUtils.getConfigData("Home_page_url")));
@@ -138,7 +140,7 @@ public class LoginPageTest extends BaseClass {
 		return loginData;
 	}
 
-	@Test(priority = 3, enabled = false, dataProvider = "getLoginData", description = "Verify login with invalid data and capture error message")
+	@Test(priority = 3, enabled = true, dataProvider = "getLoginData", description = "Verify login with invalid data and capture error message")
 	public void validateLoginForInvalidData(String username, String password) {
 		try {
 			extentTest = extent.startTest("validateLoginForInvalidData");

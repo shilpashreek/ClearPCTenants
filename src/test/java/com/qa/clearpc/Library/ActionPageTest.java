@@ -40,7 +40,7 @@ public class ActionPageTest extends BaseClass {
 
 	}
 
-	@Test(priority = 1, enabled = false, description = "Verify copy asset popUp is displayed")
+	@Test(priority = 1, enabled = true, description = "Verify copy asset popUp is displayed")
 	public void validateCopyAssetPopUpDisplayed() throws Exception {
 		extentTest = extent.startTest("validateCopyAsset");
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
@@ -55,9 +55,10 @@ public class ActionPageTest extends BaseClass {
 
 	}
 
-	@Test(priority = 2, enabled = false, description = "Validate copy functionality")
+	@Test(priority = 2, enabled = true, description = "Validate copy functionality")
 	public void validateCopyFunctionality() throws Exception {
 		extentTest = extent.startTest("validateCopyFunctionality");
+		searchPage.closePopUp();
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
 		SeleniumUtility.waitTill_invisibility_of_Element(driver, 30, genericUtils.loadingSymbol());
 		searchPage.clickOnSearchBtn();
@@ -74,10 +75,11 @@ public class ActionPageTest extends BaseClass {
 		Assert.assertTrue(alertMsg.contains("Asset copied successfully"));
 	}
 
-	@Test(priority = 3, enabled = false, description = "Verify that copied asset is present in the destination folder")
+	@Test(priority = 3, enabled = true, description = "Verify that copied asset is present in the destination folder")
 	public void validateCopiedAssetInDestFolder() {
 
 		extentTest = extent.startTest("validateCopiedAssetInDestFolder");
+		searchPage.closePopUp();
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
 		SeleniumUtility.waitTill_invisibility_of_Element(driver, 30, genericUtils.loadingSymbol());
 		searchPage.clickOnSearchBtn();
@@ -85,9 +87,10 @@ public class ActionPageTest extends BaseClass {
 		Assert.assertTrue(searchStatus);
 	}
 
-	@Test(priority = 4, enabled = false, description = "Verify move asset functionality and capture success alert message")
+	@Test(priority = 4, enabled = true, description = "Verify move asset functionality and capture success alert message")
 	public void validateMoveFunctionality() throws Exception {
 		extentTest = extent.startTest("validateMoveFunctionality");
+		searchPage.closePopUp();
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
 		SeleniumUtility.waitTill_invisibility_of_Element(driver, 30, genericUtils.loadingSymbol());
 		searchPage.selectTestFolder();
@@ -102,6 +105,7 @@ public class ActionPageTest extends BaseClass {
 	@Test(priority = 5, enabled = true, description = "Verify rename asset functionality and capture the success alert message")
 	public void validateRenameFunctionality() {
 		extentTest = extent.startTest("validateRenameFunctionality");
+		searchPage.closePopUp();
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
 		SeleniumUtility.waitTill_invisibility_of_Element(driver, 30, genericUtils.loadingSymbol());
 		searchPage.selectTestFolder();
@@ -114,6 +118,7 @@ public class ActionPageTest extends BaseClass {
 	@Test(priority = 6, enabled = true, description = "Verify that renamed asset is searchable")
 	public void validateRenamedAssetSearchResult() {
 		extentTest = extent.startTest("validateRenameFunctionality");
+		searchPage.closePopUp();
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
 		SeleniumUtility.waitTill_invisibility_of_Element(driver, 30, genericUtils.loadingSymbol());
 		searchPage.clickOnSearchBtn();

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="4" total="5" passed="1" failed="0" skipped="0">
+<testng-results ignored="6" total="34" passed="18" failed="10" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2020-11-02T14:53:02Z" name="Share Module" finished-at="2020-11-02T14:54:20Z" duration-ms="77566">
+  <suite started-at="2021-03-29T06:00:56Z" name="Share Module" finished-at="2021-03-29T06:05:24Z" duration-ms="268331">
     <groups>
     </groups>
-    <test started-at="2020-11-02T14:53:02Z" name="ShareLink" finished-at="2020-11-02T14:54:20Z" duration-ms="77566">
+    <test started-at="2021-03-29T06:00:56Z" name="ShareLink" finished-at="2021-03-29T06:05:24Z" duration-ms="268331">
       <class name="com.qa.clearpc.shareLink.ShareLinkTest">
-        <test-method is-config="true" signature="BeforesuiteSetup(java.lang.String, java.lang.String)[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:23:01Z" name="BeforesuiteSetup" finished-at="2020-11-02T20:23:02Z" duration-ms="729" status="PASS">
+        <test-method is-config="true" signature="BeforesuiteSetup(java.lang.String, java.lang.String)[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@3012646b]" started-at="2021-03-29T11:30:56Z" name="BeforesuiteSetup" finished-at="2021-03-29T11:30:56Z" duration-ms="122" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[zAdminv2UAT]]>
+                <![CDATA[Turner]]>
               </value>
             </param>
             <param index="1">
@@ -23,31 +23,1065 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- BeforesuiteSetup -->
-        <test-method is-config="true" signature="initialisation()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:23:02Z" name="initialisation" finished-at="2020-11-02T20:23:02Z" duration-ms="30" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- initialisation -->
-        <test-method is-config="true" signature="SetUp()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:23:02Z" name="SetUp" finished-at="2020-11-02T20:23:29Z" depends-on-methods="com.qa.clearpc.BaseClass.BaseClass.initialisation" duration-ms="26765" status="PASS">
+        <test-method is-config="true" signature="SetUp()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@3012646b]" started-at="2021-03-29T11:30:56Z" name="SetUp" finished-at="2021-03-29T11:31:22Z" depends-on-methods="com.qa.clearpc.BaseClass.BaseClass.initialisation" duration-ms="25890" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- SetUp -->
-        <test-method signature="validateAssetSharePopUp()[pri:5, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:23:29Z" name="validateAssetSharePopUp" description="Validate asset share popup" finished-at="2020-11-02T20:24:18Z" duration-ms="49266" status="PASS">
+        <test-method is-config="true" signature="initialisation()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@3012646b]" started-at="2021-03-29T11:30:56Z" name="initialisation" finished-at="2021-03-29T11:30:56Z" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- validateAssetSharePopUp -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:24:19Z" name="tearDown" finished-at="2020-11-02T20:24:20Z" duration-ms="623" status="PASS">
+        </test-method> <!-- initialisation -->
+        <test-method signature="validateSharePopUp()[pri:1, instance:com.qa.clearpc.shareLink.ShareLinkTest@3012646b]" started-at="2021-03-29T11:31:22Z" name="validateSharePopUp" description="Validate share pop-up" finished-at="2021-03-29T11:31:59Z" duration-ms="37128" status="FAIL">
+          <exception class="org.openqa.selenium.NoSuchElementException">
+            <message>
+              <![CDATA[no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:65180}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 8ee296a94ac5035989526ae25ce4daac
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:65180}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 8ee296a94ac5035989526ae25ce4daac
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:552)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:323)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:428)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:315)
+	at com.qa.clearpc.pages.SearchPage.selectTestFolder(SearchPage.java:397)
+	at com.qa.clearpc.shareLink.ShareLinkTest.validateSharePopUp(ShareLinkTest.java:64)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- org.openqa.selenium.NoSuchElementException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateSharePopUp -->
+        <test-method signature="validateSuccessMessageaUponCopyingShareLink(java.lang.String)[pri:2, instance:com.qa.clearpc.shareLink.ShareLinkTest@3012646b]" started-at="2021-03-29T11:31:59Z" name="validateSuccessMessageaUponCopyingShareLink" description="Validate folder share link functionality" data-provider="getShareAssetLocators" finished-at="2021-03-29T11:33:07Z" duration-ms="67318" status="FAIL">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[COPY & EXIT1]]>
+              </value>
+            </param>
+          </params>
+          <exception class="org.openqa.selenium.NoSuchElementException">
+            <message>
+              <![CDATA[no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:65180}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 8ee296a94ac5035989526ae25ce4daac
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:65180}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 8ee296a94ac5035989526ae25ce4daac
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:552)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:323)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:428)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:315)
+	at com.qa.clearpc.pages.SearchPage.selectTestFolder(SearchPage.java:397)
+	at com.qa.clearpc.shareLink.ShareLinkTest.validateSuccessMessageaUponCopyingShareLink(ShareLinkTest.java:87)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- org.openqa.selenium.NoSuchElementException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateSuccessMessageaUponCopyingShareLink -->
+        <test-method signature="validateSuccessMessageaUponCopyingShareLink(java.lang.String)[pri:2, instance:com.qa.clearpc.shareLink.ShareLinkTest@3012646b]" started-at="2021-03-29T11:33:07Z" name="validateSuccessMessageaUponCopyingShareLink" description="Validate folder share link functionality" data-provider="getShareAssetLocators" finished-at="2021-03-29T11:34:15Z" duration-ms="67768" status="FAIL">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[COPY LINK1]]>
+              </value>
+            </param>
+          </params>
+          <exception class="org.openqa.selenium.NoSuchElementException">
+            <message>
+              <![CDATA[no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:65180}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 8ee296a94ac5035989526ae25ce4daac
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:65180}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 8ee296a94ac5035989526ae25ce4daac
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:552)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:323)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:428)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:315)
+	at com.qa.clearpc.pages.SearchPage.selectTestFolder(SearchPage.java:397)
+	at com.qa.clearpc.shareLink.ShareLinkTest.validateSuccessMessageaUponCopyingShareLink(ShareLinkTest.java:87)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- org.openqa.selenium.NoSuchElementException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateSuccessMessageaUponCopyingShareLink -->
+        <test-method signature="validateShareLinkFunctionality()[pri:3, instance:com.qa.clearpc.shareLink.ShareLinkTest@3012646b]" started-at="2021-03-29T11:34:15Z" name="validateShareLinkFunctionality" description="Validate share fnctionality is working as excepted" finished-at="2021-03-29T11:35:23Z" duration-ms="67389" status="FAIL">
+          <exception class="org.openqa.selenium.NoSuchElementException">
+            <message>
+              <![CDATA[no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:65180}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 8ee296a94ac5035989526ae25ce4daac
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:65180}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 8ee296a94ac5035989526ae25ce4daac
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}
+	at jdk.internal.reflect.GeneratedConstructorAccessor43.newInstance(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:552)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:323)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:428)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:315)
+	at com.qa.clearpc.pages.SearchPage.selectTestFolder(SearchPage.java:397)
+	at com.qa.clearpc.shareLink.ShareLinkTest.validateShareLinkFunctionality(ShareLinkTest.java:101)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- org.openqa.selenium.NoSuchElementException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateShareLinkFunctionality -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@3012646b]" started-at="2021-03-29T11:35:23Z" name="tearDown" finished-at="2021-03-29T11:35:24Z" duration-ms="1543" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="endSuite()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@434a63ab]" started-at="2020-11-02T20:24:20Z" name="endSuite" finished-at="2020-11-02T20:24:20Z" duration-ms="501" status="PASS">
+        <test-method is-config="true" signature="endSuite()[pri:0, instance:com.qa.clearpc.shareLink.ShareLinkTest@3012646b]" started-at="2021-03-29T11:35:24Z" name="endSuite" finished-at="2021-03-29T11:35:25Z" duration-ms="354" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- endSuite -->
       </class> <!-- com.qa.clearpc.shareLink.ShareLinkTest -->
     </test> <!-- ShareLink -->
   </suite> <!-- Share Module -->
-  <suite started-at="2020-11-02T14:54:21Z" name="Admin_V2_UAT Suite" finished-at="2020-11-02T14:54:21Z" duration-ms="0">
+  <suite started-at="2021-03-29T05:48:26Z" name="Search Module" finished-at="2021-03-29T05:53:01Z" duration-ms="275865">
     <groups>
     </groups>
-  </suite> <!-- Admin_V2_UAT Suite -->
+    <test started-at="2021-03-29T05:48:26Z" name="Search" finished-at="2021-03-29T05:53:01Z" duration-ms="275865">
+      <class name="com.qa.clearpc.search.Search_pageTest">
+        <test-method is-config="true" signature="BeforesuiteSetup(java.lang.String, java.lang.String)[pri:0, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:18:25Z" name="BeforesuiteSetup" finished-at="2021-03-29T11:18:26Z" duration-ms="251" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Turner]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[chrome]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- BeforesuiteSetup -->
+        <test-method is-config="true" signature="initialisation()[pri:0, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:18:26Z" name="initialisation" finished-at="2021-03-29T11:18:26Z" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initialisation -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:18:26Z" name="setUp" finished-at="2021-03-29T11:18:49Z" depends-on-methods="com.qa.clearpc.BaseClass.BaseClass.initialisation" duration-ms="23275" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="ValidateSearchTipsMessageIsDispalyed()[pri:0, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:18:49Z" name="ValidateSearchTipsMessageIsDispalyed" finished-at="2021-03-29T11:19:00Z" duration-ms="11103" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ValidateSearchTipsMessageIsDispalyed -->
+        <test-method signature="performSearchWithinOrganisation(java.lang.String, java.lang.String, java.lang.String)[pri:1, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:19:00Z" name="performSearchWithinOrganisation" data-provider="searchFilters" finished-at="2021-03-29T11:19:22Z" duration-ms="22106" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Videos]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[VIDEO]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[.filterType_Videos]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- performSearchWithinOrganisation -->
+        <test-method signature="performSearchWithinOrganisation(java.lang.String, java.lang.String, java.lang.String)[pri:1, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:19:23Z" name="performSearchWithinOrganisation" data-provider="searchFilters" finished-at="2021-03-29T11:19:41Z" duration-ms="18478" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Documents]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[DOCUMENT]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[.filterType_Documents]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- performSearchWithinOrganisation -->
+        <test-method signature="performSearchWithinOrganisation(java.lang.String, java.lang.String, java.lang.String)[pri:1, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:19:42Z" name="performSearchWithinOrganisation" data-provider="searchFilters" finished-at="2021-03-29T11:20:00Z" duration-ms="18562" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Folders]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[FOLDER]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[.filterType_Folders]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- performSearchWithinOrganisation -->
+        <test-method signature="performSearchWithinOrganisation(java.lang.String, java.lang.String, java.lang.String)[pri:1, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:20:00Z" name="performSearchWithinOrganisation" data-provider="searchFilters" finished-at="2021-03-29T11:20:17Z" duration-ms="17052" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Audios]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[AUDIO]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[.filterType_Audios]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- performSearchWithinOrganisation -->
+        <test-method signature="performSearchWithinOrganisation(java.lang.String, java.lang.String, java.lang.String)[pri:1, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:20:18Z" name="performSearchWithinOrganisation" data-provider="searchFilters" finished-at="2021-03-29T11:20:37Z" duration-ms="18866" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Images]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[IMAGE]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[.filterType_Images]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- performSearchWithinOrganisation -->
+        <test-method signature="performSearchWithinOrganisation(java.lang.String, java.lang.String, java.lang.String)[pri:1, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:20:37Z" name="performSearchWithinOrganisation" data-provider="searchFilters" finished-at="2021-03-29T11:20:56Z" duration-ms="18559" status="FAIL">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Playlists ]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[PLAYLIST ]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[.filterType_Playlists]]>
+              </value>
+            </param>
+          </params>
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[expected [true] but found [false]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:513)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at org.testng.Assert.assertTrue(Assert.java:52)
+	at com.qa.clearpc.search.Search_pageTest.performSearchWithinOrganisation(Search_pageTest.java:99)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- performSearchWithinOrganisation -->
+        <test-method signature="performSearchWithinOrganisation(java.lang.String, java.lang.String, java.lang.String)[pri:1, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:20:56Z" name="performSearchWithinOrganisation" data-provider="searchFilters" finished-at="2021-03-29T11:21:15Z" duration-ms="18733" status="FAIL">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Dailies]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[PLAYLIST ]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[.filterType_Dailies]]>
+              </value>
+            </param>
+          </params>
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[expected [true] but found [false]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:513)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at org.testng.Assert.assertTrue(Assert.java:52)
+	at com.qa.clearpc.search.Search_pageTest.performSearchWithinOrganisation(Search_pageTest.java:99)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- performSearchWithinOrganisation -->
+        <test-method signature="validateSearchForInvalidData()[pri:2, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:21:15Z" name="validateSearchForInvalidData" finished-at="2021-03-29T11:21:58Z" duration-ms="43568" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateSearchForInvalidData -->
+        <test-method signature="validateAutosuggetionsForAdvancedSearch()[pri:3, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:21:59Z" name="validateAutosuggetionsForAdvancedSearch" finished-at="2021-03-29T11:22:09Z" duration-ms="10647" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateAutosuggetionsForAdvancedSearch -->
+        <test-method signature="validateGridAssetView()[pri:4, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:22:10Z" name="validateGridAssetView" description="Verify grid asset view" finished-at="2021-03-29T11:22:26Z" duration-ms="15859" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateGridAssetView -->
+        <test-method signature="validateListAssetView()[pri:5, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:22:26Z" name="validateListAssetView" description="Verify list asset view" finished-at="2021-03-29T11:22:42Z" duration-ms="16278" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateListAssetView -->
+        <test-method signature="validateDetailedAssetView()[pri:6, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:22:43Z" name="validateDetailedAssetView" description="Verify Detailed asset view" finished-at="2021-03-29T11:22:59Z" duration-ms="16767" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateDetailedAssetView -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:23:00Z" name="tearDown" finished-at="2021-03-29T11:23:01Z" duration-ms="1704" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="endSuite()[pri:0, instance:com.qa.clearpc.search.Search_pageTest@27f981c6]" started-at="2021-03-29T11:23:01Z" name="endSuite" finished-at="2021-03-29T11:23:02Z" duration-ms="422" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- endSuite -->
+      </class> <!-- com.qa.clearpc.search.Search_pageTest -->
+    </test> <!-- Search -->
+  </suite> <!-- Search Module -->
+  <suite started-at="2021-03-29T05:53:02Z" name="Filters Module" finished-at="2021-03-29T05:55:10Z" duration-ms="127701">
+    <groups>
+    </groups>
+    <test started-at="2021-03-29T05:53:02Z" name="Filters" finished-at="2021-03-29T05:55:10Z" duration-ms="127701">
+      <class name="com.qa.clearpc.search.FilterPageTest">
+        <test-method is-config="true" signature="BeforesuiteSetup(java.lang.String, java.lang.String)[pri:0, instance:com.qa.clearpc.search.FilterPageTest@4efac082]" started-at="2021-03-29T11:23:02Z" name="BeforesuiteSetup" finished-at="2021-03-29T11:23:02Z" duration-ms="223" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Turner]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[chrome]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- BeforesuiteSetup -->
+        <test-method is-config="true" signature="initialisation()[pri:0, instance:com.qa.clearpc.search.FilterPageTest@4efac082]" started-at="2021-03-29T11:23:02Z" name="initialisation" finished-at="2021-03-29T11:23:02Z" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initialisation -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.qa.clearpc.search.FilterPageTest@4efac082]" started-at="2021-03-29T11:23:02Z" name="setUp" finished-at="2021-03-29T11:23:25Z" depends-on-methods="com.qa.clearpc.BaseClass.BaseClass.initialisation" duration-ms="23036" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="validateAllFilterOptionsAreDisplayed()[pri:1, instance:com.qa.clearpc.search.FilterPageTest@4efac082]" started-at="2021-03-29T11:23:25Z" name="validateAllFilterOptionsAreDisplayed" description="Validate and print filter options" finished-at="2021-03-29T11:23:37Z" duration-ms="11758" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateAllFilterOptionsAreDisplayed -->
+        <test-method signature="validateCategoriesFilterTypeResults()[pri:2, instance:com.qa.clearpc.search.FilterPageTest@4efac082]" started-at="2021-03-29T11:23:37Z" name="validateCategoriesFilterTypeResults" description="Apply Categories filter type and validate the result" finished-at="2021-03-29T11:25:08Z" duration-ms="90904" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateCategoriesFilterTypeResults -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.qa.clearpc.search.FilterPageTest@4efac082]" started-at="2021-03-29T11:25:08Z" name="tearDown" finished-at="2021-03-29T11:25:10Z" duration-ms="1358" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="endSuite()[pri:0, instance:com.qa.clearpc.search.FilterPageTest@4efac082]" started-at="2021-03-29T11:25:10Z" name="endSuite" finished-at="2021-03-29T11:25:10Z" duration-ms="328" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- endSuite -->
+      </class> <!-- com.qa.clearpc.search.FilterPageTest -->
+    </test> <!-- Filters -->
+  </suite> <!-- Filters Module -->
+  <suite started-at="2021-03-29T05:55:10Z" name="Action Module" finished-at="2021-03-29T06:00:56Z" duration-ms="345210">
+    <groups>
+    </groups>
+    <test started-at="2021-03-29T05:55:10Z" name="Action" finished-at="2021-03-29T06:00:56Z" duration-ms="345210">
+      <class name="com.qa.clearpc.Library.ActionPageTest">
+        <test-method is-config="true" signature="BeforesuiteSetup(java.lang.String, java.lang.String)[pri:0, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:25:10Z" name="BeforesuiteSetup" finished-at="2021-03-29T11:25:10Z" duration-ms="222" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Turner]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[chrome]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- BeforesuiteSetup -->
+        <test-method is-config="true" signature="initialisation()[pri:0, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:25:10Z" name="initialisation" finished-at="2021-03-29T11:25:10Z" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initialisation -->
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:25:10Z" name="setup" finished-at="2021-03-29T11:25:33Z" depends-on-methods="com.qa.clearpc.BaseClass.BaseClass.initialisation" duration-ms="22616" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="validateCopyAssetPopUpDisplayed()[pri:1, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:25:33Z" name="validateCopyAssetPopUpDisplayed" description="Verify copy asset popUp is displayed" finished-at="2021-03-29T11:25:57Z" duration-ms="23652" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateCopyAssetPopUpDisplayed -->
+        <test-method signature="validateCopyFunctionality()[pri:2, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:25:57Z" name="validateCopyFunctionality" description="Validate copy functionality" finished-at="2021-03-29T11:27:10Z" duration-ms="73291" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateCopyFunctionality -->
+        <test-method signature="validateCopiedAssetInDestFolder()[pri:3, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:27:11Z" name="validateCopiedAssetInDestFolder" description="Verify that copied asset is present in the destination folder" finished-at="2021-03-29T11:27:55Z" duration-ms="44348" status="FAIL">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[expected [true] but found [false]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:513)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at org.testng.Assert.assertTrue(Assert.java:52)
+	at com.qa.clearpc.Library.ActionPageTest.validateCopiedAssetInDestFolder(ActionPageTest.java:87)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateCopiedAssetInDestFolder -->
+        <test-method signature="validateMoveFunctionality()[pri:4, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:27:55Z" name="validateMoveFunctionality" description="Verify move asset functionality and capture success alert message" finished-at="2021-03-29T11:29:03Z" duration-ms="67642" status="FAIL">
+          <exception class="org.openqa.selenium.NoSuchElementException">
+            <message>
+              <![CDATA[no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:64399}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0fd425afb660df538f229464199c2d0e
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:64399}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0fd425afb660df538f229464199c2d0e
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:552)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:323)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:428)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:315)
+	at com.qa.clearpc.pages.SearchPage.selectTestFolder(SearchPage.java:397)
+	at com.qa.clearpc.Library.ActionPageTest.validateMoveFunctionality(ActionPageTest.java:96)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- org.openqa.selenium.NoSuchElementException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateMoveFunctionality -->
+        <test-method signature="validateRenameFunctionality()[pri:5, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:29:03Z" name="validateRenameFunctionality" description="Verify rename asset functionality and capture the success alert message" finished-at="2021-03-29T11:30:11Z" duration-ms="67828" status="FAIL">
+          <exception class="org.openqa.selenium.NoSuchElementException">
+            <message>
+              <![CDATA[no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:64399}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0fd425afb660df538f229464199c2d0e
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span"}
+  (Session info: chrome=89.0.4389.90)
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'PFTBLR-RMZ-021', ip: '10.1.176.221', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '12.0.2'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 89.0.4389.90, chrome: {chromedriverVersion: 89.0.4389.23 (61b08ee2c5002..., userDataDir: D:\automationPULLprojects\C...}, goog:chromeOptions: {debuggerAddress: localhost:64399}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: WINDOWS, platformName: WINDOWS, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: accept, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: 0fd425afb660df538f229464199c2d0e
+*** Element info: {Using=xpath, value=//div[@id="LibraryBrowseTree"]/div/div[1]/div[3]/div/span}
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.createException(W3CHttpResponseCodec.java:187)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:122)
+	at org.openqa.selenium.remote.http.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:49)
+	at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:158)
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:83)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:552)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:323)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:428)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:315)
+	at com.qa.clearpc.pages.SearchPage.selectTestFolder(SearchPage.java:397)
+	at com.qa.clearpc.Library.ActionPageTest.validateRenameFunctionality(ActionPageTest.java:111)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- org.openqa.selenium.NoSuchElementException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateRenameFunctionality -->
+        <test-method signature="validateRenamedAssetSearchResult()[pri:6, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:30:11Z" name="validateRenamedAssetSearchResult" description="Verify that renamed asset is searchable" finished-at="2021-03-29T11:30:53Z" duration-ms="41864" status="FAIL">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[expected [true] but found [false]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:94)
+	at org.testng.Assert.failNotEquals(Assert.java:513)
+	at org.testng.Assert.assertTrue(Assert.java:42)
+	at org.testng.Assert.assertTrue(Assert.java:52)
+	at com.qa.clearpc.Library.ActionPageTest.validateRenamedAssetSearchResult(ActionPageTest.java:126)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:104)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:645)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:851)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1177)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:756)
+	at org.testng.TestRunner.run(TestRunner.java:610)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:387)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:382)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1293)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1289)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1218)
+	at org.testng.TestNG.runSuites(TestNG.java:1133)
+	at org.testng.TestNG.run(TestNG.java:1104)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateRenamedAssetSearchResult -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:30:54Z" name="tearDown" finished-at="2021-03-29T11:30:56Z" duration-ms="1843" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="endSuite()[pri:0, instance:com.qa.clearpc.Library.ActionPageTest@242b836]" started-at="2021-03-29T11:30:56Z" name="endSuite" finished-at="2021-03-29T11:30:56Z" duration-ms="426" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- endSuite -->
+      </class> <!-- com.qa.clearpc.Library.ActionPageTest -->
+    </test> <!-- Action -->
+  </suite> <!-- Action Module -->
+  <suite started-at="2021-03-29T06:05:25Z" name="Turner Suite" finished-at="2021-03-29T06:05:25Z" duration-ms="0">
+    <groups>
+    </groups>
+  </suite> <!-- Turner Suite -->
+  <suite started-at="2021-03-29T05:47:04Z" name="Login Module" finished-at="2021-03-29T05:48:25Z" duration-ms="80163">
+    <groups>
+    </groups>
+    <test started-at="2021-03-29T05:47:04Z" name="Login" finished-at="2021-03-29T05:48:25Z" duration-ms="80163">
+      <class name="com.qa.clearpc.Login.LoginPageTest">
+        <test-method is-config="true" signature="BeforesuiteSetup(java.lang.String, java.lang.String)[pri:0, instance:com.qa.clearpc.Login.LoginPageTest@37d4349f]" started-at="2021-03-29T11:17:03Z" name="BeforesuiteSetup" finished-at="2021-03-29T11:17:04Z" duration-ms="1099" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Turner]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[chrome]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- BeforesuiteSetup -->
+        <test-method is-config="true" signature="initialisation()[pri:0, instance:com.qa.clearpc.Login.LoginPageTest@37d4349f]" started-at="2021-03-29T11:17:04Z" name="initialisation" finished-at="2021-03-29T11:17:04Z" duration-ms="27" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initialisation -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.qa.clearpc.Login.LoginPageTest@37d4349f]" started-at="2021-03-29T11:17:04Z" name="setUp" finished-at="2021-03-29T11:17:23Z" depends-on-methods="com.qa.clearpc.BaseClass.BaseClass.initialisation" duration-ms="18445" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="ValidateloginToPortal(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:1, instance:com.qa.clearpc.Login.LoginPageTest@37d4349f]" started-at="2021-03-29T11:17:23Z" name="ValidateloginToPortal" description="Validate login to portal with Valid Credentials" data-provider="getMailProperties" finished-at="2021-03-29T11:17:41Z" duration-ms="17843" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[mail.primefocus.com]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[shilpashree.k@primefocus.com]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[GMYZMCPOCZBNMMXG ]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[noreply@clearnotifications.com]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Security Access Code]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ValidateloginToPortal -->
+        <test-method signature="validateLogout(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)[pri:2, instance:com.qa.clearpc.Login.LoginPageTest@37d4349f]" started-at="2021-03-29T11:17:42Z" name="validateLogout" description="Validate logout functionality" data-provider="getMailProperties" finished-at="2021-03-29T11:17:49Z" duration-ms="6777" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[mail.primefocus.com]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[shilpashree.k@primefocus.com]]>
+              </value>
+            </param>
+            <param index="2">
+              <value>
+                <![CDATA[GMYZMCPOCZBNMMXG ]]>
+              </value>
+            </param>
+            <param index="3">
+              <value>
+                <![CDATA[noreply@clearnotifications.com]]>
+              </value>
+            </param>
+            <param index="4">
+              <value>
+                <![CDATA[Security Access Code]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateLogout -->
+        <test-method signature="validateLoginForInvalidData(java.lang.String, java.lang.String)[pri:3, instance:com.qa.clearpc.Login.LoginPageTest@37d4349f]" started-at="2021-03-29T11:17:49Z" name="validateLoginForInvalidData" description="Verify login with invalid data and capture error message" data-provider="getLoginData" finished-at="2021-03-29T11:18:22Z" duration-ms="33402" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[qa_testuser]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[March@2020]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateLoginForInvalidData -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.qa.clearpc.Login.LoginPageTest@37d4349f]" started-at="2021-03-29T11:18:23Z" name="tearDown" finished-at="2021-03-29T11:18:25Z" duration-ms="1668" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="endSuite()[pri:0, instance:com.qa.clearpc.Login.LoginPageTest@37d4349f]" started-at="2021-03-29T11:18:25Z" name="endSuite" finished-at="2021-03-29T11:18:25Z" duration-ms="575" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- endSuite -->
+      </class> <!-- com.qa.clearpc.Login.LoginPageTest -->
+    </test> <!-- Login -->
+  </suite> <!-- Login Module -->
 </testng-results>

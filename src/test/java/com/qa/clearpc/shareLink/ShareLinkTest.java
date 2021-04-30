@@ -56,7 +56,7 @@ public class ShareLinkTest extends BaseClass {
 		mailUtils = new MailUtils();
 	}
 
-	@Test(priority = 1, enabled = false, description = "Validate share pop-up")
+	@Test(priority = 1, enabled = true, description = "Validate share pop-up")
 	public void validateSharePopUp() throws Exception {
 		extentTest = extent.startTest("validateSharePopUp");
 		genericUtils.selectOrganization(ConfigUtils.getConfigData("tenant"));
@@ -78,7 +78,7 @@ public class ShareLinkTest extends BaseClass {
 		return shareFunctionalityLoctors;
 	}
 
-	@Test(priority = 2, enabled = false, description = "Validate folder share link functionality", dataProvider = "getShareAssetLocators")
+	@Test(priority = 2, enabled = true, description = "Validate folder share link functionality", dataProvider = "getShareAssetLocators")
 	public void validateSuccessMessageaUponCopyingShareLink(String id) throws Exception {
 		extentTest = extent.startTest("validateSuccessMessageaUponCopyingShareLink");
 		shareLink.closeSharePopUpWindow();
@@ -92,7 +92,7 @@ public class ShareLinkTest extends BaseClass {
 
 	}
 
-	@Test(priority = 3, enabled = false, description = "Validate share fnctionality is working as excepted")
+	@Test(priority = 3, enabled = true, description = "Validate share fnctionality is working as excepted")
 	public void validateShareLinkFunctionality() throws Exception {
 		extentTest = extent.startTest("validateShareFunctionality");
 		shareLink.closeSharePopUpWindow();
@@ -122,7 +122,7 @@ public class ShareLinkTest extends BaseClass {
 		Assert.assertEquals(shareLinkLoadedPage, contentSelectedToShare);
 	}
 
-	@Test(priority = 4, enabled = false, description = "Verify asset share link functionality")
+	@Test(priority = 4, enabled = true, description = "Verify asset share link functionality")
 	public void verifyAssetShareLinkFunctionality() throws Exception {
 
 		extentTest = extent.startTest("verifyAssetShareLinkFunctionality");
@@ -161,7 +161,7 @@ public class ShareLinkTest extends BaseClass {
 
 	}
 
-	@Test(priority = 5, enabled = false, description = "Validate asset share popup")
+	@Test(priority = 5, enabled = true, description = "Validate asset share popup")
 	public void validateAssetSharePopUp() throws Exception {
 		extentTest = extent.startTest("validateAssetSharePopUp");
 		shareLink.closeSharePopUpWindow();

@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Failed suite [Share Module]" guice-stage="DEVELOPMENT">
+<suite name="Failed suite [Action Module]" guice-stage="DEVELOPMENT">
   <parameter name="browser" value="chrome"/>
-  <parameter name="tenant" value="zAdminv2UAT"/>
+  <parameter name="tenant" value="Turner"/>
   <listeners>
     <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
     <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
   </listeners>
-  <test name="ShareLink(failed)">
+  <test name="Action(failed)">
     <classes>
-      <class name="com.qa.clearpc.shareLink.ShareLinkTest">
+      <class name="com.qa.clearpc.Library.ActionPageTest">
         <methods>
-          <include name="SetUp"/>
+          <include name="tearDown"/>
           <include name="endSuite"/>
           <include name="BeforesuiteSetup"/>
-          <include name="tearDown"/>
-          <include name="verifyAssetSharePopup"/>
+          <include name="validateRenameFunctionality"/>
+          <include name="validateMoveFunctionality"/>
+          <include name="setup"/>
+          <include name="validateCopiedAssetInDestFolder"/>
+          <include name="validateRenamedAssetSearchResult"/>
           <include name="initialisation"/>
         </methods>
-      </class> <!-- com.qa.clearpc.shareLink.ShareLinkTest -->
+      </class> <!-- com.qa.clearpc.Library.ActionPageTest -->
     </classes>
-  </test> <!-- ShareLink(failed) -->
-</suite> <!-- Failed suite [Share Module] -->
+  </test> <!-- Action(failed) -->
+</suite> <!-- Failed suite [Action Module] -->

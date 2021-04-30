@@ -59,7 +59,7 @@ public class AddFolderTest extends BaseClass {
 
 	}
 
-	@Test(priority = 2, enabled = false, description = "Validate the fields in Add Folder popUp")
+	@Test(priority = 2, enabled = true, description = "Validate the fields in Add Folder popUp")
 	public void validateFieldsInAddFolderPopup() throws Exception {
 		extentTest = extent.startTest("validateFieldsInAddFolderPopup");
 		searchPage.closePopUp();
@@ -76,7 +76,7 @@ public class AddFolderTest extends BaseClass {
 
 	}
 
-	@Test(priority = 3, enabled = false, description = "validate Add folder fucntionality")
+	@Test(priority = 3, enabled = true, description = "validate Add folder fucntionality")
 	public void validateAddFolderFunctionality_SaveAndCloseFunctionality() throws Exception {
 		extentTest = extent.startTest("validateAddFolderFunctionality_SaveAndCloseFunctionality");
 		searchPage.closePopUp();
@@ -93,7 +93,7 @@ public class AddFolderTest extends BaseClass {
 
 	}
 
-	@Test(priority = 4, enabled = false, description = "Search newly created folder", dependsOnMethods = {
+	@Test(priority = 4, enabled = true, description = "Search newly created folder", dependsOnMethods = {
 			"validateAddFolderFunctionality_SaveAndCloseFunctionality" })
 	public void searchNewlyCreatedFolderWithInOrganisation() {
 
@@ -113,7 +113,7 @@ public class AddFolderTest extends BaseClass {
 
 	}
 
-	@Test(priority = 5, enabled = false, description = "validate Save And AnotherFolder Functionality")
+	@Test(priority = 5, enabled = true, description = "validate Save And AnotherFolder Functionality")
 	public void validateSaveAndAnotherFolderFunctionality() throws Exception {
 
 		extentTest = extent.startTest("validateSaveAndAnotherFolderFunctionality");
@@ -134,7 +134,7 @@ public class AddFolderTest extends BaseClass {
 
 	}
 
-	@Test(priority = 6, enabled = false, description = "Verify edit folder fucntionality", dependsOnMethods = {
+	@Test(priority = 6, enabled = true, description = "Verify edit folder fucntionality", dependsOnMethods = {
 			"validateAddFolderFunctionality_SaveAndCloseFunctionality" })
 	public void validateEditFolderFucntionality() {
 

@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Filters Module]" guice-stage="DEVELOPMENT">
   <parameter name="browser" value="chrome"/>
-  <parameter name="tenant" value="zAdminv2UAT"/>
+  <parameter name="tenant" value="Showtime"/>
   <listeners>
     <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
     <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
@@ -15,8 +15,8 @@
           <include name="validateCategoriesFilterTypeResults"/>
           <include name="BeforesuiteSetup"/>
           <include name="setUp"/>
+          <include name="validateAllFilterOptionsAreDisplayed"/>
           <include name="initialisation"/>
-          <include name="tearDown"/>
         </methods>
       </class> <!-- com.qa.clearpc.search.FilterPageTest -->
     </classes>

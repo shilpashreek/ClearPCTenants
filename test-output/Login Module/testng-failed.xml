@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Login Module]" guice-stage="DEVELOPMENT">
   <parameter name="browser" value="chrome"/>
-  <parameter name="tenant" value="zAdminv2UAT"/>
+  <parameter name="tenant" value="Showtime"/>
   <listeners>
     <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
     <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
@@ -11,11 +11,12 @@
     <classes>
       <class name="com.qa.clearpc.Login.LoginPageTest">
         <methods>
+          <include name="ValidateloginToPortal" invocation-numbers="0"/>
           <include name="endSuite"/>
           <include name="validateLoginForInvalidData" invocation-numbers="0"/>
           <include name="BeforesuiteSetup"/>
-          <include name="tearDown"/>
           <include name="setUp"/>
+          <include name="validateLogout" invocation-numbers="0"/>
           <include name="initialisation"/>
         </methods>
       </class> <!-- com.qa.clearpc.Login.LoginPageTest -->

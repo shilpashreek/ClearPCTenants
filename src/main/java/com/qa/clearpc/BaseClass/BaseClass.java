@@ -123,7 +123,8 @@ public class BaseClass {
 			// set user defined download path
 
 			chromeOptions.setExperimentalOption("prefs", prefs);
-
+			// To run in headless mode
+			// chromeOptions.addArguments("headless");
 			// To disable all the certificate errors
 			chromeOptions.addArguments("-test-type");
 			// To open the browser in incognito mode
@@ -186,7 +187,10 @@ public class BaseClass {
 			portalUrl = ConfigUtils.getConfigData("url");
 			log.info("launching portal url--" + portalUrl);
 			if (driver instanceof ChromeDriver) {
-				new ChromeFlash((ChromeDriver) driver).addSite(ConfigUtils.getConfigData("url"));
+				// new ChromeFlash((ChromeDriver)
+				// driver).addSite(ConfigUtils.getConfigData("url"));
+				new ChromeFlash((ChromeDriver) driver); // changes done on 30th dec as chrome will no longer support
+														// adobe flash
 				Thread.sleep(2000);
 				driver.get(portalUrl);
 			}

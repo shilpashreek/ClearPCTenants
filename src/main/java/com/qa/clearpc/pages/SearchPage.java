@@ -429,6 +429,9 @@ public class SearchPage extends BaseClass {
 	public void closePopUp() {
 		if (SeleniumUtility.elementDispalyed(addFolderPopUp)) {
 			SeleniumUtility.Click(driver, 15, closePopUp_cross);
+			log.info("closed popup");
+		} else {
+			log.info("Didnot found any popups opened");
 		}
 	}
 

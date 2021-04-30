@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Share Module]" guice-stage="DEVELOPMENT">
   <parameter name="browser" value="chrome"/>
-  <parameter name="tenant" value="zAdminv2UAT"/>
+  <parameter name="tenant" value="Turner"/>
   <listeners>
     <listener class-name="com.qa.clearpc.Listeners.ExtentReporterNG"/>
     <listener class-name="com.qa.clearpc.Listeners.TestngListeners"/>
@@ -11,11 +11,13 @@
     <classes>
       <class name="com.qa.clearpc.shareLink.ShareLinkTest">
         <methods>
+          <include name="validateSharePopUp"/>
+          <include name="validateSuccessMessageaUponCopyingShareLink" invocation-numbers="0 1"/>
           <include name="SetUp"/>
           <include name="endSuite"/>
+          <include name="validateShareLinkFunctionality"/>
           <include name="BeforesuiteSetup"/>
           <include name="tearDown"/>
-          <include name="verifyAssetSharePopup"/>
           <include name="initialisation"/>
         </methods>
       </class> <!-- com.qa.clearpc.shareLink.ShareLinkTest -->
