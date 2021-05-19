@@ -13301,3 +13301,59 @@ Asset copied successfully
 2021-03-29 11:35:25,550 DEBUG cache:45 - TemplateLoader.findTemplateSource("Extent_en.ftl"): Not found
 2021-03-29 11:35:25,550 DEBUG cache:45 - TemplateLoader.findTemplateSource("Extent.ftl"): Found
 2021-03-29 11:35:25,550 DEBUG cache:45 - Loading template for "Extent.ftl"("en_US", UTF-8, parsed) from "jar:file:/C:/Users/shilpashree.k/.m2/repository/com/relevantcodes/extentreports/2.41.2/extentreports-2.41.2.jar!/com/relevantcodes/extentreports/view/Extent.ftl"
+2021-05-19 11:53:12,100 INFO  LoginPageTest:17 - Config file of the following tenant is being loaded  zAdminv2UAT
+2021-05-19 11:53:12,647 INFO  LoginPageTest:77 - Following Tenant Configuration is being loaded--zAdminv2UAT
+2021-05-19 11:53:12,718 INFO  LoginPageTest:94 - Source 'D:\automationPULLprojects\ClearPCTenants\chromedata\User Data' does not exist
+2021-05-19 11:53:12,722 INFO  LoginPageTest:104 - selected browser is--chrome
+2021-05-19 11:53:16,633 INFO  LoginPageTest:188 - launching portal url--https://www.oneclear.com/BC/Product/Modules/SignIn.aspx
+2021-05-19 11:53:36,809 INFO  LoginPageTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (0014408526b8143be6503c8b027e00f1)] -> css selector: .name.FL]
+2021-05-19 11:53:36,995 INFO  LoginPageTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (0014408526b8143be6503c8b027e00f1)] -> css selector: .name.FL]
+2021-05-19 11:53:37,010 INFO  LoginPageTest:116 - Getting the attribute :: " title" from the element ::[[ChromeDriver: chrome on WINDOWS (0014408526b8143be6503c8b027e00f1)] -> css selector: .name.FL]"
+2021-05-19 11:53:37,055 INFO  LoginPageTest:118 - Thetitlevalue of the element[[ChromeDriver: chrome on WINDOWS (0014408526b8143be6503c8b027e00f1)] -> css selector: .name.FL]is
+2021-05-19 11:53:37,056 INFO  LoginPageTest:178 - Active username in the portal
+2021-05-19 11:53:39,204 INFO  LoginPageTest:184 - Values in the user dropdown are as follows:
+2021-05-19 11:53:39,229 INFO  LoginPageTest:186 - Settings
+2021-05-19 11:53:39,242 INFO  LoginPageTest:186 - About
+2021-05-19 11:53:39,266 INFO  LoginPageTest:186 - Logout
+2021-05-19 11:53:42,547 INFO  LoginPageTest:191 - Clicked on logout button
+2021-05-19 11:53:42,547 INFO  LoginPageTest:192 - Getting the login page url
+2021-05-19 11:53:42,563 INFO  LoginPageTest:194 - login page url ishttps://www.oneclear.com/BC/Product/Modules/SignIn.aspx
+2021-05-19 11:53:42,563 INFO  LoginPageTest:127 - Logged out from the portal successfully
+2021-05-19 11:55:35,627 INFO  AddFolderTest:17 - Config file of the following tenant is being loaded  zAdminv2UAT
+2021-05-19 11:55:36,183 INFO  AddFolderTest:77 - Following Tenant Configuration is being loaded--zAdminv2UAT
+2021-05-19 11:55:36,389 INFO  AddFolderTest:94 - Source 'D:\automationPULLprojects\ClearPCTenants\chromedata\User Data' does not exist
+2021-05-19 11:55:36,392 INFO  AddFolderTest:104 - selected browser is--chrome
+2021-05-19 11:55:40,141 INFO  AddFolderTest:188 - launching portal url--https://www.oneclear.com/BC/Product/Modules/SignIn.aspx
+2021-05-19 11:56:29,299 INFO  AddFolderTest:434 - Didnot found any popups opened
+2021-05-19 11:56:29,581 INFO  AddFolderTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //*[@role='presentation' and @title='Library']]
+2021-05-19 11:56:29,590 INFO  AddFolderTest:116 - Getting the attribute :: " class" from the element ::[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //*[@role='presentation' and @title='Library']]"
+2021-05-19 11:56:29,620 INFO  AddFolderTest:118 - Theclassvalue of the element[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //*[@role='presentation' and @title='Library']]isaciTreeLi aciTreeLeaf aciTreeLevel0 aciTreeSelected aciTreeFirst aciTreeVisible aciTreeOdd aciTreeInode aciTreeOpen
+2021-05-19 11:56:29,800 INFO  AddFolderTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]
+2021-05-19 11:56:29,808 INFO  AddFolderTest:116 - Getting the attribute :: " title" from the element ::[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]"
+2021-05-19 11:56:29,836 INFO  AddFolderTest:118 - Thetitlevalue of the element[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]isClick to hide the navigation drawer
+2021-05-19 11:56:30,444 INFO  AddFolderTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]
+2021-05-19 11:56:30,499 INFO  AddFolderTest:116 - Getting the attribute :: " title" from the element ::[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]"
+2021-05-19 11:56:30,529 INFO  AddFolderTest:118 - Thetitlevalue of the element[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]isClick to hide the navigation drawer
+2021-05-19 11:56:32,873 INFO  AddFolderTest:84 - Clicked on the folder successfully  z Admin v2 UAT
+2021-05-19 11:56:35,069 INFO  AddFolderTest:138 - getting text from the element --[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //div[@id="LibraryBrowseTree"]/div/div[1]/div[1]/div/span] and text is z Admin v2 UAT
+2021-05-19 11:56:35,242 INFO  AddFolderTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //div[@id="LibraryBrowseTree"]/div/div[1]/div[1]/div/a/span]
+2021-05-19 11:56:35,242 INFO  AddFolderTest:116 - Getting the attribute :: " class" from the element ::[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //div[@id="LibraryBrowseTree"]/div/div[1]/div[1]/div/a/span]"
+2021-05-19 11:56:35,251 INFO  AddFolderTest:118 - Theclassvalue of the element[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //div[@id="LibraryBrowseTree"]/div/div[1]/div[1]/div/a/span]isinfiniteFolder  clear-folderOpenF 
+2021-05-19 11:56:35,323 INFO  AddFolderTest:138 - getting text from the element --[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //div[@id="LibraryBrowseTree"]/div/div[1]/div[2]/div/span] and text is SUPPORT PROJECT
+2021-05-19 11:56:35,493 INFO  AddFolderTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //div[@id="LibraryBrowseTree"]/div/div[1]/div[2]/div/a/span]
+2021-05-19 11:56:35,494 INFO  AddFolderTest:116 - Getting the attribute :: " class" from the element ::[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //div[@id="LibraryBrowseTree"]/div/div[1]/div[2]/div/a/span]"
+2021-05-19 11:56:35,505 INFO  AddFolderTest:118 - Theclassvalue of the element[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //div[@id="LibraryBrowseTree"]/div/div[1]/div[2]/div/a/span]isinfiniteFolder  clear-folder 
+2021-05-19 11:56:46,135 INFO  AddFolderTest:382 - Add folder functionality is enabled and clicked successfully
+2021-05-19 11:56:49,174 INFO  AddFolderTest:421 - Add folder popup is displayed
+2021-05-19 11:56:51,522 INFO  AddFolderTest:432 - closed popup
+2021-05-19 11:56:51,770 INFO  AddFolderTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //*[@role='presentation' and @title='Library']]
+2021-05-19 11:56:51,780 INFO  AddFolderTest:116 - Getting the attribute :: " class" from the element ::[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //*[@role='presentation' and @title='Library']]"
+2021-05-19 11:56:51,810 INFO  AddFolderTest:118 - Theclassvalue of the element[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> xpath: //*[@role='presentation' and @title='Library']]isaciTreeLi aciTreeLeaf aciTreeLevel0 aciTreeFirst aciTreeVisible aciTreeOdd aciTreeInode aciTreeOpen
+2021-05-19 11:56:51,998 INFO  AddFolderTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]
+2021-05-19 11:56:52,012 INFO  AddFolderTest:116 - Getting the attribute :: " title" from the element ::[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]"
+2021-05-19 11:56:52,036 INFO  AddFolderTest:118 - Thetitlevalue of the element[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]isShow Navigation Panel
+2021-05-19 11:56:52,210 INFO  AddFolderTest:84 - successfully mouse hovered to the element [[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]
+2021-05-19 11:56:52,217 INFO  AddFolderTest:116 - Getting the attribute :: " title" from the element ::[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]"
+2021-05-19 11:56:52,239 INFO  AddFolderTest:118 - Thetitlevalue of the element[[ChromeDriver: chrome on WINDOWS (9e63a41a27f7786c2cf9f3b0c5dff782)] -> id: navigiationOpenClosePanel]isShow Navigation Panel
+2021-05-19 11:56:54,362 INFO  AddFolderTest:59 - Clicked on show navigation panel icon
+2021-05-19 11:56:54,395 INFO  AddFolderTest:61 - library panel is displayed
